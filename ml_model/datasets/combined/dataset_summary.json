@@ -1,0 +1,37 @@
+{
+  "total_records": 2200,
+  "crop_count": 22,
+  "soil_type_count": 3,
+  "feature_count": 16,
+  "crops": [
+    "apple",
+    "banana",
+    "blackgram",
+    "chickpea",
+    "coconut",
+    "coffee",
+    "cotton",
+    "grapes",
+    "jute",
+    "kidneybeans",
+    "lentil",
+    "maize",
+    "mango",
+    "mothbeans",
+    "mungbean",
+    "muskmelon",
+    "orange",
+    "papaya",
+    "pigeonpeas",
+    "pomegranate",
+    "rice",
+    "watermelon"
+  ],
+  "soil_types": [
+    "Clayey",
+    "Loamy",
+    "Sandy"
+  ],
+  "avg_nutrient_balance": 63.71964090909092,
+  "avg_crop_suitability": 91.375
+}
