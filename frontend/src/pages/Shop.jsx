@@ -47,7 +47,8 @@ const Shop = () => {
             return;
         }
 
-        const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const cartKey = `cart_${user.id}`;
+        const existingCart = JSON.parse(localStorage.getItem(cartKey) || '[]');
         const existingItem = existingCart.find(item => item.id === product.id);
 
         if (existingItem) {
@@ -56,7 +57,7 @@ const Shop = () => {
             existingCart.push({ ...product, quantity: 1 });
         }
 
-        localStorage.setItem('cart', JSON.stringify(existingCart));
+        localStorage.setItem(cartKey, JSON.stringify(existingCart));
 
         // Show toast notification
         showToast(`${product.name} added to cart!`);

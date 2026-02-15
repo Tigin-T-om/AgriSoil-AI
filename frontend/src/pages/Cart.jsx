@@ -8,24 +8,70 @@ import './Cart.css';
 const Cart = () => {
     const [cart, setCart] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [stockErrors, setStockErrors] = useState({});
     const { user } = useAuth();
     const navigate = useNavigate();
 
+    const cartKey = user ? `cart_${user.id}` : 'cart';
+
     useEffect(() => {
-        const savedCart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const savedCart = JSON.parse(localStorage.getItem(cartKey) || '[]');
         setCart(savedCart);
-    }, []);
+        // Validate stock on load
+        validateAllStock(savedCart);
+    }, [cartKey]);
 
     const updateCart = (newCart) => {
         setCart(newCart);
-        localStorage.setItem('cart', JSON.stringify(newCart));
+        localStorage.setItem(cartKey, JSON.stringify(newCart));
+        validateAllStock(newCart);
+    };
+
+    const validateAllStock = (cartItems) => {
+        const errors = {};
+        cartItems.forEach(item => {
+            if (item.stock_quantity != null && item.quantity > item.stock_quantity) {
+                errors[item.id] = `Only ${item.stock_quantity} available in stock`;
+            }
+        });
+        setStockErrors(errors);
     };
 
     const updateQuantity = (productId, delta) => {
         const newCart = cart.map(item => {
             if (item.id === productId) {
                 const newQty = Math.max(1, item.quantity + delta);
+                // Allow setting the quantity but show a warning if over stock
                 return { ...item, quantity: newQty };
+            }
+            return item;
+        });
+        updateCart(newCart);
+    };
+
+    const handleQuantityInput = (productId, value) => {
+        const parsed = parseInt(value, 10);
+        // Allow empty input while typing
+        if (value === '') {
+            const newCart = cart.map(item =>
+                item.id === productId ? { ...item, quantity: '' } : item
+            );
+            setCart(newCart);
+            return;
+        }
+        if (isNaN(parsed) || parsed < 1) return;
+
+        const newCart = cart.map(item =>
+            item.id === productId ? { ...item, quantity: parsed } : item
+        );
+        updateCart(newCart);
+    };
+
+    const handleQuantityBlur = (productId) => {
+        // If user leaves input empty, reset to 1
+        const newCart = cart.map(item => {
+            if (item.id === productId && (item.quantity === '' || item.quantity < 1)) {
+                return { ...item, quantity: 1 };
             }
             return item;
         });
@@ -41,7 +87,9 @@ const Cart = () => {
         updateCart([]);
     };
 
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const hasStockErrors = Object.keys(stockErrors).length > 0;
+
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * (typeof item.quantity === 'number' ? item.quantity : 0)), 0);
     const shipping = subtotal > 500 ? 0 : 50;
     const total = subtotal + shipping;
 
@@ -51,7 +99,7 @@ const Cart = () => {
             return;
         }
 
-        if (cart.length === 0) return;
+        if (cart.length === 0 || hasStockErrors) return;
 
         setLoading(true);
         try {
@@ -73,6 +121,11 @@ const Cart = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const getCategoryIcon = (category) => {
+        const icons = { seeds: '🌱', crops: '🌾', fertilizers: '🧪', tools: '🔧' };
+        return icons[category] || '📦';
     };
 
     return (
@@ -110,52 +163,88 @@ const Cart = () => {
                     <div className="cart-grid">
                         {/* Cart Items */}
                         <div className="cart-items">
-                            {cart.map((item) => (
-                                <div key={item.id} className="cart-item">
-                                    {/* Image */}
-                                    <div className="cart-item-image">
-                                        {item.image_url ? (
-                                            <img src={item.image_url} alt={item.name} />
-                                        ) : (
-                                            <div className="cart-item-placeholder">🌱</div>
-                                        )}
-                                    </div>
+                            {cart.map((item) => {
+                                const itemStockError = stockErrors[item.id];
+                                const isOverStock = !!itemStockError;
 
-                                    {/* Details */}
-                                    <div className="cart-item-details">
-                                        <div className="cart-item-header">
-                                            <div>
-                                                <h3 className="cart-item-name">{item.name}</h3>
-                                                <p className="cart-item-category">{item.category}</p>
-                                            </div>
-                                            <button onClick={() => removeItem(item.id)} className="cart-item-remove">
-                                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                </svg>
-                                            </button>
+                                return (
+                                    <div key={item.id} className={`cart-item ${isOverStock ? 'cart-item-error' : ''}`}>
+                                        {/* Image */}
+                                        <div className="cart-item-image">
+                                            {item.image_url ? (
+                                                <img src={item.image_url} alt={item.name} />
+                                            ) : (
+                                                <div className="cart-item-placeholder">
+                                                    {getCategoryIcon(item.category)}
+                                                </div>
+                                            )}
                                         </div>
 
-                                        <div className="cart-item-footer">
-                                            {/* Quantity */}
-                                            <div className="cart-quantity">
-                                                <button onClick={() => updateQuantity(item.id, -1)} className="cart-quantity-btn">
-                                                    −
-                                                </button>
-                                                <span className="cart-quantity-value">{item.quantity}</span>
-                                                <button onClick={() => updateQuantity(item.id, 1)} className="cart-quantity-btn">
-                                                    +
+                                        {/* Details */}
+                                        <div className="cart-item-details">
+                                            <div className="cart-item-header">
+                                                <div>
+                                                    <h3 className="cart-item-name">{item.name}</h3>
+                                                    <p className="cart-item-category">{item.category}</p>
+                                                    {item.stock_quantity != null && (
+                                                        <p className="cart-item-stock">
+                                                            {item.stock_quantity > 0
+                                                                ? `${item.stock_quantity} in stock`
+                                                                : 'Out of stock'}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                                <button onClick={() => removeItem(item.id)} className="cart-item-remove">
+                                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                    </svg>
                                                 </button>
                                             </div>
 
-                                            {/* Price */}
-                                            <div className="cart-item-price">
-                                                <p className="cart-item-total">₹{(item.price * item.quantity).toFixed(2)}</p>
-                                                <p className="cart-item-each">₹{item.price} each</p>
+                                            <div className="cart-item-footer">
+                                                {/* Quantity */}
+                                                <div className="cart-quantity-wrap">
+                                                    <div className="cart-quantity">
+                                                        <button
+                                                            onClick={() => updateQuantity(item.id, -1)}
+                                                            className="cart-quantity-btn"
+                                                            disabled={item.quantity <= 1}
+                                                        >
+                                                            −
+                                                        </button>
+                                                        <input
+                                                            type="number"
+                                                            className={`cart-quantity-input ${isOverStock ? 'cart-quantity-input-error' : ''}`}
+                                                            value={item.quantity}
+                                                            onChange={(e) => handleQuantityInput(item.id, e.target.value)}
+                                                            onBlur={() => handleQuantityBlur(item.id)}
+                                                            min={1}
+                                                            max={item.stock_quantity || undefined}
+                                                        />
+                                                        <button
+                                                            onClick={() => updateQuantity(item.id, 1)}
+                                                            className="cart-quantity-btn"
+                                                        >
+                                                            +
+                                                        </button>
+                                                    </div>
+                                                    {isOverStock && (
+                                                        <p className="cart-stock-error">
+                                                            ⚠️ {itemStockError}
+                                                        </p>
+                                                    )}
+                                                </div>
+
+                                                {/* Price */}
+                                                <div className="cart-item-price">
+                                                    <p className="cart-item-total">₹{(item.price * (typeof item.quantity === 'number' ? item.quantity : 0)).toFixed(2)}</p>
+                                                    <p className="cart-item-each">₹{item.price} each</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
 
                         {/* Order Summary */}
@@ -185,9 +274,16 @@ const Cart = () => {
                                     </div>
                                 </div>
 
+                                {hasStockErrors && (
+                                    <div className="cart-stock-warning">
+                                        <span>⚠️</span>
+                                        <span>Some items exceed available stock. Please adjust quantities before checkout.</span>
+                                    </div>
+                                )}
+
                                 <button
                                     onClick={handleCheckout}
-                                    disabled={loading || cart.length === 0}
+                                    disabled={loading || cart.length === 0 || hasStockErrors}
                                     className="cart-checkout-btn"
                                 >
                                     {loading ? (

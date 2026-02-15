@@ -22,6 +22,12 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
+    # Google OAuth
+    GOOGLE_CLIENT_ID: str = os.getenv(
+        "GOOGLE_CLIENT_ID",
+        "516962367203-2m1fajdnbks7sc5mu0mdt8bojsdnh8pl.apps.googleusercontent.com"
+    )
+    
     # CORS settings
     CORS_ORIGINS: List[str] = [
         "http://localhost:3000",

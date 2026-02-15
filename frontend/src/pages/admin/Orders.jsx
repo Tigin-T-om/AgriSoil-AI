@@ -1,19 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import AdminLayout from '../../components/admin/AdminLayout';
 import { orderService } from '../../services/orderService';
-import Navbar from '../../components/Navbar';
 
 const AdminOrders = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
-    const location = useLocation();
-
-    const menuItems = [
-        { path: '/admin/dashboard', label: 'Dashboard', icon: '📊' },
-        { path: '/admin/products', label: 'Products', icon: '📦' },
-        { path: '/admin/orders', label: 'Orders', icon: '🛒' },
-        { path: '/admin/users', label: 'Users', icon: '👥' },
-    ];
 
     const statusOptions = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'];
 
@@ -34,114 +25,140 @@ const AdminOrders = () => {
 
     const handleStatusChange = async (orderId, newStatus) => {
         try {
-            await orderService.updateOrderStatus(orderId, newStatus);
+            await orderService.updateStatus(orderId, newStatus);
             fetchOrders();
         } catch (error) {
             alert('Failed to update order status');
         }
     };
 
-    const getStatusColor = (status) => {
-        const colors = {
-            pending: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-            confirmed: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-            processing: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-            shipped: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30',
-            delivered: 'bg-green-500/20 text-green-400 border-green-500/30',
-            cancelled: 'bg-red-500/20 text-red-400 border-red-500/30',
+    const getStatusBadgeClass = (status) => {
+        const map = {
+            pending: 'admin-badge-yellow',
+            confirmed: 'admin-badge-blue',
+            processing: 'admin-badge-purple',
+            shipped: 'admin-badge-cyan',
+            delivered: 'admin-badge-green',
+            cancelled: 'admin-badge-red',
         };
-        return colors[status] || 'bg-dark-700 text-dark-300';
+        return map[status] || 'admin-badge-yellow';
     };
 
-    const formatDate = (date) => new Date(date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+    const getStatusSelectStyle = (status) => {
+        const styles = {
+            pending: { color: '#facc15', borderColor: 'rgba(250, 204, 21, 0.3)', background: 'rgba(250, 204, 21, 0.08)' },
+            confirmed: { color: '#60a5fa', borderColor: 'rgba(96, 165, 250, 0.3)', background: 'rgba(96, 165, 250, 0.08)' },
+            processing: { color: '#c084fc', borderColor: 'rgba(168, 85, 247, 0.3)', background: 'rgba(168, 85, 247, 0.08)' },
+            shipped: { color: '#22d3ee', borderColor: 'rgba(34, 211, 238, 0.3)', background: 'rgba(34, 211, 238, 0.08)' },
+            delivered: { color: '#4ade80', borderColor: 'rgba(34, 197, 94, 0.3)', background: 'rgba(34, 197, 94, 0.08)' },
+            cancelled: { color: '#f87171', borderColor: 'rgba(239, 68, 68, 0.3)', background: 'rgba(239, 68, 68, 0.08)' },
+        };
+        return styles[status] || styles.pending;
+    };
+
+    const formatDate = (date) =>
+        new Date(date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+
+    // Summary stats
+    const pendingCount = orders.filter(o => o.status === 'pending').length;
+    const deliveredCount = orders.filter(o => o.status === 'delivered').length;
+    const totalRevenue = orders.reduce((sum, o) => sum + (o.total_amount || 0), 0);
 
     return (
-        <div className="min-h-screen bg-dark-950">
-            <Navbar />
-
-            <div className="flex">
-                {/* Sidebar */}
-                <aside className="hidden lg:block w-64 min-h-screen bg-dark-900/50 border-r border-white/5 p-6">
-                    <div className="flex items-center gap-3 mb-8">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-xl">⚡</div>
-                        <span className="text-lg font-bold text-white">Admin Panel</span>
-                    </div>
-                    <nav className="space-y-2">
-                        {menuItems.map((item) => (
-                            <Link key={item.path} to={item.path}
-                                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${location.pathname === item.path ? 'bg-primary-500/20 text-primary-400 border border-primary-500/30' : 'text-dark-300 hover:bg-white/5 hover:text-white'
-                                    }`}
-                            >
-                                <span>{item.icon}</span><span>{item.label}</span>
-                            </Link>
-                        ))}
-                    </nav>
-                </aside>
-
-                {/* Main Content */}
-                <main className="flex-1 p-6 lg:p-10">
-                    <div className="mb-10">
-                        <h1 className="text-3xl font-bold text-white mb-2">Orders</h1>
-                        <p className="text-dark-400">{orders.length} total orders</p>
-                    </div>
-
-                    {/* Mobile Menu */}
-                    <div className="lg:hidden flex flex-wrap gap-2 mb-6">
-                        {menuItems.map((item) => (
-                            <Link key={item.path} to={item.path}
-                                className={`px-3 py-2 rounded-lg text-sm ${location.pathname === item.path ? 'bg-primary-500 text-white' : 'bg-dark-800 text-dark-300'}`}
-                            >
-                                {item.icon} {item.label}
-                            </Link>
-                        ))}
+        <AdminLayout
+            title="Orders"
+            subtitle={`${orders.length} total orders`}
+        >
+            {loading ? (
+                <div className="admin-loading">
+                    <div className="admin-loading-spinner" />
+                </div>
+            ) : (
+                <>
+                    {/* Quick Summary */}
+                    <div className="admin-stats-grid" style={{ marginBottom: '1.5rem' }}>
+                        <div className="admin-stat-card">
+                            <div className="admin-stat-top">
+                                <div className="admin-stat-icon admin-stat-icon-blue">🛒</div>
+                            </div>
+                            <div className="admin-stat-value">{orders.length}</div>
+                            <div className="admin-stat-label">Total Orders</div>
+                        </div>
+                        <div className="admin-stat-card">
+                            <div className="admin-stat-top">
+                                <div className="admin-stat-icon admin-stat-icon-orange">⏳</div>
+                            </div>
+                            <div className="admin-stat-value">{pendingCount}</div>
+                            <div className="admin-stat-label">Pending</div>
+                        </div>
+                        <div className="admin-stat-card">
+                            <div className="admin-stat-top">
+                                <div className="admin-stat-icon admin-stat-icon-green">✅</div>
+                            </div>
+                            <div className="admin-stat-value">{deliveredCount}</div>
+                            <div className="admin-stat-label">Delivered</div>
+                        </div>
+                        <div className="admin-stat-card">
+                            <div className="admin-stat-top">
+                                <div className="admin-stat-icon admin-stat-icon-purple">💰</div>
+                            </div>
+                            <div className="admin-stat-value">₹{totalRevenue.toLocaleString()}</div>
+                            <div className="admin-stat-label">Total Revenue</div>
+                        </div>
                     </div>
 
                     {/* Orders Table */}
-                    {loading ? (
-                        <div className="text-center py-20 text-dark-400">Loading...</div>
-                    ) : orders.length === 0 ? (
-                        <div className="text-center py-20">
-                            <div className="text-5xl mb-4">📦</div>
-                            <p className="text-dark-400">No orders yet</p>
+                    {orders.length === 0 ? (
+                        <div className="admin-empty">
+                            <div className="admin-empty-icon">📦</div>
+                            <h3 className="admin-empty-title">No orders yet</h3>
+                            <p className="admin-empty-text">Orders will appear here when customers place them</p>
                         </div>
                     ) : (
-                        <div className="bg-dark-800/50 rounded-2xl border border-white/5 overflow-hidden">
-                            <div className="overflow-x-auto">
-                                <table className="w-full">
+                        <div className="admin-table-wrap">
+                            <div className="admin-table-scroll">
+                                <table className="admin-table">
                                     <thead>
-                                        <tr className="border-b border-dark-700">
-                                            <th className="text-left p-4 text-dark-400 font-medium">Order ID</th>
-                                            <th className="text-left p-4 text-dark-400 font-medium">Customer</th>
-                                            <th className="text-left p-4 text-dark-400 font-medium">Items</th>
-                                            <th className="text-left p-4 text-dark-400 font-medium">Total</th>
-                                            <th className="text-left p-4 text-dark-400 font-medium">Status</th>
-                                            <th className="text-left p-4 text-dark-400 font-medium">Date</th>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Customer</th>
+                                            <th>Items</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {orders.map((order) => (
-                                            <tr key={order.id} className="border-b border-dark-700/50 hover:bg-white/5 transition-colors">
-                                                <td className="p-4 text-white font-medium">#{order.id}</td>
-                                                <td className="p-4">
+                                            <tr key={order.id}>
+                                                <td>
+                                                    <span style={{ fontWeight: 700, color: '#fff' }}>#{order.id}</span>
+                                                </td>
+                                                <td>
                                                     <div>
-                                                        <p className="text-white">{order.user?.name || 'Unknown'}</p>
-                                                        <p className="text-dark-400 text-sm">{order.user?.email}</p>
+                                                        <div className="admin-cell-title">
+                                                            {order.user?.full_name || order.user?.username || 'Unknown'}
+                                                        </div>
+                                                        <div className="admin-cell-sub">{order.user?.email}</div>
                                                     </div>
                                                 </td>
-                                                <td className="p-4 text-dark-300">{order.items?.length || 0} items</td>
-                                                <td className="p-4 text-white font-medium">₹{order.total_amount?.toFixed(2)}</td>
-                                                <td className="p-4">
+                                                <td>{order.items?.length || 0} items</td>
+                                                <td className="admin-cell-price">₹{order.total_amount?.toFixed(2)}</td>
+                                                <td>
                                                     <select
                                                         value={order.status}
                                                         onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                                                        className={`px-3 py-1.5 rounded-lg border text-sm font-medium outline-none cursor-pointer ${getStatusColor(order.status)}`}
+                                                        className="admin-status-select"
+                                                        style={getStatusSelectStyle(order.status)}
                                                     >
                                                         {statusOptions.map((status) => (
-                                                            <option key={status} value={status} className="bg-dark-900 text-white">{status}</option>
+                                                            <option key={status} value={status}>{status}</option>
                                                         ))}
                                                     </select>
                                                 </td>
-                                                <td className="p-4 text-dark-400">{formatDate(order.created_at)}</td>
+                                                <td style={{ color: 'var(--dark-400)' }}>
+                                                    {formatDate(order.created_at)}
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -149,9 +166,9 @@ const AdminOrders = () => {
                             </div>
                         </div>
                     )}
-                </main>
-            </div>
-        </div>
+                </>
+            )}
+        </AdminLayout>
     );
 };
 

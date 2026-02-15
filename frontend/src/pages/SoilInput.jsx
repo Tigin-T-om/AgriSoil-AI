@@ -102,7 +102,7 @@ const SoilInput = () => {
         });
       }
       if (cropNames.length > 0) {
-        const products = await productService.searchByMultipleCrops(cropNames, 6);
+        const products = await productService.searchByMultipleCrops(cropNames, 12);
         setRelatedProducts(products);
       }
     } catch (err) {
@@ -114,12 +114,18 @@ const SoilInput = () => {
 
   const addToCart = (product) => {
     if (!user) { navigate('/login'); return; }
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const cartKey = `cart_${user.id}`;
+    const cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
     const existing = cart.find((item) => item.id === product.id);
     if (existing) existing.quantity += 1;
     else cart.push({ ...product, quantity: 1 });
-    localStorage.setItem('cart', JSON.stringify(cart));
-    alert(`${product.name} added to cart!`);
+    localStorage.setItem(cartKey, JSON.stringify(cart));
+    navigate('/cart');
+  };
+
+  const getCategoryIcon = (category) => {
+    const icons = { seeds: '🌱', crops: '🌾', fertilizers: '🧪', tools: '🔧' };
+    return icons[category] || '📦';
   };
 
   const getScoreClass = (score) => {
@@ -331,21 +337,27 @@ const SoilInput = () => {
                 <h3 className="soil-detail-title">
                   <span>🛒</span> Recommended Products
                 </h3>
+                <p className="soil-products-subtitle">
+                  Products related to <strong>{analysis.crop_recommendation?.recommended_crop}</strong> across all categories
+                </p>
                 {productsLoading ? (
-                  <div style={{ textAlign: 'center', color: '#94a3b8', padding: '2rem' }}>Loading products...</div>
+                  <div style={{ textAlign: 'center', color: '#94a3b8', padding: '2rem' }}>
+                    <div className="soil-spinner" style={{ margin: '0 auto 1rem' }} />
+                    Searching for related products...
+                  </div>
                 ) : (
                   <div className="soil-products-grid">
                     {relatedProducts.map((product) => (
                       <div key={product.id} className="soil-product-card">
                         <div className="soil-product-content">
-                          <div className="soil-product-icon">🌱</div>
+                          <div className="soil-product-icon">{getCategoryIcon(product.category)}</div>
                           <div className="soil-product-info">
                             <h4 className="soil-product-name">{product.name}</h4>
-                            <p className="soil-product-category">{product.category}</p>
+                            <span className="soil-product-badge">{product.category}</span>
                             <div className="soil-product-footer">
                               <span className="soil-product-price">₹{product.price}</span>
                               <button onClick={() => addToCart(product)} className="soil-product-add-btn">
-                                Add
+                                🛒 Add to Cart
                               </button>
                             </div>
                           </div>

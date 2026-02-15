@@ -45,6 +45,17 @@ export const AuthProvider = ({ children }) => {
     return { ...response, user: userData };
   };
 
+  const googleLogin = async (credential) => {
+    const response = await authService.googleLogin(credential);
+    localStorage.setItem('access_token', response.access_token);
+
+    const userData = await authService.getCurrentUser();
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
+
+    return { ...response, user: userData };
+  };
+
   const register = async (userData) => {
     try {
       const response = await authService.register(userData);
@@ -68,12 +79,15 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('user');
+    // Remove legacy shared cart key (user-specific carts are preserved for re-login)
+    localStorage.removeItem('cart');
     setUser(null);
   };
 
   const value = {
     user,
     login,
+    googleLogin,
     register,
     logout,
     loading,

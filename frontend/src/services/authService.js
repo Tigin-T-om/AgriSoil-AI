@@ -13,6 +13,12 @@ export const authService = {
     return response.data;
   },
 
+  // Google OAuth login
+  googleLogin: async (credential) => {
+    const response = await api.post('/api/v1/auth/google', { credential });
+    return response.data;
+  },
+
   // Get current user info
   getCurrentUser: async () => {
     const response = await api.get('/api/v1/auth/me');

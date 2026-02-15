@@ -133,6 +133,15 @@
     border-color: rgba(255, 255, 255, 0.1);
 }
 
+.cart-item-error {
+    border-color: rgba(239, 68, 68, 0.35);
+    background: rgba(239, 68, 68, 0.04);
+}
+
+.cart-item-error:hover {
+    border-color: rgba(239, 68, 68, 0.5);
+}
+
 /* Item Image */
 .cart-item-image {
     width: 6rem;
@@ -186,6 +195,12 @@
     text-transform: capitalize;
 }
 
+.cart-item-stock {
+    color: #64748b;
+    font-size: 0.75rem;
+    margin-top: 0.2rem;
+}
+
 .cart-item-remove {
     padding: 0.5rem;
     border-radius: 0.5rem;
@@ -215,10 +230,16 @@
 }
 
 /* Quantity Controls */
+.cart-quantity-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
 .cart-quantity {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.35rem;
 }
 
 .cart-quantity-btn {
@@ -232,11 +253,60 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1rem;
     transition: background 0.3s ease;
 }
 
-.cart-quantity-btn:hover {
+.cart-quantity-btn:hover:not(:disabled) {
     background: #475569;
+}
+
+.cart-quantity-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.cart-quantity-input {
+    width: 3.5rem;
+    height: 2rem;
+    text-align: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    background: #1e293b;
+    border: 1px solid #475569;
+    border-radius: 0.5rem;
+    outline: none;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.cart-quantity-input::-webkit-outer-spin-button,
+.cart-quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.cart-quantity-input:focus {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+}
+
+.cart-quantity-input-error {
+    border-color: #ef4444;
+    color: #f87171;
+}
+
+.cart-quantity-input-error:focus {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.cart-stock-error {
+    color: #f87171;
+    font-size: 0.72rem;
+    font-weight: 500;
 }
 
 .cart-quantity-value {
@@ -352,6 +422,20 @@
 .cart-checkout-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+.cart-stock-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.75rem;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    font-size: 0.8rem;
+    line-height: 1.4;
 }
 
 .cart-spinner {
