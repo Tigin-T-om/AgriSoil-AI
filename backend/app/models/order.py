@@ -14,6 +14,13 @@ class OrderStatus(str, enum.Enum):
     CANCELLED = "cancelled"
 
 
+class PaymentStatus(str, enum.Enum):
+    PENDING = "pending"
+    PAID = "paid"
+    FAILED = "failed"
+    REFUNDED = "refunded"
+
+
 class Order(Base):
     __tablename__ = "orders"
 
@@ -24,6 +31,13 @@ class Order(Base):
     shipping_address = Column(String, nullable=False)
     phone_number = Column(String, nullable=True)
     notes = Column(String, nullable=True)
+    
+    # Payment fields (Razorpay)
+    payment_status = Column(SQLEnum(PaymentStatus), default=PaymentStatus.PENDING)
+    razorpay_order_id = Column(String, nullable=True, index=True)
+    razorpay_payment_id = Column(String, nullable=True)
+    razorpay_signature = Column(String, nullable=True)
+    
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 

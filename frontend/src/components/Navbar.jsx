@@ -45,7 +45,7 @@ const Navbar = () => {
                                 <span>🌱</span>
                             </div>
                             <div className="navbar-logo-text">
-                                <span className="navbar-logo-name">AgroNova</span>
+                                <span className="navbar-logo-name">Agri-Soil AI</span>
                                 <span className="navbar-logo-tagline">AI-Powered Agriculture</span>
                             </div>
                         </Link>

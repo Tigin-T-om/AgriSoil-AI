@@ -114,7 +114,7 @@ const Home = () => {
         <div className="section-container">
           <div className="section-header">
             <h2 className="section-title">
-              Why Choose <span className="section-title-gradient">AgroNova</span>?
+              Why Choose <span className="section-title-gradient">Agri-Soil AI</span>?
             </h2>
             <p className="section-subtitle">
               Cutting-edge technology meets traditional agricultural wisdom
@@ -187,10 +187,10 @@ const Home = () => {
               <div className="footer-logo-icon">
                 <span>🌱</span>
               </div>
-              <span className="footer-logo-text">AgroNova</span>
+              <span className="footer-logo-text">Agri-Soil AI</span>
             </div>
             <p className="footer-copyright">
-              © 2026 AgroNova AI. All rights reserved. Made with ❤️ for farmers.
+              © 2026 Agri-Soil AI. All rights reserved. Made with ❤️ for farmers.
             </p>
             <div className="footer-links">
               <a href="#" className="footer-link">Privacy</a>

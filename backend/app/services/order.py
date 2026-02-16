@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session, relationship
+from sqlalchemy.orm import Session, joinedload
 from typing import List
 from fastapi import HTTPException, status
 from app.models.order import Order, OrderItem, OrderStatus
@@ -77,7 +77,15 @@ class OrderService:
     @staticmethod
     def get_order(db: Session, order_id: int, user_id: int) -> Order:
         """Get an order by ID (user can only see their own orders)"""
-        db_order = db.query(Order).filter(Order.id == order_id).first()
+        db_order = (
+            db.query(Order)
+            .options(
+                joinedload(Order.order_items).joinedload(OrderItem.product),
+                joinedload(Order.user)
+            )
+            .filter(Order.id == order_id)
+            .first()
+        )
         if not db_order:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -94,9 +102,12 @@ class OrderService:
 
     @staticmethod
     def get_user_orders(db: Session, user_id: int, skip: int = 0, limit: int = 100) -> List[Order]:
-        """Get all orders for a user"""
+        """Get all orders for a user with items and product details"""
         return (
             db.query(Order)
+            .options(
+                joinedload(Order.order_items).joinedload(OrderItem.product)
+            )
             .filter(Order.user_id == user_id)
             .order_by(Order.created_at.desc())
             .offset(skip)
@@ -106,11 +117,14 @@ class OrderService:
 
     @staticmethod
     def get_all_orders(db: Session, skip: int = 0, limit: int = 100) -> List[Order]:
-        """Get all orders (Admin)"""
+        """Get all orders (Admin) with items, products, and user info"""
         return (
             db.query(Order)
+            .options(
+                joinedload(Order.order_items).joinedload(OrderItem.product),
+                joinedload(Order.user)
+            )
             .order_by(Order.created_at.desc())
-            .options(relationship("User")) # Eager load user
             .offset(skip)
             .limit(limit)
             .all()
@@ -123,7 +137,15 @@ class OrderService:
         new_status: OrderStatus
     ) -> Order:
         """Update order status (admin only)"""
-        db_order = db.query(Order).filter(Order.id == order_id).first()
+        db_order = (
+            db.query(Order)
+            .options(
+                joinedload(Order.order_items).joinedload(OrderItem.product),
+                joinedload(Order.user)
+            )
+            .filter(Order.id == order_id)
+            .first()
+        )
         if not db_order:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

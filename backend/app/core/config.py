@@ -1,6 +1,5 @@
 from pydantic_settings import BaseSettings
 from typing import List
-import os
 
 
 class Settings(BaseSettings):
@@ -9,24 +8,19 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     
     # Database settings
-    DATABASE_URL: str = os.getenv(
-        "DATABASE_URL", 
-        "sqlite:///./agrisoil.db"
-    )
+    DATABASE_URL: str = "sqlite:///./agrisoil.db"
     
     # JWT settings
-    SECRET_KEY: str = os.getenv(
-        "SECRET_KEY",
-        "your-secret-key-change-this-in-production-use-env-variable"
-    )
+    SECRET_KEY: str = "your-secret-key-change-this-in-production-use-env-variable"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
     # Google OAuth
-    GOOGLE_CLIENT_ID: str = os.getenv(
-        "GOOGLE_CLIENT_ID",
-        "516962367203-2m1fajdnbks7sc5mu0mdt8bojsdnh8pl.apps.googleusercontent.com"
-    )
+    GOOGLE_CLIENT_ID: str = ""
+    
+    # Razorpay Payment Gateway
+    RAZORPAY_KEY_ID: str = ""
+    RAZORPAY_KEY_SECRET: str = ""
     
     # CORS settings
     CORS_ORIGINS: List[str] = [
@@ -35,9 +29,6 @@ class Settings(BaseSettings):
         "http://127.0.0.1:5173",
         "http://localhost:5174",  # Alternative Vite port
     ]
-    
-    # For development, you can use ["*"] to allow all origins
-    # CORS_ORIGINS: List[str] = ["*"]  # Uncomment for development only
     
     class Config:
         env_file = ".env"

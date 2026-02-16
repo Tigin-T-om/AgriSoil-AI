@@ -62,7 +62,7 @@ const Register = () => {
           {/* Logo */}
           <Link to="/" className="auth-mobile-logo" style={{ display: 'flex' }}>
             <div className="auth-mobile-logo-icon">🌱</div>
-            <span className="auth-mobile-logo-text">AgroNova</span>
+            <span className="auth-mobile-logo-text">Agri-Soil AI</span>
           </Link>
 
           {/* Header */}

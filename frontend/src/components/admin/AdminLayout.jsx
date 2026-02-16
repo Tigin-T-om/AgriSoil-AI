@@ -69,7 +69,7 @@ const AdminLayout = ({ children, title, subtitle, actions }) => {
                         <Link to="/admin/dashboard" className="admin-topbar-brand">
                             <div className="admin-topbar-logo">⚡</div>
                             <span className="admin-topbar-title">
-                                Agro<span>Nova</span>
+                                Agri-<span>Soil AI</span>
                             </span>
                             <span className="admin-topbar-badge">Admin</span>
                         </Link>
@@ -115,7 +115,7 @@ const AdminLayout = ({ children, title, subtitle, actions }) => {
                         <Link to="/admin/dashboard" className="admin-topbar-brand" onClick={() => setMobileOpen(false)}>
                             <div className="admin-topbar-logo">⚡</div>
                             <span className="admin-topbar-title">
-                                Agro<span>Nova</span>
+                                Agri-<span>Soil AI</span>
                             </span>
                         </Link>
                         <button className="admin-mobile-sidebar-close" onClick={() => setMobileOpen(false)}>✕</button>

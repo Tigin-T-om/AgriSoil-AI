@@ -167,7 +167,7 @@ const AuthPage = () => {
                 <div className={`auth-deco-content ${isLogin ? 'auth-deco-visible' : 'auth-deco-hidden'}`}>
                     <div className="auth-panel-header">
                         <div className="auth-panel-logo">🌱</div>
-                        <h1 className="auth-panel-title">Welcome to AgroNova</h1>
+                        <h1 className="auth-panel-title">Welcome to Agri-Soil AI</h1>
                         <p className="auth-panel-text">
                             Your AI-powered companion for smart agriculture. Analyze soil, get crop recommendations, and shop with confidence.
                         </p>
@@ -215,7 +215,7 @@ const AuthPage = () => {
                     {/* Logo for mobile */}
                     <Link to="/" className="auth-mobile-logo">
                         <div className="auth-mobile-logo-icon">🌱</div>
-                        <span className="auth-mobile-logo-text">AgroNova</span>
+                        <span className="auth-mobile-logo-text">Agri-Soil AI</span>
                     </Link>
 
                     {isLogin ? (

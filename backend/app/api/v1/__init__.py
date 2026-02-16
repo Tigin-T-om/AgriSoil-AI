@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1 import auth, products, orders, prediction, users
+from app.api.v1 import auth, products, orders, prediction, users, payment
 
 api_router = APIRouter()
 
@@ -8,3 +8,4 @@ api_router.include_router(users.router, prefix="/users", tags=["users"])
 api_router.include_router(products.router, prefix="/products", tags=["products"])
 api_router.include_router(orders.router, prefix="/orders", tags=["orders"])
 api_router.include_router(prediction.router, prefix="/model", tags=["prediction"])
+api_router.include_router(payment.router, prefix="/payment", tags=["payment"])
