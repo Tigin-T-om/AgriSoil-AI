@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { orderService } from '../services/orderService';
+import { paymentService } from '../services/paymentService';
 import Navbar from '../components/Navbar';
 import './Cart.css';
 
@@ -9,6 +9,14 @@ const Cart = () => {
     const [cart, setCart] = useState([]);
     const [loading, setLoading] = useState(false);
     const [stockErrors, setStockErrors] = useState({});
+    const [paymentStep, setPaymentStep] = useState(''); // '', 'creating', 'paying', 'verifying'
+    const [showAddressModal, setShowAddressModal] = useState(false);
+    const [addressForm, setAddressForm] = useState({
+        shipping_address: '',
+        phone_number: '',
+        notes: '',
+    });
+    const [addressErrors, setAddressErrors] = useState({});
     const { user } = useAuth();
     const navigate = useNavigate();
 
@@ -17,7 +25,6 @@ const Cart = () => {
     useEffect(() => {
         const savedCart = JSON.parse(localStorage.getItem(cartKey) || '[]');
         setCart(savedCart);
-        // Validate stock on load
         validateAllStock(savedCart);
     }, [cartKey]);
 
@@ -41,7 +48,6 @@ const Cart = () => {
         const newCart = cart.map(item => {
             if (item.id === productId) {
                 const newQty = Math.max(1, item.quantity + delta);
-                // Allow setting the quantity but show a warning if over stock
                 return { ...item, quantity: newQty };
             }
             return item;
@@ -51,7 +57,6 @@ const Cart = () => {
 
     const handleQuantityInput = (productId, value) => {
         const parsed = parseInt(value, 10);
-        // Allow empty input while typing
         if (value === '') {
             const newCart = cart.map(item =>
                 item.id === productId ? { ...item, quantity: '' } : item
@@ -68,7 +73,6 @@ const Cart = () => {
     };
 
     const handleQuantityBlur = (productId) => {
-        // If user leaves input empty, reset to 1
         const newCart = cart.map(item => {
             if (item.id === productId && (item.quantity === '' || item.quantity < 1)) {
                 return { ...item, quantity: 1 };
@@ -93,33 +97,116 @@ const Cart = () => {
     const shipping = subtotal > 500 ? 0 : 50;
     const total = subtotal + shipping;
 
-    const handleCheckout = async () => {
+    // --- Razorpay Payment Flow ---
+
+    const handleCheckoutClick = () => {
         if (!user) {
             navigate('/login');
             return;
         }
-
         if (cart.length === 0 || hasStockErrors) return;
 
+        // Show address modal
+        setShowAddressModal(true);
+    };
+
+    const validateAddress = () => {
+        const errors = {};
+        if (!addressForm.shipping_address.trim()) {
+            errors.shipping_address = 'Shipping address is required';
+        }
+        if (addressForm.shipping_address.trim().length < 10) {
+            errors.shipping_address = 'Please enter a complete address';
+        }
+        setAddressErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const handlePayWithRazorpay = async () => {
+        if (!validateAddress()) return;
+
         setLoading(true);
+        setPaymentStep('creating');
+
         try {
+            // Step 1: Load Razorpay script
+            const scriptLoaded = await paymentService.loadRazorpayScript();
+            if (!scriptLoaded) {
+                throw new Error('Failed to load Razorpay. Check your internet connection.');
+            }
+
+            // Step 2: Create Razorpay order on backend
             const orderData = {
                 items: cart.map(item => ({
                     product_id: item.id,
                     quantity: item.quantity,
-                    price: item.price,
                 })),
-                total_amount: total,
+                shipping_address: addressForm.shipping_address.trim(),
+                phone_number: addressForm.phone_number.trim() || null,
+                notes: addressForm.notes.trim() || null,
             };
 
-            await orderService.createOrder(orderData);
+            const razorpayOrder = await paymentService.createOrder(orderData);
+
+            // Step 3: Open Razorpay checkout popup
+            setPaymentStep('paying');
+
+            const paymentResponse = await paymentService.openCheckout({
+                key: razorpayOrder.key_id,
+                amount: razorpayOrder.amount,
+                currency: razorpayOrder.currency,
+                name: 'AgroNova',
+                description: `Order #${razorpayOrder.db_order_id}`,
+                order_id: razorpayOrder.razorpay_order_id,
+                prefill: {
+                    name: user.full_name || user.username,
+                    email: user.email,
+                    contact: addressForm.phone_number || user.phone_number || '',
+                },
+                theme: {
+                    color: '#22c55e',
+                },
+                notes: {
+                    db_order_id: razorpayOrder.db_order_id.toString(),
+                },
+            });
+
+            // Step 4: Verify payment on backend
+            setPaymentStep('verifying');
+
+            await paymentService.verifyPayment({
+                razorpay_order_id: paymentResponse.razorpay_order_id,
+                razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                razorpay_signature: paymentResponse.razorpay_signature,
+                db_order_id: razorpayOrder.db_order_id,
+            });
+
+            // Success! Clear cart and navigate
             clearCart();
+            setShowAddressModal(false);
             navigate('/my-orders');
+
         } catch (error) {
-            console.error('Checkout failed:', error);
-            alert('Checkout failed. Please try again.');
+            console.error('Payment failed:', error);
+
+            if (error.message === 'Payment cancelled by user') {
+                // User closed the Razorpay popup — not an error
+                setPaymentStep('');
+            } else {
+                alert(error.response?.data?.detail || error.message || 'Payment failed. Please try again.');
+            }
         } finally {
             setLoading(false);
+            setPaymentStep('');
+        }
+    };
+
+    const getPaymentStepText = () => {
+        switch (paymentStep) {
+            case 'creating': return 'Creating order...';
+            case 'paying': return 'Waiting for payment...';
+            case 'verifying': return 'Verifying payment...';
+            default: return 'Processing...';
         }
     };
 
@@ -282,31 +369,145 @@ const Cart = () => {
                                 )}
 
                                 <button
-                                    onClick={handleCheckout}
+                                    onClick={handleCheckoutClick}
                                     disabled={loading || cart.length === 0 || hasStockErrors}
                                     className="cart-checkout-btn"
                                 >
                                     {loading ? (
                                         <>
                                             <div className="cart-spinner" />
-                                            Processing...
+                                            {getPaymentStepText()}
                                         </>
                                     ) : (
                                         <>
-                                            <span>🔒</span>
-                                            <span>Secure Checkout</span>
+                                            <span>💳</span>
+                                            <span>Pay with Razorpay</span>
                                         </>
                                     )}
                                 </button>
 
-                                <p className="cart-payment-note">
-                                    We accept all major cards & UPI
-                                </p>
+                                <div className="cart-payment-methods">
+                                    <p className="cart-payment-note">
+                                        Secure payment via Razorpay
+                                    </p>
+                                    <div className="cart-payment-icons">
+                                        <span title="UPI">📱 UPI</span>
+                                        <span title="Cards">💳 Cards</span>
+                                        <span title="Net Banking">🏦 NetBanking</span>
+                                        <span title="Wallets">👛 Wallets</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Razorpay Test Mode Badge */}
+                            <div className="cart-test-mode-badge">
+                                <span className="cart-test-dot"></span>
+                                <span>Razorpay Test Mode</span>
                             </div>
                         </div>
                     </div>
                 )}
             </div>
+
+            {/* Address Modal */}
+            {showAddressModal && (
+                <div className="cart-modal-overlay" onClick={() => !loading && setShowAddressModal(false)}>
+                    <div className="cart-modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="cart-modal-header">
+                            <h2 className="cart-modal-title">Shipping Details</h2>
+                            <button
+                                className="cart-modal-close"
+                                onClick={() => !loading && setShowAddressModal(false)}
+                                disabled={loading}
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        <div className="cart-modal-body">
+                            <div className="cart-modal-field">
+                                <label className="cart-modal-label">
+                                    Shipping Address <span className="cart-required">*</span>
+                                </label>
+                                <textarea
+                                    className={`cart-modal-textarea ${addressErrors.shipping_address ? 'cart-modal-input-error' : ''}`}
+                                    placeholder="Enter your full shipping address..."
+                                    value={addressForm.shipping_address}
+                                    onChange={(e) => {
+                                        setAddressForm({ ...addressForm, shipping_address: e.target.value });
+                                        if (addressErrors.shipping_address) {
+                                            setAddressErrors({ ...addressErrors, shipping_address: '' });
+                                        }
+                                    }}
+                                    rows={3}
+                                    disabled={loading}
+                                />
+                                {addressErrors.shipping_address && (
+                                    <p className="cart-modal-error">{addressErrors.shipping_address}</p>
+                                )}
+                            </div>
+
+                            <div className="cart-modal-field">
+                                <label className="cart-modal-label">Phone Number</label>
+                                <input
+                                    type="tel"
+                                    className="cart-modal-input"
+                                    placeholder="e.g., +91 9876543210"
+                                    value={addressForm.phone_number}
+                                    onChange={(e) => setAddressForm({ ...addressForm, phone_number: e.target.value })}
+                                    disabled={loading}
+                                />
+                            </div>
+
+                            <div className="cart-modal-field">
+                                <label className="cart-modal-label">Order Notes</label>
+                                <input
+                                    type="text"
+                                    className="cart-modal-input"
+                                    placeholder="Any special instructions..."
+                                    value={addressForm.notes}
+                                    onChange={(e) => setAddressForm({ ...addressForm, notes: e.target.value })}
+                                    disabled={loading}
+                                />
+                            </div>
+
+                            <div className="cart-modal-summary">
+                                <div className="cart-modal-summary-row">
+                                    <span>Total Amount</span>
+                                    <span className="cart-modal-total">₹{total.toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="cart-modal-footer">
+                            <button
+                                className="cart-modal-cancel"
+                                onClick={() => setShowAddressModal(false)}
+                                disabled={loading}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="cart-modal-pay-btn"
+                                onClick={handlePayWithRazorpay}
+                                disabled={loading}
+                            >
+                                {loading ? (
+                                    <>
+                                        <div className="cart-spinner" />
+                                        {getPaymentStepText()}
+                                    </>
+                                ) : (
+                                    <>
+                                        <span>🔒</span>
+                                        <span>Pay ₹{total.toFixed(2)}</span>
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
