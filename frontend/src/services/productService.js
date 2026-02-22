@@ -7,6 +7,12 @@ export const productService = {
         return response.data;
     },
 
+    // Get single product by ID
+    getProduct: async (id) => {
+        const response = await api.get(`/api/v1/products/${id}`);
+        return response.data;
+    },
+
     // Search products by crop name (for soil analysis)
     searchByCrop: async (cropName, limit = 5) => {
         const response = await api.get(`/api/v1/products/search/by-crop/${cropName}`, {

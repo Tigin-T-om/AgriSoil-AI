@@ -1,6 +1,6 @@
-# AgriSoil AI Frontend
+# Agri-Soil AI Frontend
 
-React frontend application for the AgriSoil AI e-commerce platform.
+React frontend application for the Agri-Soil AI e-commerce platform.
 
 ## Features
 

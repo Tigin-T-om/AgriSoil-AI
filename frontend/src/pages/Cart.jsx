@@ -127,7 +127,6 @@ const Cart = () => {
 
         setLoading(true);
         setPaymentStep('creating');
-        let createdDbOrderId = null;
 
         try {
             // Step 1: Load Razorpay script
@@ -148,7 +147,6 @@ const Cart = () => {
             };
 
             const razorpayOrder = await paymentService.createOrder(orderData);
-            createdDbOrderId = razorpayOrder.db_order_id;
 
             // Step 3: Open Razorpay checkout popup
             setPaymentStep('paying');
@@ -192,24 +190,9 @@ const Cart = () => {
             console.error('Payment failed:', error);
 
             if (error.message === 'Payment cancelled by user') {
-                // User closed the Razorpay popup — mark order as failed
-                if (createdDbOrderId) {
-                    try {
-                        await paymentService.markFailed(createdDbOrderId);
-                    } catch (e) {
-                        console.error('Failed to mark order as failed:', e);
-                    }
-                }
+                // User closed the Razorpay popup — not an error
                 setPaymentStep('');
             } else {
-                // Other errors — also mark as failed if order was created
-                if (createdDbOrderId) {
-                    try {
-                        await paymentService.markFailed(createdDbOrderId);
-                    } catch (e) {
-                        console.error('Failed to mark order as failed:', e);
-                    }
-                }
                 alert(error.response?.data?.detail || error.message || 'Payment failed. Please try again.');
             }
         } finally {

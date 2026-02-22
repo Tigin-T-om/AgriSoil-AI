@@ -258,111 +258,17 @@
     text-transform: uppercase;
 }
 
-/* Out of Stock Overlay */
-.product-oos-overlay {
+.product-stock-badge {
     position: absolute;
-    inset: 0;
-    background: rgba(2, 6, 23, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-}
-
-.product-oos-stamp {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 1rem 1.5rem;
-    border-radius: 0.75rem;
-    background: rgba(239, 68, 68, 0.15);
-    border: 2px solid rgba(248, 113, 113, 0.4);
-    backdrop-filter: blur(4px);
-    transform: rotate(-6deg);
-}
-
-.product-oos-icon {
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: #f87171;
-    line-height: 1;
-}
-
-.product-oos-text {
-    font-size: 0.8rem;
-    font-weight: 800;
-    color: #f87171;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-}
-
-/* Out of Stock Card */
-.product-card-oos {
-    opacity: 0.7;
-}
-
-.product-card-oos .product-image {
-    filter: grayscale(60%);
-}
-
-.product-card-oos .product-placeholder {
-    filter: grayscale(80%);
-}
-
-.product-card-oos:hover {
-    transform: translateY(-4px);
-    border-color: rgba(248, 113, 113, 0.2);
-    box-shadow: 0 15px 30px -10px rgba(239, 68, 68, 0.08);
-}
-
-/* Stock Indicator Bar */
-.product-stock-bar {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.45rem 1rem;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-}
-
-.product-stock-icon {
-    font-size: 0.7rem;
-}
-
-.product-stock-bar.stock-high {
-    background: rgba(74, 222, 128, 0.08);
-    color: #4ade80;
-}
-
-.product-stock-bar.stock-medium {
-    background: rgba(250, 204, 21, 0.08);
+    top: 1rem;
+    right: 1rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.5rem;
+    background: rgba(250, 204, 21, 0.2);
+    backdrop-filter: blur(8px);
+    font-size: 0.75rem;
+    font-weight: 600;
     color: #facc15;
-}
-
-.product-stock-bar.stock-low {
-    background: rgba(251, 146, 60, 0.1);
-    color: #fb923c;
-    animation: stockPulse 2s ease-in-out infinite;
-}
-
-.product-stock-bar.stock-out {
-    background: rgba(248, 113, 113, 0.08);
-    color: #f87171;
-}
-
-@keyframes stockPulse {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.6;
-    }
 }
 
 .product-content {
@@ -537,4 +443,22 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Clickable Product Links */
+.product-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.product-name-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.product-name-link:hover .product-name {
+    color: #4ade80;
+    transition: color 0.2s ease;
 }

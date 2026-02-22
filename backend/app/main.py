@@ -21,7 +21,7 @@ async def startup_event():
     import os
     
     print("\n" + "=" * 60)
-    print("🌱 AgriSoil AI - Starting Up...")
+    print("🌱 Agri-Soil AI - Starting Up...")
     print("=" * 60)
     
     # Pre-load BOTH ML models
@@ -43,7 +43,7 @@ async def startup_event():
     print(f"   Database: SQLite -> {os.path.abspath(db_path)}")
     
     print("\n" + "=" * 60)
-    print("✅ AgriSoil AI Backend Ready!")
+    print("✅ Agri-Soil AI Backend Ready!")
     print("=" * 60 + "\n")
 
 # CORS middleware - MUST be added before other middleware and routes
@@ -63,7 +63,7 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 @app.get("/")
 async def root():
     return {
-        "message": "Welcome to AgriSoil AI E-commerce API",
+        "message": "Welcome to Agri-Soil AI E-commerce API",
         "version": settings.VERSION,
         "docs": f"{settings.API_V1_STR}/docs"
     }

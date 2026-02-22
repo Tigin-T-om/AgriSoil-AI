@@ -193,33 +193,3 @@ def verify_payment(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Payment verification failed. Signature mismatch."
         )
-
-
-@router.post("/mark-failed")
-def mark_payment_failed(
-    db_order_id: int,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_active_user)
-):
-    """
-    Mark an order as failed when user cancels/dismisses the Razorpay popup.
-    This prevents abandoned orders from staying as 'pending' forever.
-    """
-    db_order = db.query(Order).filter(
-        Order.id == db_order_id,
-        Order.user_id == current_user.id
-    ).first()
-    
-    if not db_order:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Order not found"
-        )
-    
-    # Only mark as failed if still pending
-    if db_order.payment_status == PaymentStatus.PENDING:
-        db_order.payment_status = PaymentStatus.FAILED
-        db_order.status = OrderStatus.CANCELLED
-        db.commit()
-    
-    return {"status": "ok", "message": "Order marked as failed"}

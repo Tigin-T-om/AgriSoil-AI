@@ -1,6 +1,6 @@
 # Database Schema Documentation
 
-This document describes the database tables and their fields for the AgriSoil AI E-commerce backend.
+This document describes the database tables and their fields for the Agri-Soil AI E-commerce backend.
 
 ## Tables Created
 

@@ -1,5 +1,5 @@
 """
-Rule Engine for AgriSoil AI
+Rule Engine for Agri-Soil AI
 ============================
 This module provides rule-based validation for crop recommendations.
 It works alongside the ML models to provide a hybrid prediction system.
@@ -11,7 +11,7 @@ Features:
 - Warning generation for suboptimal conditions
 - Suggestion generation for improvements
 
-Part of the AgriSoil AI Hybrid ML + Rule-Based System
+Part of the Agri-Soil AI Hybrid ML + Rule-Based System
 """
 
 from typing import Dict, List, Any, Optional, Tuple

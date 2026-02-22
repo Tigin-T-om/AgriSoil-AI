@@ -4,19 +4,27 @@ from datetime import datetime
 from app.models.order import OrderStatus, PaymentStatus
 
 
-# --- Product info embedded in order items ---
-class OrderItemProductInfo(BaseModel):
-    """Minimal product info shown inside an order item"""
+# Brief schemas for nested responses
+class ProductBrief(BaseModel):
     id: int
     name: str
-    category: str
     image_url: Optional[str] = None
+    category: Optional[str] = None
 
     class Config:
         from_attributes = True
 
 
-# --- Order Item schemas ---
+class UserBrief(BaseModel):
+    id: int
+    username: str
+    email: str
+    full_name: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+
 class OrderItemBase(BaseModel):
     product_id: int
     quantity: int
@@ -30,26 +38,13 @@ class OrderItemResponse(OrderItemBase):
     id: int
     order_id: int
     price: float
-    product: Optional[OrderItemProductInfo] = None
     created_at: datetime
+    product: Optional[ProductBrief] = None
 
     class Config:
         from_attributes = True
 
 
-# --- User info embedded in order response (for admin) ---
-class OrderUserInfo(BaseModel):
-    """Minimal user info shown in admin order view"""
-    id: int
-    username: str
-    email: str
-    full_name: Optional[str] = None
-
-    class Config:
-        from_attributes = True
-
-
-# --- Order schemas ---
 class OrderBase(BaseModel):
     shipping_address: str
     phone_number: Optional[str] = None
@@ -71,13 +66,13 @@ class OrderResponse(OrderBase):
     created_at: datetime
     updated_at: Optional[datetime] = None
     order_items: List[OrderItemResponse] = []
-    user: Optional[OrderUserInfo] = None
+    user: Optional[UserBrief] = None
 
     class Config:
         from_attributes = True
 
 
-# --- Razorpay payment schemas ---
+# Razorpay payment schemas
 class RazorpayOrderCreate(BaseModel):
     """Request body for creating a Razorpay order"""
     items: List[OrderItemCreate]

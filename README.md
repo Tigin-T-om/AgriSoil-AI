@@ -1,4 +1,4 @@
-# 🌱 AgriSoil AI
+# 🌱 Agri-Soil AI
 
 An intelligent agricultural platform that uses machine learning to analyze soil properties and recommend suitable crops.
 
@@ -44,7 +44,7 @@ npm run dev
 ## 📁 Project Structure
 
 ```
-AgriSoil-AI/
+Agri-Soil-AI/
 ├── backend/          # FastAPI server
 │   ├── app/          # Application code
 │   │   ├── api/      # API routes

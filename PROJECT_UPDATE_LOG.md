@@ -1,6 +1,6 @@
-# AgriSoil AI Project Update - January 18, 2026
+# Agri-Soil AI Project Update - January 18, 2026
 
-This document summarizes the changes, fixes, and new features implemented today for the AgriSoil AI project. It covers the resolution of authentication issues, the setup of the Machine Learning environment, and the integration of the crop recommendation system.
+This document summarizes the changes, fixes, and new features implemented today for the Agri-Soil AI project. It covers the resolution of authentication issues, the setup of the Machine Learning environment, and the integration of the crop recommendation system.
 
 ## 1. Authentication Fix (Bcrypt & Passlib)
 

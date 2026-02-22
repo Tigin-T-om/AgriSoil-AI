@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Train Unified Soil Classification Model
-Creates the missing soil classification models for AgroNova
+Creates the missing soil classification models for Agri-Soil AI
 """
 
 import pandas as pd
@@ -194,7 +194,7 @@ def test_soil_model():
 
 def main():
     """Main training function"""
-    print("AGRONOVA SOIL CLASSIFICATION TRAINING")
+    print("AGRI-SOIL AI SOIL CLASSIFICATION TRAINING")
     print("Training unified soil classification model...")
     
     # Train soil model

@@ -1,6 +1,6 @@
-# AgriSoil AI E-commerce Backend
+# Agri-Soil AI E-commerce Backend
 
-FastAPI backend for the AgriSoil AI e-commerce platform for selling seeds and crops to farmers.
+FastAPI backend for the Agri-Soil AI e-commerce platform for selling seeds and crops to farmers.
 
 ## Features
 
@@ -196,4 +196,4 @@ You can test the API using:
 
 ## License
 
-This project is part of the AgriSoil AI platform.
+This project is part of the Agri-Soil AI platform.

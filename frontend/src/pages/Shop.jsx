@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { productService } from '../services/productService';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
@@ -33,7 +33,7 @@ const Shop = () => {
             if (searchQuery) params.search = searchQuery;
 
             const data = await productService.getProducts(params);
-            setProducts(data);
+            setProducts(data.filter(p => p.is_available));
         } catch (error) {
             console.error('Failed to fetch products', error);
         } finally {
@@ -71,20 +71,6 @@ const Shop = () => {
         setTimeout(() => {
             toast.remove();
         }, 3000);
-    };
-
-    const getStockInfo = (product) => {
-        const qty = product.stock_quantity;
-        if (!product.is_available || qty <= 0) {
-            return { label: 'Out of Stock', className: 'stock-out', icon: '✕' };
-        }
-        if (qty <= 5) {
-            return { label: `Only ${qty} left`, className: 'stock-low', icon: '⚡' };
-        }
-        if (qty <= 20) {
-            return { label: `${qty} in stock`, className: 'stock-medium', icon: '📦' };
-        }
-        return { label: `${qty} in stock`, className: 'stock-high', icon: '✓' };
     };
 
     return (
@@ -168,69 +154,57 @@ const Shop = () => {
                         </div>
                     ) : (
                         <div className="shop-products-grid">
-                            {products.map((product) => {
-                                const stock = getStockInfo(product);
-                                const isOutOfStock = !product.is_available || product.stock_quantity <= 0;
-
-                                return (
-                                    <div key={product.id} className={`product-card ${isOutOfStock ? 'product-card-oos' : ''}`}>
-                                        {/* Image */}
-                                        <div className="product-image-wrapper">
-                                            {product.image_url ? (
-                                                <img
-                                                    src={product.image_url}
-                                                    alt={product.name}
-                                                    className="product-image"
-                                                />
-                                            ) : (
-                                                <div className="product-placeholder">
-                                                    {product.category === 'seeds' ? '🌱' :
-                                                        product.category === 'crops' ? '🌾' :
-                                                            product.category === 'fertilizers' ? '🧪' : '🛠️'}
-                                                </div>
-                                            )}
-
-                                            {/* Category Badge */}
-                                            <div className="product-category-badge">
-                                                {product.category}
+                            {products.map((product) => (
+                                <div key={product.id} className="product-card">
+                                    {/* Image — clickable */}
+                                    <Link to={`/product/${product.id}`} className="product-image-wrapper product-link">
+                                        {product.image_url ? (
+                                            <img
+                                                src={product.image_url}
+                                                alt={product.name}
+                                                className="product-image"
+                                            />
+                                        ) : (
+                                            <div className="product-placeholder">
+                                                {product.category === 'seeds' ? '🌱' :
+                                                    product.category === 'crops' ? '🌾' :
+                                                        product.category === 'fertilizers' ? '🧪' : '🛠️'}
                                             </div>
+                                        )}
 
-                                            {/* Out of Stock Overlay */}
-                                            {isOutOfStock && (
-                                                <div className="product-oos-overlay">
-                                                    <div className="product-oos-stamp">
-                                                        <span className="product-oos-icon">✕</span>
-                                                        <span className="product-oos-text">OUT OF STOCK</span>
-                                                    </div>
-                                                </div>
-                                            )}
+                                        {/* Category Badge */}
+                                        <div className="product-category-badge">
+                                            {product.category}
                                         </div>
 
-                                        {/* Stock Indicator Bar */}
-                                        <div className={`product-stock-bar ${stock.className}`}>
-                                            <span className="product-stock-icon">{stock.icon}</span>
-                                            <span className="product-stock-label">{stock.label}</span>
-                                        </div>
+                                        {/* Stock Badge */}
+                                        {product.stock_quantity <= 5 && product.stock_quantity > 0 && (
+                                            <div className="product-stock-badge">
+                                                Only {product.stock_quantity} left
+                                            </div>
+                                        )}
+                                    </Link>
 
-                                        {/* Content */}
-                                        <div className="product-content">
+                                    {/* Content */}
+                                    <div className="product-content">
+                                        <Link to={`/product/${product.id}`} className="product-name-link">
                                             <h3 className="product-name">{product.name}</h3>
-                                            <p className="product-description">{product.description}</p>
+                                        </Link>
+                                        <p className="product-description">{product.description}</p>
 
-                                            <div className="product-footer">
-                                                <span className="product-price">₹{product.price}</span>
-                                                <button
-                                                    onClick={() => addToCart(product)}
-                                                    disabled={isOutOfStock}
-                                                    className={`product-add-btn ${isOutOfStock ? 'product-add-btn-disabled' : 'product-add-btn-active'}`}
-                                                >
-                                                    {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
-                                                </button>
-                                            </div>
+                                        <div className="product-footer">
+                                            <span className="product-price">₹{product.price}</span>
+                                            <button
+                                                onClick={() => addToCart(product)}
+                                                disabled={product.stock_quantity === 0}
+                                                className={`product-add-btn ${product.stock_quantity === 0 ? 'product-add-btn-disabled' : 'product-add-btn-active'}`}
+                                            >
+                                                {product.stock_quantity === 0 ? 'Out of Stock' : 'Add to Cart'}
+                                            </button>
                                         </div>
                                     </div>
-                                );
-                            })}
+                                </div>
+                            ))}
                         </div>
                     )}
                 </div>

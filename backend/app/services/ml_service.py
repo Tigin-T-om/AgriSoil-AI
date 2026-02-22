@@ -5,8 +5,17 @@ This service handles both:
 1. Crop Recommendation (from unified_agricultural_dataset.csv)
 2. Soil Classification (from synthetic_soil_dataset.csv)
 
-Part of the AgriSoil AI Hybrid ML + Rule-Based System
+Part of the Agri-Soil AI Hybrid ML + Rule-Based System
 """
+
+import warnings
+# Suppress sklearn version mismatch warnings (models trained with older sklearn still work fine)
+warnings.filterwarnings("ignore", category=UserWarning, module="sklearn")
+try:
+    from sklearn.exceptions import InconsistentVersionWarning
+    warnings.filterwarnings("ignore", category=InconsistentVersionWarning)
+except ImportError:
+    pass
 
 import joblib
 import os
@@ -19,7 +28,7 @@ from app.schemas.prediction import PredictionInput
 
 class MLService:
     """
-    Machine Learning Service for AgriSoil AI
+    Machine Learning Service for Agri-Soil AI
     Manages both crop recommendation and soil classification models.
     Supports both standard and enhanced (high-accuracy) models.
     """

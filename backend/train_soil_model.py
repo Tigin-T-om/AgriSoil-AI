@@ -8,7 +8,7 @@ Dataset: synthetic_soil_dataset.csv (1,000 records)
 Features: N, P, K, temperature, humidity, ph, rainfall
 Target: soil_type (Loamy, Clayey, Sandy, Silty)
 
-Part of the Hybrid ML + Rule-Based AgriSoil AI System
+Part of the Hybrid ML + Rule-Based Agri-Soil AI System
 """
 
 import pandas as pd

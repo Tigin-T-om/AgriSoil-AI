@@ -56,6 +56,17 @@ export const AuthProvider = ({ children }) => {
     return { ...response, user: userData };
   };
 
+  const twitterLogin = async (code, codeVerifier) => {
+    const response = await authService.twitterLogin(code, codeVerifier);
+    localStorage.setItem('access_token', response.access_token);
+
+    const userData = await authService.getCurrentUser();
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
+
+    return { ...response, user: userData };
+  };
+
   const register = async (userData) => {
     try {
       const response = await authService.register(userData);
@@ -88,6 +99,7 @@ export const AuthProvider = ({ children }) => {
     user,
     login,
     googleLogin,
+    twitterLogin,
     register,
     logout,
     loading,

@@ -29,7 +29,12 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Token expired or invalid
+      // Ignore 401s from the login endpoint itself (wrong password)
+      if (error.config.url.includes('/login')) {
+        return Promise.reject(error);
+      }
+
+      // Token expired or invalid for other requests -> redirect to login
       localStorage.removeItem('access_token');
       localStorage.removeItem('user');
       window.location.href = '/login';

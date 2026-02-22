@@ -13,12 +13,6 @@ export const paymentService = {
         return response.data;
     },
 
-    // Mark payment as failed (when user cancels/dismisses popup)
-    markFailed: async (dbOrderId) => {
-        const response = await api.post(`/api/v1/payment/mark-failed?db_order_id=${dbOrderId}`);
-        return response.data;
-    },
-
     // Load Razorpay checkout script dynamically
     loadRazorpayScript: () => {
         return new Promise((resolve) => {

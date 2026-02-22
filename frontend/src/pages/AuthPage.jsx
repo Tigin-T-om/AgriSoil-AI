@@ -1,8 +1,47 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 import './Auth.css';
+
+// ── Twitter / X OAuth helpers ──
+const TWITTER_CLIENT_ID = import.meta.env.VITE_TWITTER_CLIENT_ID || '';
+const TWITTER_REDIRECT_URI = import.meta.env.VITE_TWITTER_REDIRECT_URI || 'http://localhost:5173/auth/callback/twitter';
+
+function generateCodeVerifier() {
+    const array = new Uint8Array(32);
+    crypto.getRandomValues(array);
+    return btoa(String.fromCharCode(...array))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+async function generateCodeChallenge(verifier) {
+    const data = new TextEncoder().encode(verifier);
+    const digest = await crypto.subtle.digest('SHA-256', data);
+    return btoa(String.fromCharCode(...new Uint8Array(digest)))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function initiateTwitterOAuth() {
+    const verifier = generateCodeVerifier();
+    generateCodeChallenge(verifier).then((challenge) => {
+        const state = crypto.randomUUID();
+        sessionStorage.setItem('twitter_code_verifier', verifier);
+        sessionStorage.setItem('twitter_state', state);
+
+        const params = new URLSearchParams({
+            response_type: 'code',
+            client_id: TWITTER_CLIENT_ID,
+            redirect_uri: TWITTER_REDIRECT_URI,
+            scope: 'tweet.read users.read offline.access',
+            state,
+            code_challenge: challenge,
+            code_challenge_method: 'S256',
+        });
+
+        window.location.href = `https://twitter.com/i/oauth2/authorize?${params.toString()}`;
+    });
+}
 
 const AuthPage = () => {
     const location = useLocation();
@@ -109,6 +148,28 @@ const AuthPage = () => {
         }
     };
 
+    // Twitter / X OAuth handler
+    const handleTwitterLogin = () => {
+        if (!TWITTER_CLIENT_ID) {
+            const msg = 'Twitter login is not configured.';
+            if (isLogin) setLoginError(msg);
+            else setRegError(msg);
+            return;
+        }
+        initiateTwitterOAuth();
+    };
+
+    const googleLoginFlow = useGoogleLogin({
+        onSuccess: (tokenResponse) => {
+            handleGoogleSuccess({ credential: tokenResponse.access_token });
+        },
+        onError: () => {
+            const msg = 'Google login failed. Please try again.';
+            if (isLogin) setLoginError(msg);
+            else setRegError(msg);
+        },
+    });
+
     // Shared Social Buttons
     const SocialButtons = () => (
         <>
@@ -118,22 +179,13 @@ const AuthPage = () => {
                 <div className="auth-divider-line" />
             </div>
             <div className="auth-social-buttons">
-                <div className="auth-social-btn auth-social-google-wrap">
-                    <GoogleLogin
-                        onSuccess={handleGoogleSuccess}
-                        onError={() => {
-                            const msg = 'Google login failed. Please try again.';
-                            if (isLogin) setLoginError(msg);
-                            else setRegError(msg);
-                        }}
-                        theme="filled_black"
-                        shape="pill"
-                        size="large"
-                        width="100%"
-                        text="continue_with"
-                    />
-                </div>
-                <button type="button" className="auth-social-btn">
+                <button type="button" className="auth-social-btn" onClick={() => googleLoginFlow()}>
+                    <svg className="auth-social-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M21.35 11.1h-9.17v2.73h6.51c-.33 3.81-3.5 5.44-6.5 5.44C8.36 19.27 5 16.25 5 12c0-4.1 3.2-6.98 7.18-6.98 1.95 0 3.92.7 5.32 2.05l2.05-2.05C17.9 3.54 15.29 2 12.19 2 6.56 2 2 6.56 2 12s4.56 10 10.19 10c5.81 0 10.22-4.04 10.22-10 0-.69-.1-1.3-.26-1.9z" />
+                    </svg>
+                    Google
+                </button>
+                <button type="button" className="auth-social-btn" onClick={handleTwitterLogin}>
                     <svg className="auth-social-icon" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                     </svg>
@@ -243,7 +295,7 @@ const AuthPage = () => {
                                 <div className="form-group">
                                     <div className="form-label-row">
                                         <label className="form-label">Password</label>
-                                        <a href="#" className="form-link">Forgot password?</a>
+                                        <Link to="/forgot-password" className="form-link">Forgot password?</Link>
                                     </div>
                                     <input type="password" name="password" value={loginData.password} onChange={handleLoginChange} required className="form-input" placeholder="Enter your password" />
                                 </div>

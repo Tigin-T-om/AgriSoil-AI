@@ -102,7 +102,7 @@ class OrderService:
 
     @staticmethod
     def get_user_orders(db: Session, user_id: int, skip: int = 0, limit: int = 100) -> List[Order]:
-        """Get all orders for a user with items and product details"""
+        """Get all orders for a user with product details"""
         return (
             db.query(Order)
             .options(
@@ -117,7 +117,7 @@ class OrderService:
 
     @staticmethod
     def get_all_orders(db: Session, skip: int = 0, limit: int = 100) -> List[Order]:
-        """Get all orders (Admin) with items, products, and user info"""
+        """Get all orders (Admin) with product and user details"""
         return (
             db.query(Order)
             .options(
@@ -156,3 +156,4 @@ class OrderService:
         db.commit()
         db.refresh(db_order)
         return db_order
+
