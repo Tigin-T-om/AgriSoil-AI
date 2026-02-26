@@ -3,6 +3,7 @@ from typing import List
 from fastapi import HTTPException, status
 from app.models.order import Order, OrderItem, OrderStatus
 from app.models.product import Product
+from app.models.delivery_staff import DeliveryStaff
 from app.schemas.order import OrderCreate
 from app.services.product import ProductService
 
@@ -52,6 +53,7 @@ class OrderService:
             user_id=user_id,
             total_amount=total_amount,
             shipping_address=order_data.shipping_address,
+            district=order_data.district,
             phone_number=order_data.phone_number,
             notes=order_data.notes,
             status=OrderStatus.PENDING
@@ -81,7 +83,8 @@ class OrderService:
             db.query(Order)
             .options(
                 joinedload(Order.order_items).joinedload(OrderItem.product),
-                joinedload(Order.user)
+                joinedload(Order.user),
+                joinedload(Order.delivery_staff),
             )
             .filter(Order.id == order_id)
             .first()
@@ -106,7 +109,8 @@ class OrderService:
         return (
             db.query(Order)
             .options(
-                joinedload(Order.order_items).joinedload(OrderItem.product)
+                joinedload(Order.order_items).joinedload(OrderItem.product),
+                joinedload(Order.delivery_staff),
             )
             .filter(Order.user_id == user_id)
             .order_by(Order.created_at.desc())
@@ -122,7 +126,8 @@ class OrderService:
             db.query(Order)
             .options(
                 joinedload(Order.order_items).joinedload(OrderItem.product),
-                joinedload(Order.user)
+                joinedload(Order.user),
+                joinedload(Order.delivery_staff),
             )
             .order_by(Order.created_at.desc())
             .offset(skip)
@@ -141,7 +146,8 @@ class OrderService:
             db.query(Order)
             .options(
                 joinedload(Order.order_items).joinedload(OrderItem.product),
-                joinedload(Order.user)
+                joinedload(Order.user),
+                joinedload(Order.delivery_staff),
             )
             .filter(Order.id == order_id)
             .first()

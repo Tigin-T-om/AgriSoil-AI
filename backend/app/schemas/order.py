@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
 from app.models.order import OrderStatus, PaymentStatus
+from app.schemas.delivery_staff import DeliveryStaffBrief
 
 
 # Brief schemas for nested responses
@@ -47,6 +48,7 @@ class OrderItemResponse(OrderItemBase):
 
 class OrderBase(BaseModel):
     shipping_address: str
+    district: Optional[str] = None
     phone_number: Optional[str] = None
     notes: Optional[str] = None
 
@@ -63,6 +65,9 @@ class OrderResponse(OrderBase):
     payment_status: Optional[PaymentStatus] = PaymentStatus.PENDING
     razorpay_order_id: Optional[str] = None
     razorpay_payment_id: Optional[str] = None
+    delivery_staff_id: Optional[int] = None
+    delivery_staff: Optional[DeliveryStaffBrief] = None
+    delivery_notes: Optional[str] = None
     created_at: datetime
     updated_at: Optional[datetime] = None
     order_items: List[OrderItemResponse] = []

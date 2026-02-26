@@ -312,6 +312,11 @@ const AuthPage = () => {
                                     Sign up for free
                                 </button>
                             </p>
+                            <p className="auth-footer-text" style={{ marginTop: '0.5rem' }}>
+                                <Link to="/delivery/login" className="auth-footer-link" style={{ color: '#f97316' }}>
+                                    🚚 Delivery Staff? Login here
+                                </Link>
+                            </p>
                         </div>
                     ) : (
                         /* ================= REGISTER FORM ================= */

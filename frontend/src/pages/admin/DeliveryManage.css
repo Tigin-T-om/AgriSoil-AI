@@ -1,0 +1,221 @@
+/* ═══════════════════════════════════════════
+   DELIVERY MANAGEMENT ADMIN PAGE
+   ═══════════════════════════════════════════ */
+
+/* Create Card */
+.dm-create-card {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(249, 115, 22, 0.15);
+    border-radius: 0.875rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    animation: adminSlideDown 0.3s ease;
+}
+
+.dm-create-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin: 0 0 1rem;
+}
+
+.dm-error {
+    padding: 0.75rem 1rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: 0.5rem;
+    color: #f87171;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.dm-create-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.dm-form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.dm-field label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.3rem;
+}
+
+.dm-field input {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.5rem;
+    color: #e2e8f0;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.dm-field input:focus {
+    border-color: rgba(249, 115, 22, 0.4);
+}
+
+.dm-field input::placeholder {
+    color: #475569;
+}
+
+.dm-create-btn {
+    align-self: flex-start;
+    padding: 0.6rem 1.5rem;
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    border: none;
+    border-radius: 0.5rem;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dm-create-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+}
+
+.dm-create-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* District Badge */
+.dm-district-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.625rem;
+    background: rgba(249, 115, 22, 0.08);
+    border: 1px solid rgba(249, 115, 22, 0.15);
+    border-radius: 2rem;
+    font-size: 0.8rem;
+    color: #f97316;
+    font-weight: 500;
+}
+
+/* Status Badges */
+.dm-status-badges {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.dm-badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.dm-badge-active {
+    background: rgba(74, 222, 128, 0.1);
+    color: #4ade80;
+}
+
+.dm-badge-inactive {
+    background: rgba(248, 113, 113, 0.1);
+    color: #f87171;
+}
+
+.dm-badge-available {
+    background: rgba(34, 197, 94, 0.08);
+    color: #22c55e;
+}
+
+.dm-badge-unavailable {
+    background: rgba(239, 68, 68, 0.08);
+    color: #ef4444;
+}
+
+/* Workload */
+.dm-workload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dm-workload-count {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #c084fc;
+}
+
+.dm-workload-label {
+    font-size: 0.65rem;
+    color: #64748b;
+    text-transform: uppercase;
+}
+
+/* Toggle Button */
+.dm-toggle-btn {
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid;
+}
+
+.dm-toggle-deactivate {
+    background: rgba(248, 113, 113, 0.1);
+    border-color: rgba(248, 113, 113, 0.2);
+    color: #f87171;
+}
+
+.dm-toggle-deactivate:hover {
+    background: rgba(248, 113, 113, 0.2);
+}
+
+.dm-toggle-activate {
+    background: rgba(74, 222, 128, 0.1);
+    border-color: rgba(74, 222, 128, 0.2);
+    color: #4ade80;
+}
+
+.dm-toggle-activate:hover {
+    background: rgba(74, 222, 128, 0.2);
+}
+
+/* Primary Button (used by AdminLayout actions) */
+.admin-btn-primary {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    border: none;
+    border-radius: 0.5rem;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.admin-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+}
+
+@media (max-width: 768px) {
+    .dm-form-grid {
+        grid-template-columns: 1fr;
+    }
+}

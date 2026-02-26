@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.database import engine, Base
-from app.models import User, Product, Order, OrderItem  # Import models to register them
+from app.models import User, Product, Order, OrderItem, DeliveryStaff  # Import models to register them
 from app.api.v1 import api_router
 
 # Create database tables

@@ -1,25 +1,35 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { orderService } from '../../services/orderService';
+import { deliveryService } from '../../services/deliveryService';
 import './Orders.css';
 
 const AdminOrders = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [expandedOrder, setExpandedOrder] = useState(null);
+    const [allStaff, setAllStaff] = useState([]);
+    const [assigningOrderId, setAssigningOrderId] = useState(null);
+    const [selectedStaffId, setSelectedStaffId] = useState('');
+    const [districtStaff, setDistrictStaff] = useState([]);
+    const [autoAssigning, setAutoAssigning] = useState(null);
 
     const statusOptions = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'];
 
     useEffect(() => {
-        fetchOrders();
+        fetchData();
     }, []);
 
-    const fetchOrders = async () => {
+    const fetchData = async () => {
         try {
-            const data = await orderService.getAllOrders();
-            setOrders(data);
+            const [ordersData, staffData] = await Promise.all([
+                orderService.getAllOrders(),
+                deliveryService.getAllStaff().catch(() => []),
+            ]);
+            setOrders(ordersData);
+            setAllStaff(staffData);
         } catch (error) {
-            console.error('Failed to fetch orders:', error);
+            console.error('Failed to fetch data:', error);
         } finally {
             setLoading(false);
         }
@@ -28,7 +38,7 @@ const AdminOrders = () => {
     const handleStatusChange = async (orderId, newStatus) => {
         try {
             await orderService.updateStatus(orderId, newStatus);
-            fetchOrders();
+            fetchData();
         } catch (error) {
             alert('Failed to update order status');
         }
@@ -36,6 +46,55 @@ const AdminOrders = () => {
 
     const toggleOrder = (orderId) => {
         setExpandedOrder(expandedOrder === orderId ? null : orderId);
+        setAssigningOrderId(null);
+    };
+
+    const handleAssign = async (orderId) => {
+        if (!selectedStaffId) return;
+        try {
+            await deliveryService.assignToOrder(orderId, parseInt(selectedStaffId));
+            setAssigningOrderId(null);
+            setSelectedStaffId('');
+            fetchData();
+        } catch (err) {
+            alert(err.response?.data?.detail || 'Assignment failed');
+        }
+    };
+
+    const handleAutoAssign = async (orderId) => {
+        setAutoAssigning(orderId);
+        try {
+            await deliveryService.autoAssign(orderId);
+            fetchData();
+        } catch (err) {
+            alert(err.response?.data?.detail || 'Auto-assignment failed. No available staff for this district.');
+        } finally {
+            setAutoAssigning(null);
+        }
+    };
+
+    const handleUnassign = async (orderId) => {
+        try {
+            await deliveryService.unassign(orderId);
+            fetchData();
+        } catch (err) {
+            alert(err.response?.data?.detail || 'Failed to unassign');
+        }
+    };
+
+    const openAssignDialog = async (orderId, district) => {
+        setAssigningOrderId(orderId);
+        setSelectedStaffId('');
+        if (district) {
+            try {
+                const staff = await deliveryService.getStaffByDistrict(district);
+                setDistrictStaff(staff);
+            } catch {
+                setDistrictStaff([]);
+            }
+        } else {
+            setDistrictStaff([]);
+        }
     };
 
     const getStatusBadgeClass = (status) => {
@@ -77,6 +136,7 @@ const AdminOrders = () => {
     const pendingCount = orders.filter(o => o.status === 'pending').length;
     const deliveredCount = orders.filter(o => o.status === 'delivered').length;
     const totalRevenue = orders.reduce((sum, o) => sum + (o.total_amount || 0), 0);
+    const assignedCount = orders.filter(o => o.delivery_staff_id).length;
 
     return (
         <AdminLayout
@@ -114,6 +174,13 @@ const AdminOrders = () => {
                         </div>
                         <div className="admin-stat-card">
                             <div className="admin-stat-top">
+                                <div className="admin-stat-icon admin-stat-icon-cyan">🚚</div>
+                            </div>
+                            <div className="admin-stat-value">{assignedCount}</div>
+                            <div className="admin-stat-label">Assigned</div>
+                        </div>
+                        <div className="admin-stat-card">
+                            <div className="admin-stat-top">
                                 <div className="admin-stat-icon admin-stat-icon-purple">💰</div>
                             </div>
                             <div className="admin-stat-value">₹{totalRevenue.toLocaleString()}</div>
@@ -140,12 +207,13 @@ const AdminOrders = () => {
                                             <th>Products</th>
                                             <th>Total</th>
                                             <th>Status</th>
+                                            <th>Delivery</th>
                                             <th>Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {orders.map((order) => (
-                                            <>
+                                            <React.Fragment key={order.id}>
                                                 <tr key={order.id} className={`admin-order-row ${expandedOrder === order.id ? 'admin-order-row-expanded' : ''}`}>
                                                     <td>
                                                         <button
@@ -186,6 +254,16 @@ const AdminOrders = () => {
                                                             ))}
                                                         </select>
                                                     </td>
+                                                    <td>
+                                                        {order.delivery_staff ? (
+                                                            <div className="admin-delivery-assigned">
+                                                                <span className="admin-delivery-name">🚚 {order.delivery_staff.full_name}</span>
+                                                                <span className="admin-delivery-district">{order.delivery_staff.district}</span>
+                                                            </div>
+                                                        ) : (
+                                                            <span className="admin-delivery-none">—</span>
+                                                        )}
+                                                    </td>
                                                     <td style={{ color: 'var(--dark-400)' }}>
                                                         {formatDate(order.created_at)}
                                                     </td>
@@ -194,7 +272,7 @@ const AdminOrders = () => {
                                                 {/* Expanded Row */}
                                                 {expandedOrder === order.id && (
                                                     <tr key={`${order.id}-details`} className="admin-order-detail-row">
-                                                        <td colSpan="7">
+                                                        <td colSpan="8">
                                                             <div className="admin-order-detail">
                                                                 {/* Products */}
                                                                 <div className="admin-detail-section">
@@ -222,11 +300,16 @@ const AdminOrders = () => {
                                                                     </div>
                                                                 </div>
 
-                                                                {/* Shipping & Payment */}
+                                                                {/* Shipping & Payment & Delivery */}
                                                                 <div className="admin-detail-grid">
                                                                     <div className="admin-detail-section">
                                                                         <div className="admin-detail-label">📍 Shipping Address</div>
                                                                         <div className="admin-detail-value">{order.shipping_address || 'Not provided'}</div>
+                                                                        {order.district && (
+                                                                            <div className="admin-detail-value" style={{ marginTop: '0.25rem', color: '#f97316' }}>
+                                                                                🏘️ District: {order.district}
+                                                                            </div>
+                                                                        )}
                                                                         {order.phone_number && (
                                                                             <div className="admin-detail-value" style={{ marginTop: '0.25rem', color: '#64748b' }}>
                                                                                 📞 {order.phone_number}
@@ -253,11 +336,144 @@ const AdminOrders = () => {
                                                                         </div>
                                                                     )}
                                                                 </div>
+
+                                                                {/* ═══ Delivery Assignment Section ═══ */}
+                                                                <div className="admin-delivery-section">
+                                                                    <div className="admin-detail-label">🚚 Delivery Assignment</div>
+
+                                                                    {order.delivery_staff ? (
+                                                                        <div className="admin-delivery-info-card">
+                                                                            <div className="admin-delivery-info-top">
+                                                                                <div className="admin-delivery-avatar">
+                                                                                    {order.delivery_staff.full_name?.charAt(0).toUpperCase()}
+                                                                                </div>
+                                                                                <div>
+                                                                                    <div className="admin-delivery-staff-name">{order.delivery_staff.full_name}</div>
+                                                                                    <div className="admin-delivery-staff-district">📍 {order.delivery_staff.district}</div>
+                                                                                    {order.delivery_staff.phone_number && (
+                                                                                        <div className="admin-delivery-staff-phone">📞 {order.delivery_staff.phone_number}</div>
+                                                                                    )}
+                                                                                </div>
+                                                                                <span className={`admin-delivery-avail ${order.delivery_staff.is_available ? 'avail-yes' : 'avail-no'}`}>
+                                                                                    {order.delivery_staff.is_available ? '🟢 Available' : '🔴 Unavailable'}
+                                                                                </span>
+                                                                            </div>
+                                                                            <div className="admin-delivery-actions">
+                                                                                <button
+                                                                                    className="admin-reassign-btn"
+                                                                                    onClick={() => openAssignDialog(order.id, order.district)}
+                                                                                >
+                                                                                    🔄 Reassign
+                                                                                </button>
+                                                                                <button
+                                                                                    className="admin-unassign-btn"
+                                                                                    onClick={() => handleUnassign(order.id)}
+                                                                                >
+                                                                                    ✕ Unassign
+                                                                                </button>
+                                                                            </div>
+                                                                            {order.delivery_notes && (
+                                                                                <div className="admin-delivery-notes">
+                                                                                    <strong>Delivery Notes:</strong> {order.delivery_notes}
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div className="admin-delivery-unassigned">
+                                                                            <p className="admin-delivery-unassigned-text">No delivery staff assigned</p>
+                                                                            <div className="admin-delivery-assign-btns">
+                                                                                <button
+                                                                                    className="admin-auto-assign-btn"
+                                                                                    onClick={() => handleAutoAssign(order.id)}
+                                                                                    disabled={autoAssigning === order.id}
+                                                                                >
+                                                                                    {autoAssigning === order.id ? (
+                                                                                        <><span className="admin-assign-spinner" /> Finding...</>
+                                                                                    ) : (
+                                                                                        <>⚡ Auto-Assign</>
+                                                                                    )}
+                                                                                </button>
+                                                                                <button
+                                                                                    className="admin-manual-assign-btn"
+                                                                                    onClick={() => openAssignDialog(order.id, order.district)}
+                                                                                >
+                                                                                    👤 Manual Assign
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+
+                                                                    {/* Assignment Dialog */}
+                                                                    {assigningOrderId === order.id && (
+                                                                        <div className="admin-assign-dialog">
+                                                                            <div className="admin-assign-dialog-header">
+                                                                                <span>Select Delivery Staff</span>
+                                                                                <button onClick={() => setAssigningOrderId(null)} className="admin-assign-close">✕</button>
+                                                                            </div>
+
+                                                                            {order.district && districtStaff.length > 0 && (
+                                                                                <div className="admin-assign-group">
+                                                                                    <div className="admin-assign-group-label">📍 Staff in {order.district} (recommended)</div>
+                                                                                    {districtStaff.map(s => (
+                                                                                        <label key={s.id} className={`admin-assign-option ${selectedStaffId == s.id ? 'selected' : ''}`}>
+                                                                                            <input
+                                                                                                type="radio"
+                                                                                                name="staff"
+                                                                                                value={s.id}
+                                                                                                checked={selectedStaffId == s.id}
+                                                                                                onChange={(e) => setSelectedStaffId(e.target.value)}
+                                                                                            />
+                                                                                            <div className="admin-assign-option-info">
+                                                                                                <span className="admin-assign-option-name">{s.full_name}</span>
+                                                                                                <span className="admin-assign-option-meta">
+                                                                                                    {s.district} · {s.active_orders_count} active · {s.is_available ? '🟢' : '🔴'}
+                                                                                                </span>
+                                                                                            </div>
+                                                                                        </label>
+                                                                                    ))}
+                                                                                </div>
+                                                                            )}
+
+                                                                            <div className="admin-assign-group">
+                                                                                <div className="admin-assign-group-label">👥 All Staff</div>
+                                                                                {allStaff.length === 0 ? (
+                                                                                    <p className="admin-assign-no-staff">No delivery staff created yet</p>
+                                                                                ) : (
+                                                                                    allStaff.map(s => (
+                                                                                        <label key={s.id} className={`admin-assign-option ${selectedStaffId == s.id ? 'selected' : ''}`}>
+                                                                                            <input
+                                                                                                type="radio"
+                                                                                                name="staff"
+                                                                                                value={s.id}
+                                                                                                checked={selectedStaffId == s.id}
+                                                                                                onChange={(e) => setSelectedStaffId(e.target.value)}
+                                                                                            />
+                                                                                            <div className="admin-assign-option-info">
+                                                                                                <span className="admin-assign-option-name">{s.full_name}</span>
+                                                                                                <span className="admin-assign-option-meta">
+                                                                                                    {s.district} · {s.active_orders_count} active · {s.is_available ? '🟢' : '🔴'} · {s.is_active ? 'Active' : 'Inactive'}
+                                                                                                </span>
+                                                                                            </div>
+                                                                                        </label>
+                                                                                    ))
+                                                                                )}
+                                                                            </div>
+
+                                                                            <button
+                                                                                className="admin-assign-confirm-btn"
+                                                                                disabled={!selectedStaffId}
+                                                                                onClick={() => handleAssign(order.id)}
+                                                                            >
+                                                                                ✅ Assign Selected
+                                                                            </button>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
                                                             </div>
                                                         </td>
                                                     </tr>
                                                 )}
-                                            </>
+                                            </React.Fragment>
                                         ))}
                                     </tbody>
                                 </table>

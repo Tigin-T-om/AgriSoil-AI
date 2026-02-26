@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.security import decode_access_token
 from app.models.user import User
+from app.models.delivery_staff import DeliveryStaff
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
@@ -21,6 +22,11 @@ def get_current_user(
     
     payload = decode_access_token(token)
     if payload is None:
+        raise credentials_exception
+    
+    # Reject delivery_staff tokens — they should use get_current_delivery_staff
+    role = payload.get("role")
+    if role == "delivery_staff":
         raise credentials_exception
     
     username: str = payload.get("sub")
@@ -56,3 +62,42 @@ def get_current_active_superuser(
             detail="The user doesn't have enough privileges"
         )
     return current_user
+
+
+# ─── Delivery Staff Auth ──────────────────────────────────
+
+def get_current_delivery_staff(
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db)
+) -> DeliveryStaff:
+    """Get current authenticated delivery staff from JWT token"""
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate delivery staff credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    
+    payload = decode_access_token(token)
+    if payload is None:
+        raise credentials_exception
+    
+    # Must be a delivery_staff token
+    role = payload.get("role")
+    if role != "delivery_staff":
+        raise credentials_exception
+    
+    username: str = payload.get("sub")
+    if username is None:
+        raise credentials_exception
+    
+    staff = db.query(DeliveryStaff).filter(DeliveryStaff.username == username).first()
+    if staff is None:
+        raise credentials_exception
+    
+    if not staff.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Delivery staff account is inactive"
+        )
+    
+    return staff

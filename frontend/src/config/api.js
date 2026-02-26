@@ -34,10 +34,19 @@ api.interceptors.response.use(
         return Promise.reject(error);
       }
 
-      // Token expired or invalid for other requests -> redirect to login
+      // Determine if this was a delivery staff session
+      const isDeliveryStaff = !!localStorage.getItem('delivery_staff');
+
+      // Token expired or invalid -> clear and redirect
       localStorage.removeItem('access_token');
       localStorage.removeItem('user');
-      window.location.href = '/login';
+      localStorage.removeItem('delivery_staff');
+
+      if (isDeliveryStaff) {
+        window.location.href = '/delivery/login';
+      } else {
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }

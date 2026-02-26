@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
+import DeliveryRoute from './components/DeliveryRoute';
 import Home from './pages/Home';
 import AuthPage from './pages/AuthPage';
 import TwitterCallback from './pages/TwitterCallback';
@@ -11,10 +12,13 @@ import AdminDashboard from './pages/admin/Dashboard';
 import Users from './pages/admin/Users';
 import Products from './pages/admin/Products';
 import Orders from './pages/admin/Orders';
+import DeliveryManage from './pages/admin/DeliveryManage';
 import Shop from './pages/Shop';
 import Cart from './pages/Cart';
 import MyOrders from './pages/MyOrders';
 import ProductDetail from './pages/ProductDetail';
+import DeliveryLogin from './pages/delivery/DeliveryLogin';
+import DeliveryDashboard from './pages/delivery/DeliveryDashboard';
 import './App.css';
 
 function App() {
@@ -119,6 +123,29 @@ function App() {
                 <Orders />
               </AdminRoute>
             }
+          />
+          <Route
+            path="/admin/delivery"
+            element={
+              <AdminRoute>
+                <DeliveryManage />
+              </AdminRoute>
+            }
+          />
+
+          {/* Delivery Staff Routes */}
+          <Route path="/delivery/login" element={<DeliveryLogin />} />
+          <Route
+            path="/delivery/dashboard"
+            element={
+              <DeliveryRoute>
+                <DeliveryDashboard />
+              </DeliveryRoute>
+            }
+          />
+          <Route
+            path="/delivery"
+            element={<Navigate to="/delivery/dashboard" replace />}
           />
 
           {/* Catch all - redirect to home */}

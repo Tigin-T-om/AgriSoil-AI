@@ -1,0 +1,738 @@
+/* ═══════════════════════════════════════════
+   DELIVERY DASHBOARD
+   ═══════════════════════════════════════════ */
+
+.dd-page {
+    min-height: 100vh;
+    background: #0a0f1e;
+    color: #e2e8f0;
+}
+
+/* Loading */
+.dd-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    gap: 1rem;
+    color: #94a3b8;
+}
+
+.dd-loading-spinner {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 3px solid rgba(249, 115, 22, 0.2);
+    border-top-color: #f97316;
+    border-radius: 50%;
+    animation: ddSpin 0.7s linear infinite;
+}
+
+@keyframes ddSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ─── Header ─── */
+.dd-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(10, 15, 30, 0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(249, 115, 22, 0.12);
+}
+
+.dd-header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dd-header-left {
+    display: flex;
+    align-items: center;
+}
+
+.dd-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.dd-logo-icon {
+    font-size: 1.75rem;
+}
+
+.dd-logo-title {
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: #e2e8f0;
+}
+
+.dd-logo-title span {
+    background: linear-gradient(135deg, #f97316, #fbbf24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.dd-logo-badge {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #f97316;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.dd-header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.dd-header-user {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dd-header-avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.dd-header-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #cbd5e1;
+}
+
+.dd-logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.875rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 0.5rem;
+    color: #f87171;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dd-logout-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* ─── Main ─── */
+.dd-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+/* ─── Profile Card ─── */
+.dd-profile-card {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.dd-profile-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.dd-profile-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.dd-profile-avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.25rem;
+}
+
+.dd-profile-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0;
+    color: #f1f5f9;
+}
+
+.dd-profile-email {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin: 0.15rem 0 0;
+}
+
+.dd-edit-btn {
+    padding: 0.4rem 0.875rem;
+    background: rgba(249, 115, 22, 0.1);
+    border: 1px solid rgba(249, 115, 22, 0.2);
+    border-radius: 0.5rem;
+    color: #f97316;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dd-edit-btn:hover {
+    background: rgba(249, 115, 22, 0.2);
+}
+
+/* Profile Details */
+.dd-profile-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+}
+
+.dd-detail-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.4rem 0.75rem;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 2rem;
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+.dd-chip-available {
+    border-color: rgba(74, 222, 128, 0.2);
+    color: #4ade80;
+}
+
+.dd-chip-unavailable {
+    border-color: rgba(248, 113, 113, 0.2);
+    color: #f87171;
+}
+
+/* Profile Edit */
+.dd-profile-edit {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.dd-edit-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.dd-edit-field label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #94a3b8;
+    margin-bottom: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.dd-edit-field input {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.5rem;
+    color: #e2e8f0;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.dd-edit-field input:focus {
+    border-color: rgba(249, 115, 22, 0.4);
+}
+
+.dd-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+}
+
+.dd-toggle-label input[type="checkbox"] {
+    display: none;
+}
+
+.dd-toggle-slider {
+    width: 2.5rem;
+    height: 1.375rem;
+    background: #334155;
+    border-radius: 2rem;
+    position: relative;
+    transition: background 0.3s ease;
+}
+
+.dd-toggle-slider::after {
+    content: '';
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    background: #fff;
+    border-radius: 50%;
+    top: 0.1875rem;
+    left: 0.1875rem;
+    transition: transform 0.3s ease;
+}
+
+.dd-toggle-label input:checked+.dd-toggle-slider {
+    background: #f97316;
+}
+
+.dd-toggle-label input:checked+.dd-toggle-slider::after {
+    transform: translateX(1.125rem);
+}
+
+.dd-save-btn {
+    align-self: flex-start;
+    padding: 0.5rem 1.25rem;
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    border: none;
+    border-radius: 0.5rem;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dd-save-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+}
+
+/* ─── Stats ─── */
+.dd-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.dd-stat-card {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 0.875rem;
+    padding: 1.25rem;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.dd-stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.dd-stat-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.dd-stat-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+}
+
+.dd-stat-label {
+    font-size: 0.75rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+}
+
+.dd-stat-active .dd-stat-value {
+    color: #f97316;
+}
+
+.dd-stat-shipped .dd-stat-value {
+    color: #22d3ee;
+}
+
+.dd-stat-delivered .dd-stat-value {
+    color: #4ade80;
+}
+
+.dd-stat-total .dd-stat-value {
+    color: #c084fc;
+}
+
+/* ─── Orders ─── */
+.dd-orders-section {
+    margin-top: 0.5rem;
+}
+
+.dd-section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+    color: #f1f5f9;
+}
+
+.dd-empty {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px dashed rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+}
+
+.dd-empty-icon {
+    font-size: 3rem;
+    margin-bottom: 0.75rem;
+}
+
+.dd-empty h3 {
+    font-size: 1.1rem;
+    color: #cbd5e1;
+    margin: 0 0 0.3rem;
+}
+
+.dd-empty p {
+    color: #64748b;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.dd-orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.dd-order-card {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 0.875rem;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+}
+
+.dd-order-card:hover {
+    border-color: rgba(249, 115, 22, 0.15);
+}
+
+.dd-order-expanded {
+    border-color: rgba(249, 115, 22, 0.25);
+}
+
+.dd-order-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.dd-order-header:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.dd-order-left {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+}
+
+.dd-order-id {
+    font-weight: 800;
+    font-size: 1rem;
+    color: #f97316;
+}
+
+.dd-order-meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.dd-order-customer {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #e2e8f0;
+}
+
+.dd-order-date {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.dd-order-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.dd-order-status {
+    padding: 0.25rem 0.625rem;
+    border: 1px solid;
+    border-radius: 2rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.dd-expand-icon {
+    color: #64748b;
+    transition: transform 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.dd-expand-open {
+    transform: rotate(180deg);
+    color: #f97316;
+}
+
+/* Order Body */
+.dd-order-body {
+    padding: 0 1.25rem 1.25rem;
+    animation: ddSlideDown 0.3s ease;
+}
+
+@keyframes ddSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dd-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.875rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.dd-info-block {}
+
+.dd-info-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.25rem;
+}
+
+.dd-info-value {
+    color: #cbd5e1;
+    font-size: 0.85rem;
+}
+
+.dd-info-price {
+    color: #4ade80;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+/* Items */
+.dd-items {
+    margin-bottom: 1rem;
+}
+
+.dd-items-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.5rem;
+}
+
+.dd-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.625rem;
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 0.5rem;
+    margin-bottom: 0.375rem;
+}
+
+.dd-item-img {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.375rem;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.dd-item-placeholder {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.375rem;
+    background: #334155;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.dd-item-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dd-item-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #e2e8f0;
+}
+
+.dd-item-qty {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+.dd-item-price {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4ade80;
+}
+
+/* Action Bar */
+.dd-action-bar {
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.dd-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0.625rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dd-action-shipped {
+    background: linear-gradient(135deg, #0891b2, #06b6d4);
+    color: #fff;
+}
+
+.dd-action-shipped:hover:not(:disabled) {
+    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.3);
+    transform: translateY(-1px);
+}
+
+.dd-action-delivered {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: #fff;
+}
+
+.dd-action-delivered:hover:not(:disabled) {
+    box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3);
+    transform: translateY(-1px);
+}
+
+.dd-action-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.dd-btn-spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: ddSpin 0.6s linear infinite;
+}
+
+.dd-delivered-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(74, 222, 128, 0.08);
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    border-radius: 0.625rem;
+    color: #4ade80;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+    .dd-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dd-edit-row {
+        grid-template-columns: 1fr;
+    }
+
+    .dd-header-name {
+        display: none;
+    }
+
+    .dd-info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .dd-main {
+        padding: 1rem;
+    }
+
+    .dd-order-left {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+}

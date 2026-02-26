@@ -14,6 +14,7 @@ const sidebarLinks = [
             { path: '/admin/products', label: 'Products', icon: '📦' },
             { path: '/admin/orders', label: 'Orders', icon: '🛒' },
             { path: '/admin/users', label: 'Users', icon: '👥' },
+            { path: '/admin/delivery', label: 'Delivery Staff', icon: '🚚' },
         ]
     },
 ];

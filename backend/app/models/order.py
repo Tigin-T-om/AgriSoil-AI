@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Enum as SQLEnum
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Enum as SQLEnum, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 import enum
@@ -29,8 +29,13 @@ class Order(Base):
     total_amount = Column(Float, nullable=False)
     status = Column(SQLEnum(OrderStatus), default=OrderStatus.PENDING)
     shipping_address = Column(String, nullable=False)
+    district = Column(String, nullable=True, index=True)  # Customer's district for delivery assignment
     phone_number = Column(String, nullable=True)
     notes = Column(String, nullable=True)
+    
+    # Delivery staff assignment
+    delivery_staff_id = Column(Integer, ForeignKey("delivery_staff.id"), nullable=True)
+    delivery_notes = Column(Text, nullable=True)  # Notes from delivery staff
     
     # Payment fields (Razorpay)
     payment_status = Column(SQLEnum(PaymentStatus), default=PaymentStatus.PENDING)
@@ -44,6 +49,7 @@ class Order(Base):
     # Relationships
     user = relationship("User", back_populates="orders")
     order_items = relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
+    delivery_staff = relationship("DeliveryStaff", back_populates="assigned_orders")
 
 
 class OrderItem(Base):
