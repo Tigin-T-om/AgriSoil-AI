@@ -87,7 +87,6 @@ The frontend handles the user interface, while FastAPI manages authentication, M
 
 ## 📸 Screenshots
 
-```markdown
 ### Dashboard 
 
 ![Dashboard](docs/screenshots/01_dashboard.png)
@@ -106,7 +105,6 @@ The frontend handles the user interface, while FastAPI manages authentication, M
 ### Cart Page
 
 ![Cart Page](docs/screenshots/03_cartpage.png)
-```
 
 ## ⚙️ Installation
 
