@@ -87,42 +87,25 @@ The frontend handles the user interface, while FastAPI manages authentication, M
 
 ## 📸 Screenshots
 
-Create:
-
-```text
-docs/
-└── screenshots/
-```
-
-Recommended screenshots:
-
-```text
-01-home.png
-02-soil-analysis.png
-03-crop-recommendation.png
-04-shop.png
-05-admin-dashboard.png
-06-delivery-dashboard.png
-```
-
-Add them to this section:
-
 ```markdown
-### Soil Analysis
+### Dashboard 
 
-![Soil Analysis](docs/screenshots/02-soil-analysis.png)
+![Dashboard](docs/screenshots/01_dashboard.png)
+
+### Soil Analysis
+![Dashboard](docs/screenshots/05_soil_anlaysis_input.png)
 
 ### Crop Recommendation
 
-![Crop Recommendation](docs/screenshots/03-crop-recommendation.png)
+![Crop Recommendation](docs/screenshots/04_soil_anlaysis.png)
 
 ### Marketplace
 
-![Marketplace](docs/screenshots/04-shop.png)
+![Marketplace](docs/screenshots/02_products.png)
 
-### Admin Dashboard
+### Cart Page
 
-![Admin Dashboard](docs/screenshots/05-admin-dashboard.png)
+![Cart Page](docs/screenshots/03_cartpage.png)
 ```
 
 ## ⚙️ Installation

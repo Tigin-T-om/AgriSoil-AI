@@ -21,16 +21,19 @@ async def startup_event():
     import os
     
     print("\n" + "=" * 60)
-    print("🌱 Agri-Soil AI - Starting Up...")
+    print("[*] Agri-Soil AI - Starting Up...")
     print("=" * 60)
     
     # Pre-load BOTH ML models
-    print("\n📦 Loading ML Models...")
+    print("\n[+] Loading ML Models...")
     model_status = MLService.load_models()
     
     # Summary
     loaded_count = sum(1 for v in model_status.values() if v)
-    print(f"\n📊 Models loaded: {loaded_count}/{len(model_status)}")
+    print(f"\n[i] Models loaded: {loaded_count}/{len(model_status)}")
+    
+    if loaded_count == 0:
+        print("[i] Running in Rule-Based Fallback Mode (ML libraries blocked by system policy)")
     
     # Database and Environment logs
     env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env")
@@ -38,12 +41,12 @@ async def startup_event():
     if db_path.startswith("./"):
         db_path = os.path.join(os.getcwd(), db_path[2:])
     
-    print(f"\n🔧 Configuration:")
+    print(f"\n[~] Configuration:")
     print(f"   ENV file: {os.path.abspath(env_path)} (exists={os.path.exists(env_path)})")
     print(f"   Database: SQLite -> {os.path.abspath(db_path)}")
     
     print("\n" + "=" * 60)
-    print("✅ Agri-Soil AI Backend Ready!")
+    print("[OK] Agri-Soil AI Backend Ready!")
     print("=" * 60 + "\n")
 
 # CORS middleware - MUST be added before other middleware and routes

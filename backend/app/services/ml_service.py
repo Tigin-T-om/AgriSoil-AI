@@ -9,6 +9,10 @@ Part of the Agri-Soil AI Hybrid ML + Rule-Based System
 """
 
 import warnings
+import os
+import json
+import sys
+
 # Suppress sklearn version mismatch warnings (models trained with older sklearn still work fine)
 warnings.filterwarnings("ignore", category=UserWarning, module="sklearn")
 try:
@@ -17,13 +21,59 @@ try:
 except ImportError:
     pass
 
-import joblib
-import os
-import json
-import numpy as np
-import pandas as pd
+ML_AVAILABLE = False
+np = None
+pd = None
+joblib = None
+
+try:
+    import numpy as np
+    import pandas as pd
+    import joblib
+    import sklearn
+    ML_AVAILABLE = True
+except (ImportError, Exception) as e:
+    print(f"[WARNING] ML libraries (numpy/pandas/joblib/sklearn) are unavailable or blocked: {e}", file=sys.stderr)
+    print("[WARNING] AgriSoil AI will run in Rule-Based Fallback Mode.", file=sys.stderr)
+
 from typing import Optional, Dict, List, Any
 from app.schemas.prediction import PredictionInput
+
+# Kerala Soil Scientific Ranges for heuristic classifier
+KERALA_SOIL_TYPES = {
+    "Laterite": {
+        "N": (30, 80), "P": (5, 25), "K": (40, 100),
+        "temperature": (24, 34), "humidity": (70, 92), "ph": (4.5, 6.0), "rainfall": (2400, 4200)
+    },
+    "Red Loam": {
+        "N": (40, 90), "P": (15, 40), "K": (50, 110),
+        "temperature": (24, 35), "humidity": (65, 88), "ph": (5.5, 6.8), "rainfall": (1800, 3360)
+    },
+    "Coastal Alluvial": {
+        "N": (25, 65), "P": (20, 50), "K": (30, 80),
+        "temperature": (26, 36), "humidity": (75, 95), "ph": (7.0, 8.5), "rainfall": (1440, 2640)
+    },
+    "Riverine Alluvial": {
+        "N": (60, 120), "P": (35, 70), "K": (55, 120),
+        "temperature": (24, 33), "humidity": (70, 90), "ph": (6.2, 7.5), "rainfall": (2160, 3600)
+    },
+    "Brown Hydromorphic": {
+        "N": (50, 100), "P": (20, 50), "K": (30, 75),
+        "temperature": (25, 34), "humidity": (80, 98), "ph": (4.0, 5.5), "rainfall": (2400, 3840)
+    },
+    "Forest Loam": {
+        "N": (80, 150), "P": (30, 65), "K": (60, 130),
+        "temperature": (15, 26), "humidity": (75, 95), "ph": (5.0, 6.5), "rainfall": (3000, 4800)
+    },
+    "Black Cotton": {
+        "N": (45, 95), "P": (25, 55), "K": (40, 90),
+        "temperature": (26, 38), "humidity": (50, 75), "ph": (7.0, 8.5), "rainfall": (960, 1800)
+    },
+    "Peaty": {
+        "N": (100, 180), "P": (15, 40), "K": (25, 60),
+        "temperature": (26, 34), "humidity": (85, 99), "ph": (3.5, 5.0), "rainfall": (2400, 3600)
+    }
+}
 
 
 class MLService:
@@ -72,6 +122,9 @@ class MLService:
             "soil_model": False
         }
         
+        if not ML_AVAILABLE:
+            return results
+            
         # Load Crop Recommendation Model
         if cls.crop_model is None:
             results["crop_model"] = cls._load_crop_model()
@@ -101,7 +154,7 @@ class MLService:
                     cls._crop_features = loaded.get('features', cls.FEATURE_COLUMNS)
                     cls._crop_base_features = loaded.get('base_features', cls.FEATURE_COLUMNS)
                     cls._is_enhanced_model = True
-                    print(f"✅ Enhanced Crop Model loaded (with {len(cls._crop_features)} features)")
+                    print(f"[OK] Enhanced Crop Model loaded (with {len(cls._crop_features)} features)")
                 else:
                     # Old format - just the model
                     cls.crop_model = loaded
@@ -111,13 +164,13 @@ class MLService:
                     cls._is_enhanced_model = False
                 
                 crop_count = len(cls.crop_model.classes_) if hasattr(cls.crop_model, 'classes_') else 0
-                print(f"   📊 {crop_count} crops available")
+                print(f"   [i] {crop_count} crops available")
                 return True
             except Exception as e:
-                print(f"❌ Failed to load crop model: {e}")
+                print(f"[ERROR] Failed to load crop model: {e}")
                 return False
         else:
-            print(f"⚠️  Crop model not found at {cls._crop_model_path}")
+            print(f"[WARNING] Crop model not found at {cls._crop_model_path}")
             return False
     
     @classmethod
@@ -136,8 +189,8 @@ class MLService:
                     cls._soil_base_features = loaded.get('base_features', cls.FEATURE_COLUMNS)
                     cls._is_enhanced_soil_model = True
                     soil_types = len(cls.soil_model.classes_) if hasattr(cls.soil_model, 'classes_') else 0
-                    print(f"✅ Enhanced Soil Model loaded (with {len(cls._soil_features)} features)")
-                    print(f"   📊 {soil_types} soil types: {list(cls.soil_model.classes_)[:5]}...")
+                    print(f"[OK] Enhanced Soil Model loaded (with {len(cls._soil_features)} features)")
+                    print(f"   [i] {soil_types} soil types: {list(cls.soil_model.classes_)[:5]}...")
                 else:
                     # Old format - just the model
                     cls.soil_model = loaded
@@ -146,20 +199,20 @@ class MLService:
                     cls._soil_base_features = cls.FEATURE_COLUMNS
                     cls._is_enhanced_soil_model = False
                     soil_types = len(cls.soil_model.classes_) if hasattr(cls.soil_model, 'classes_') else 0
-                    print(f"✅ Soil Classification Model loaded: {soil_types} soil types")
+                    print(f"[OK] Soil Classification Model loaded: {soil_types} soil types")
                 
                 # Load metadata if available
                 if os.path.exists(cls._soil_metadata_path):
                     with open(cls._soil_metadata_path, 'r') as f:
                         cls.soil_metadata = json.load(f)
-                    print(f"   📊 Model accuracy: {cls.soil_metadata.get('accuracy', cls.soil_metadata.get('test_accuracy', 0)) * 100:.1f}%")
+                    print(f"   [i] Model accuracy: {cls.soil_metadata.get('accuracy', cls.soil_metadata.get('test_accuracy', 0)) * 100:.1f}%")
                 
                 return True
             except Exception as e:
-                print(f"❌ Failed to load soil model: {e}")
+                print(f"[ERROR] Failed to load soil model: {e}")
                 return False
         else:
-            print(f"⚠️  Soil model not found at {cls._soil_model_path}")
+            print(f"[WARNING] Soil model not found at {cls._soil_model_path}")
             return False
     
     @classmethod
@@ -171,7 +224,7 @@ class MLService:
         cls.load_models()
     
     @classmethod
-    def _prepare_input(cls, data: PredictionInput) -> pd.DataFrame:
+    def _prepare_input(cls, data: PredictionInput) -> "pd.DataFrame":
         """Convert PredictionInput to DataFrame for model prediction."""
         return pd.DataFrame([{
             'N': data.nitrogen,
@@ -184,7 +237,7 @@ class MLService:
         }])
     
     @classmethod
-    def _create_enhanced_features(cls, df: pd.DataFrame) -> pd.DataFrame:
+    def _create_enhanced_features(cls, df: "pd.DataFrame") -> "pd.DataFrame":
         """
         Create enhanced features for the improved model.
         Matches the feature engineering in train_enhanced_model.py
@@ -234,7 +287,7 @@ class MLService:
         return df
     
     @classmethod
-    def _prepare_enhanced_input(cls, data: PredictionInput) -> np.ndarray:
+    def _prepare_enhanced_input(cls, data: PredictionInput) -> "np.ndarray":
         """Prepare input with enhanced features for the improved model."""
         # Get basic input
         input_df = cls._prepare_input(data)
@@ -253,7 +306,7 @@ class MLService:
         return X.values
     
     @classmethod
-    def _create_enhanced_soil_features(cls, df: pd.DataFrame) -> pd.DataFrame:
+    def _create_enhanced_soil_features(cls, df: "pd.DataFrame") -> "pd.DataFrame":
         """
         Create enhanced features for soil classification.
         Matches the feature engineering in train_improved_soil_model.py
@@ -326,7 +379,7 @@ class MLService:
         return df
     
     @classmethod
-    def _prepare_enhanced_soil_input(cls, data: PredictionInput) -> np.ndarray:
+    def _prepare_enhanced_soil_input(cls, data: PredictionInput) -> "np.ndarray":
         """Prepare input with enhanced features for the improved soil model."""
         # Get basic input
         input_df = cls._prepare_input(data)
@@ -345,6 +398,103 @@ class MLService:
         return X.values
     
     @classmethod
+    def _heuristic_predict_soil_type(cls, data: PredictionInput) -> Dict[str, Any]:
+        """
+        Fallback heuristic classifier for soil types when ML libraries are blocked.
+        Matches parameters to the scientific ranges of Kerala soil types.
+        """
+        features = {
+            "N": data.nitrogen,
+            "P": data.phosphorus,
+            "K": data.potassium,
+            "temperature": data.temperature,
+            "humidity": data.humidity,
+            "ph": data.ph,
+            "rainfall": data.rainfall
+        }
+        
+        soil_scores = {}
+        for soil_name, ranges in KERALA_SOIL_TYPES.items():
+            score = 0.0
+            for param, val in features.items():
+                min_val, max_val = ranges[param]
+                if min_val <= val <= max_val:
+                    score += 5.0
+                else:
+                    range_width = max_val - min_val if max_val != min_val else 1.0
+                    dist = min(abs(val - min_val), abs(val - max_val))
+                    # Penalty based on relative distance
+                    penalty = min(5.0, (dist / range_width) * 5.0)
+                    score += (5.0 - penalty)
+            soil_scores[soil_name] = score
+            
+        # Convert scores to pseudo-probabilities using softmax-like normalization
+        import math
+        max_score = max(soil_scores.values())
+        exp_scores = {k: math.exp(v - max_score) for k, v in soil_scores.items()}
+        sum_exp = sum(exp_scores.values())
+        probabilities = {k: round((v / sum_exp) * 100, 2) for k, v in exp_scores.items()}
+        
+        predicted_type = max(probabilities, key=probabilities.get)
+        confidence = probabilities[predicted_type]
+        
+        return {
+            "predicted_type": predicted_type,
+            "confidence": confidence,
+            "all_probabilities": probabilities
+        }
+
+    @classmethod
+    def _rule_based_predict_crop(cls, data: PredictionInput) -> Dict[str, Any]:
+        """
+        Fallback rule-based crop prediction when ML libraries are unavailable.
+        Uses RuleValidator.get_suitable_crops to recommend crops.
+        """
+        soil_result = cls.predict_soil_type(data)
+        predicted_soil = soil_result["predicted_type"] if soil_result else "Loamy"
+        
+        from app.services.rule_engine import RuleValidator
+        rule_based_crops = RuleValidator.get_suitable_crops(
+            soil_type=predicted_soil,
+            n=data.nitrogen,
+            p=data.phosphorus,
+            k=data.potassium,
+            temperature=data.temperature,
+            humidity=data.humidity,
+            ph=data.ph,
+            rainfall=data.rainfall,
+            drainage=data.drainage,
+            top_n=5
+        )
+        
+        if not rule_based_crops:
+            return {
+                "recommended_crop": "Rice",
+                "confidence": 50.0,
+                "alternatives": [
+                    {"crop": "Banana", "confidence": 40.0},
+                    {"crop": "Coconut", "confidence": 30.0}
+                ],
+                "all_probabilities": {"Rice": 50.0, "Banana": 40.0, "Coconut": 30.0}
+            }
+            
+        alternatives = []
+        for crop_info in rule_based_crops[1:4]:
+            alternatives.append({
+                "crop": crop_info["crop"],
+                "confidence": round(crop_info["validation_score"], 2)
+            })
+            
+        all_probs = {c["crop"]: round(c["validation_score"], 2) for c in rule_based_crops}
+        
+        return {
+            "recommended_crop": rule_based_crops[0]["crop"],
+            "confidence": round(rule_based_crops[0]["validation_score"], 2),
+            "alternatives": alternatives,
+            "all_probabilities": all_probs
+        }
+
+    @classmethod
     def predict_soil_type(cls, data: PredictionInput) -> Optional[Dict[str, Any]]:
         """
         Predict soil type from input data.
@@ -356,12 +506,16 @@ class MLService:
             - confidence: float (0-100)
             - all_probabilities: Dict[str, float]
         """
+        # Fall back to heuristic classification if ML libraries are unavailable
+        if not ML_AVAILABLE:
+            return cls._heuristic_predict_soil_type(data)
+
         # Ensure model is loaded
         if cls.soil_model is None:
             cls._load_soil_model()
             
         if cls.soil_model is None:
-            return None
+            return cls._heuristic_predict_soil_type(data)
         
         # Use enhanced features if enhanced model is loaded
         if getattr(cls, '_is_enhanced_soil_model', False):
@@ -405,12 +559,16 @@ class MLService:
             - confidence: float (0-100)
             - alternatives: List[Dict] (top 3 crops with confidence)
         """
+        # Fall back to rule-based classification if ML libraries are unavailable
+        if not ML_AVAILABLE:
+            return cls._rule_based_predict_crop(data)
+
         # Ensure model is loaded
         if cls.crop_model is None:
             cls._load_crop_model()
             
         if cls.crop_model is None:
-            return None
+            return cls._rule_based_predict_crop(data)
         
         # Use enhanced features if enhanced model is loaded
         if getattr(cls, '_is_enhanced_model', False):
@@ -764,6 +922,26 @@ class MLService:
         """
         Get the status of all loaded models.
         """
+        if not ML_AVAILABLE:
+            return {
+                "crop_model": {
+                    "loaded": False,
+                    "classes": [],
+                    "n_classes": 0
+                },
+                "soil_model": {
+                    "loaded": False,
+                    "classes": [],
+                    "n_classes": 0,
+                    "metadata": None
+                },
+                "rule_engine": {
+                    "loaded": True,
+                    "crops_with_rules": 22
+                },
+                "fallback_mode": True
+            }
+
         status = {
             "crop_model": {
                 "loaded": cls.crop_model is not None,
