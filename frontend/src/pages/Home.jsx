@@ -19,7 +19,7 @@ const Home = () => {
     {
       icon: '📊',
       title: 'Hybrid Intelligence',
-      description: 'Combines ML predictions with agricultural rule validation for 95%+ accuracy.',
+      description: 'Combines ML predictions with agricultural rule validation for reliable accuracy.',
       colorClass: 'feature-icon-purple',
     },
     {
@@ -31,7 +31,7 @@ const Home = () => {
   ];
 
   const stats = [
-    { value: '95%+', label: 'Accuracy' },
+    { value: 'AI', label: 'Powered' },
     { value: '11', label: 'Soil Types' },
     { value: '23', label: 'Crops' },
     { value: '10K+', label: 'Predictions' },
@@ -59,52 +59,60 @@ const Home = () => {
         <div className="hero-grid-pattern" />
 
         <div className="hero-content">
-          <div className="hero-inner">
-            {/* Badge */}
-            <div className="hero-badge">
-              <span className="hero-badge-dot">
-                <span className="hero-badge-dot-ping"></span>
-                <span className="hero-badge-dot-inner"></span>
-              </span>
-              Powered by AI • 95%+ Accuracy
-            </div>
-
-            {/* Title */}
-            <h1 className="hero-title">
-              Revolutionize
-              <span className="hero-title-gradient">
-                Agriculture with AI
-              </span>
-            </h1>
-
-            {/* Subtitle */}
-            <p className="hero-subtitle">
-              Analyze your soil, get smart crop recommendations, and discover the perfect products
-              for your land — all powered by advanced machine learning.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="hero-buttons">
-              <Link to="/soil-analysis" className="hero-btn-primary">
-                <span>Start Soil Analysis</span>
-                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-              <Link to="/shop" className="hero-btn-secondary">
-                Browse Products
-              </Link>
-            </div>
-          </div>
-
-          {/* Stats */}
-          <div className="hero-stats">
-            {stats.map((stat, index) => (
-              <div key={index} className="hero-stat">
-                <div className="hero-stat-value">{stat.value}</div>
-                <div className="hero-stat-label">{stat.label}</div>
+          <div className="hero-layout">
+            <div className="hero-left">
+              {/* Badge */}
+              <div className="hero-badge">
+                <span className="hero-badge-dot">
+                  <span className="hero-badge-dot-ping"></span>
+                  <span className="hero-badge-dot-inner"></span>
+                </span>
+                Powered by AI • Hybrid Intelligence
               </div>
-            ))}
+
+              {/* Title */}
+              <h1 className="hero-title">
+                Revolutionize
+                <span className="hero-title-gradient">
+                  Agriculture with AI
+                </span>
+              </h1>
+
+              {/* Subtitle */}
+              <p className="hero-subtitle">
+                Analyze your soil, get smart crop recommendations, and discover the perfect products
+                for your land — all powered by advanced machine learning.
+              </p>
+
+              {/* CTA Buttons */}
+              <div className="hero-buttons">
+                <Link to="/soil-analysis" className="hero-btn-primary">
+                  <span>Start Soil Analysis</span>
+                  <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+                <Link to="/shop" className="hero-btn-secondary">
+                  Browse Products
+                </Link>
+              </div>
+
+              {/* Stats */}
+              <div className="hero-stats">
+                {stats.map((stat, index) => (
+                  <div key={index} className="hero-stat">
+                    <div className="hero-stat-value">{stat.value}</div>
+                    <div className="hero-stat-label">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="hero-right">
+              <div className="hero-image-wrapper">
+                <img src="https://images.stockcake.com/public/1/d/e/1de02852-178d-4552-a7d1-e3db627b5235_large/farmer-at-sunset-stockcake.jpg" alt="Farmer at sunset" />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -193,9 +201,9 @@ const Home = () => {
               © 2026 Agri-Soil AI. All rights reserved. Made with ❤️ for farmers.
             </p>
             <div className="footer-links">
-              <a href="#" className="footer-link">Privacy</a>
-              <a href="#" className="footer-link">Terms</a>
-              <a href="#" className="footer-link">Contact</a>
+              <Link to="/privacy" className="footer-link">Privacy</Link>
+              <Link to="/terms" className="footer-link">Terms</Link>
+              <a href="mailto:support@agrisoilai.com" className="footer-link">Contact</a>
             </div>
           </div>
         </div>

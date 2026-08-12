@@ -13,6 +13,11 @@ const Cart = () => {
     const [showAddressModal, setShowAddressModal] = useState(false);
     const [addressForm, setAddressForm] = useState({
         shipping_address: '',
+        city: '',
+        district: '',
+        state: 'Kerala',
+        pincode: '',
+        landmark: '',
         phone_number: '',
         notes: '',
     });
@@ -21,6 +26,13 @@ const Cart = () => {
     const navigate = useNavigate();
 
     const cartKey = user ? `cart_${user.id}` : 'cart';
+
+    // Kerala districts for dropdown
+    const keralaDistricts = [
+        'Thiruvananthapuram', 'Kollam', 'Pathanamthitta', 'Alappuzha',
+        'Kottayam', 'Idukki', 'Ernakulam', 'Thrissur', 'Palakkad',
+        'Malappuram', 'Kozhikode', 'Wayanad', 'Kannur', 'Kasaragod'
+    ];
 
     useEffect(() => {
         const savedCart = JSON.parse(localStorage.getItem(cartKey) || '[]');
@@ -113,10 +125,23 @@ const Cart = () => {
     const validateAddress = () => {
         const errors = {};
         if (!addressForm.shipping_address.trim()) {
-            errors.shipping_address = 'Shipping address is required';
+            errors.shipping_address = 'House/Flat number is required';
         }
-        if (addressForm.shipping_address.trim().length < 10) {
-            errors.shipping_address = 'Please enter a complete address';
+        if (!addressForm.city.trim()) {
+            errors.city = 'City/Town is required';
+        }
+        if (!addressForm.district.trim()) {
+            errors.district = 'District is required';
+        }
+        if (!addressForm.pincode.trim()) {
+            errors.pincode = 'Pincode is required';
+        } else if (!/^\d{6}$/.test(addressForm.pincode.trim())) {
+            errors.pincode = 'Enter a valid 6-digit pincode';
+        }
+        if (!addressForm.phone_number.trim()) {
+            errors.phone_number = 'Phone number is required';
+        } else if (!/^(\+91[\s-]?)?[6-9]\d{9}$/.test(addressForm.phone_number.trim().replace(/\s/g, ''))) {
+            errors.phone_number = 'Enter a valid Indian phone number';
         }
         setAddressErrors(errors);
         return Object.keys(errors).length === 0;
@@ -135,13 +160,27 @@ const Cart = () => {
                 throw new Error('Failed to load Razorpay. Check your internet connection.');
             }
 
+            // Build full shipping address string from structured fields
+            const fullAddress = [
+                addressForm.shipping_address.trim(),
+                addressForm.landmark.trim() ? `Near ${addressForm.landmark.trim()}` : '',
+                addressForm.city.trim(),
+                `${addressForm.district.trim()}, ${addressForm.state.trim()}`,
+                addressForm.pincode.trim()
+            ].filter(Boolean).join(', ');
+
             // Step 2: Create Razorpay order on backend
             const orderData = {
                 items: cart.map(item => ({
                     product_id: item.id,
                     quantity: item.quantity,
                 })),
-                shipping_address: addressForm.shipping_address.trim(),
+                shipping_address: fullAddress,
+                city: addressForm.city.trim() || null,
+                district: addressForm.district.trim() || null,
+                state: addressForm.state.trim() || null,
+                pincode: addressForm.pincode.trim() || null,
+                landmark: addressForm.landmark.trim() || null,
                 phone_number: addressForm.phone_number.trim() || null,
                 notes: addressForm.notes.trim() || null,
             };
@@ -412,9 +451,9 @@ const Cart = () => {
             {/* Address Modal */}
             {showAddressModal && (
                 <div className="cart-modal-overlay" onClick={() => !loading && setShowAddressModal(false)}>
-                    <div className="cart-modal" onClick={(e) => e.stopPropagation()}>
+                    <div className="cart-modal cart-modal-wide" onClick={(e) => e.stopPropagation()}>
                         <div className="cart-modal-header">
-                            <h2 className="cart-modal-title">Shipping Details</h2>
+                            <h2 className="cart-modal-title">📍 Shipping Details</h2>
                             <button
                                 className="cart-modal-close"
                                 onClick={() => !loading && setShowAddressModal(false)}
@@ -425,50 +464,152 @@ const Cart = () => {
                         </div>
 
                         <div className="cart-modal-body">
-                            <div className="cart-modal-field">
-                                <label className="cart-modal-label">
-                                    Shipping Address <span className="cart-required">*</span>
-                                </label>
-                                <textarea
-                                    className={`cart-modal-textarea ${addressErrors.shipping_address ? 'cart-modal-input-error' : ''}`}
-                                    placeholder="Enter your full shipping address..."
-                                    value={addressForm.shipping_address}
-                                    onChange={(e) => {
-                                        setAddressForm({ ...addressForm, shipping_address: e.target.value });
-                                        if (addressErrors.shipping_address) {
-                                            setAddressErrors({ ...addressErrors, shipping_address: '' });
-                                        }
-                                    }}
-                                    rows={3}
-                                    disabled={loading}
-                                />
-                                {addressErrors.shipping_address && (
-                                    <p className="cart-modal-error">{addressErrors.shipping_address}</p>
-                                )}
+                            {/* Row 1: House + Street */}
+                            <div className="cart-modal-row">
+                                <div className="cart-modal-field">
+                                    <label className="cart-modal-label">
+                                        House / Flat No. <span className="cart-required">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className={`cart-modal-input ${addressErrors.shipping_address ? 'cart-modal-input-error' : ''}`}
+                                        placeholder="e.g., 12/A, Green Villa"
+                                        value={addressForm.shipping_address}
+                                        onChange={(e) => {
+                                            setAddressForm({ ...addressForm, shipping_address: e.target.value });
+                                            if (addressErrors.shipping_address) setAddressErrors({ ...addressErrors, shipping_address: '' });
+                                        }}
+                                        disabled={loading}
+                                    />
+                                    {addressErrors.shipping_address && (
+                                        <p className="cart-modal-error">{addressErrors.shipping_address}</p>
+                                    )}
+                                </div>
+                                <div className="cart-modal-field">
+                                    <label className="cart-modal-label">Landmark</label>
+                                    <input
+                                        type="text"
+                                        className="cart-modal-input"
+                                        placeholder="e.g., Near SBI Bank"
+                                        value={addressForm.landmark}
+                                        onChange={(e) => setAddressForm({ ...addressForm, landmark: e.target.value })}
+                                        disabled={loading}
+                                    />
+                                </div>
                             </div>
 
-                            <div className="cart-modal-field">
-                                <label className="cart-modal-label">Phone Number</label>
-                                <input
-                                    type="tel"
-                                    className="cart-modal-input"
-                                    placeholder="e.g., +91 9876543210"
-                                    value={addressForm.phone_number}
-                                    onChange={(e) => setAddressForm({ ...addressForm, phone_number: e.target.value })}
-                                    disabled={loading}
-                                />
+                            {/* Row 2: City + District */}
+                            <div className="cart-modal-row">
+                                <div className="cart-modal-field">
+                                    <label className="cart-modal-label">
+                                        City / Town <span className="cart-required">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className={`cart-modal-input ${addressErrors.city ? 'cart-modal-input-error' : ''}`}
+                                        placeholder="e.g., Aluva"
+                                        value={addressForm.city}
+                                        onChange={(e) => {
+                                            setAddressForm({ ...addressForm, city: e.target.value });
+                                            if (addressErrors.city) setAddressErrors({ ...addressErrors, city: '' });
+                                        }}
+                                        disabled={loading}
+                                    />
+                                    {addressErrors.city && (
+                                        <p className="cart-modal-error">{addressErrors.city}</p>
+                                    )}
+                                </div>
+                                <div className="cart-modal-field">
+                                    <label className="cart-modal-label">
+                                        District <span className="cart-required">*</span>
+                                    </label>
+                                    <select
+                                        className={`cart-modal-input cart-modal-select ${addressErrors.district ? 'cart-modal-input-error' : ''}`}
+                                        value={addressForm.district}
+                                        onChange={(e) => {
+                                            setAddressForm({ ...addressForm, district: e.target.value });
+                                            if (addressErrors.district) setAddressErrors({ ...addressErrors, district: '' });
+                                        }}
+                                        disabled={loading}
+                                    >
+                                        <option value="">Select District</option>
+                                        {keralaDistricts.map(d => (
+                                            <option key={d} value={d}>{d}</option>
+                                        ))}
+                                    </select>
+                                    {addressErrors.district && (
+                                        <p className="cart-modal-error">{addressErrors.district}</p>
+                                    )}
+                                </div>
                             </div>
 
-                            <div className="cart-modal-field">
-                                <label className="cart-modal-label">Order Notes</label>
-                                <input
-                                    type="text"
-                                    className="cart-modal-input"
-                                    placeholder="Any special instructions..."
-                                    value={addressForm.notes}
-                                    onChange={(e) => setAddressForm({ ...addressForm, notes: e.target.value })}
-                                    disabled={loading}
-                                />
+                            {/* Row 3: State + Pincode */}
+                            <div className="cart-modal-row">
+                                <div className="cart-modal-field">
+                                    <label className="cart-modal-label">State</label>
+                                    <input
+                                        type="text"
+                                        className="cart-modal-input"
+                                        value={addressForm.state}
+                                        onChange={(e) => setAddressForm({ ...addressForm, state: e.target.value })}
+                                        disabled={loading}
+                                    />
+                                </div>
+                                <div className="cart-modal-field">
+                                    <label className="cart-modal-label">
+                                        Pincode <span className="cart-required">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className={`cart-modal-input ${addressErrors.pincode ? 'cart-modal-input-error' : ''}`}
+                                        placeholder="e.g., 683101"
+                                        value={addressForm.pincode}
+                                        maxLength={6}
+                                        onChange={(e) => {
+                                            const val = e.target.value.replace(/\D/g, '');
+                                            setAddressForm({ ...addressForm, pincode: val });
+                                            if (addressErrors.pincode) setAddressErrors({ ...addressErrors, pincode: '' });
+                                        }}
+                                        disabled={loading}
+                                    />
+                                    {addressErrors.pincode && (
+                                        <p className="cart-modal-error">{addressErrors.pincode}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Row 4: Phone + Notes */}
+                            <div className="cart-modal-row">
+                                <div className="cart-modal-field">
+                                    <label className="cart-modal-label">
+                                        Phone Number <span className="cart-required">*</span>
+                                    </label>
+                                    <input
+                                        type="tel"
+                                        className={`cart-modal-input ${addressErrors.phone_number ? 'cart-modal-input-error' : ''}`}
+                                        placeholder="+91 9876543210"
+                                        value={addressForm.phone_number}
+                                        onChange={(e) => {
+                                            setAddressForm({ ...addressForm, phone_number: e.target.value });
+                                            if (addressErrors.phone_number) setAddressErrors({ ...addressErrors, phone_number: '' });
+                                        }}
+                                        disabled={loading}
+                                    />
+                                    {addressErrors.phone_number && (
+                                        <p className="cart-modal-error">{addressErrors.phone_number}</p>
+                                    )}
+                                </div>
+                                <div className="cart-modal-field">
+                                    <label className="cart-modal-label">Order Notes</label>
+                                    <input
+                                        type="text"
+                                        className="cart-modal-input"
+                                        placeholder="Any special instructions..."
+                                        value={addressForm.notes}
+                                        onChange={(e) => setAddressForm({ ...addressForm, notes: e.target.value })}
+                                        disabled={loading}
+                                    />
+                                </div>
                             </div>
 
                             <div className="cart-modal-summary">

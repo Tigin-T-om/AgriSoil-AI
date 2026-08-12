@@ -48,7 +48,11 @@ class OrderItemResponse(OrderItemBase):
 
 class OrderBase(BaseModel):
     shipping_address: str
+    city: Optional[str] = None
     district: Optional[str] = None
+    state: Optional[str] = "Kerala"
+    pincode: Optional[str] = None
+    landmark: Optional[str] = None
     phone_number: Optional[str] = None
     notes: Optional[str] = None
 
@@ -82,6 +86,11 @@ class RazorpayOrderCreate(BaseModel):
     """Request body for creating a Razorpay order"""
     items: List[OrderItemCreate]
     shipping_address: str
+    city: Optional[str] = None
+    district: Optional[str] = None
+    state: Optional[str] = "Kerala"
+    pincode: Optional[str] = None
+    landmark: Optional[str] = None
     phone_number: Optional[str] = None
     notes: Optional[str] = None
 

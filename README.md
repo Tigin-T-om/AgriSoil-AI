@@ -1,73 +1,238 @@
 # 🌱 Agri-Soil AI
 
-An intelligent agricultural platform that uses machine learning to analyze soil properties and recommend suitable crops.
+An AI-powered agricultural platform that helps farmers analyze soil, get crop recommendations, and find related agricultural products.
+
+Built with **React, FastAPI, Python, Machine Learning, SQLite, and Razorpay**.
 
 ## ✨ Features
 
-- **Soil Analysis** - Input soil parameters (pH, nitrogen, phosphorus, etc.) and get AI-powered predictions
-- **Crop Recommendations** - Get personalized crop suggestions based on soil conditions
-- **Agricultural Shop** - Browse and purchase farming products
-- **Order Management** - Track your orders with ease
-- **Admin Dashboard** - Manage products, orders, and users
+- 🔬 AI-based soil classification
+- 🌱 ML-powered crop recommendation
+- 🧠 Hybrid ML + agricultural rule validation
+- 💧 Drainage and waterlogging warnings
+- 🛒 Crop-based seed and fertilizer recommendations
+- 💳 Razorpay test-mode payment integration
+- 🚚 District-based delivery staff assignment
+- 📊 Admin analytics and product management
+- 🔐 JWT authentication with role-based access
+- 🌐 Google and Twitter/X login support
+
+## 🤖 Machine Learning
+
+Two Random Forest models are used:
+
+| Model | Purpose | Classes | Test Accuracy |
+|---|---|---:|---:|
+| Soil Classification | Predict soil type | 11 | 97.59% |
+| Crop Recommendation | Recommend suitable crops | 23 | 81.66% |
+
+### Input Features
+
+- Nitrogen (N)
+- Phosphorus (P)
+- Potassium (K)
+- Temperature
+- Humidity
+- pH
+- Annual Rainfall
+
+The system also performs feature engineering using nutrient ratios, fertility indicators, and environmental stress values.
+
+### Hybrid Recommendation Flow
+
+```text
+Soil & Environment Input
+          ↓
+   Soil Classification
+          ↓
+    Crop Prediction
+          ↓
+Agricultural Rule Validation
+          ↓
+ Best Valid Crop Recommendation
+          ↓
+ Seeds / Fertilizers
+```
+
+## 🏗️ Architecture
+
+```text
+React Frontend
+      ↓
+Axios / HTTP
+      ↓
+FastAPI Backend
+      ↓
+Service Layer
+ ┌────┼───────────┐
+ ↓    ↓           ↓
+ML   Rules     Payments
+ ↓    ↓           ↓
+RandomForest   Razorpay
+      ↓
+   SQLite
+```
+
+The frontend handles the user interface, while FastAPI manages authentication, ML predictions, business logic, payments, orders, and database operations.
 
 ## 🛠️ Tech Stack
 
-| Layer | Technologies |
-|-------|-------------|
-| **Frontend** | React 19, Vite, Tailwind CSS, React Router |
-| **Backend** | FastAPI, SQLAlchemy, SQLite |
-| **ML** | Scikit-learn, Pandas, NumPy |
-| **Auth** | JWT (python-jose), Passlib, Bcrypt |
+**Frontend:** React, Vite, Tailwind CSS, Axios, Recharts  
+**Backend:** FastAPI, Python, Pydantic, SQLAlchemy  
+**ML:** Scikit-learn, Random Forest, Pandas, NumPy, Joblib  
+**Database:** SQLite  
+**Authentication:** JWT, bcrypt, OAuth  
+**Payments:** Razorpay  
+**Tools:** Git, GitHub
 
-## 🚀 Quick Start
+## 📸 Screenshots
 
-### Prerequisites
-- Python 3.10+
-- Node.js 18+
+Create:
 
-### Backend Setup
+```text
+docs/
+└── screenshots/
+```
+
+Recommended screenshots:
+
+```text
+01-home.png
+02-soil-analysis.png
+03-crop-recommendation.png
+04-shop.png
+05-admin-dashboard.png
+06-delivery-dashboard.png
+```
+
+Add them to this section:
+
+```markdown
+### Soil Analysis
+
+![Soil Analysis](docs/screenshots/02-soil-analysis.png)
+
+### Crop Recommendation
+
+![Crop Recommendation](docs/screenshots/03-crop-recommendation.png)
+
+### Marketplace
+
+![Marketplace](docs/screenshots/04-shop.png)
+
+### Admin Dashboard
+
+![Admin Dashboard](docs/screenshots/05-admin-dashboard.png)
+```
+
+## ⚙️ Installation
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Tigin-T-om/YOUR-REPOSITORY.git
+cd YOUR-REPOSITORY
+```
+
+### 2. Backend Setup
+
 ```bash
 cd backend
 python -m venv .venv
-.venv\Scripts\activate  # Windows
+```
+
+**Windows:**
+
+```bash
+.venv\Scripts\activate
+```
+
+Install dependencies:
+
+```bash
 pip install -r requirements.txt
+```
+
+Create a `.env` file and add the required configuration:
+
+```env
+DATABASE_URL=sqlite:///./agrisoil.db
+SECRET_KEY=your_secret_key
+RAZORPAY_KEY_ID=your_test_key
+RAZORPAY_KEY_SECRET=your_test_secret
+```
+
+Start FastAPI:
+
+```bash
 uvicorn app.main:app --reload
 ```
 
-### Frontend Setup
+Backend: `http://localhost:8000`
+
+API documentation: `http://localhost:8000/docs`
+
+### 3. Frontend Setup
+
+Open another terminal:
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-## 📁 Project Structure
+Frontend: `http://localhost:5173`
 
-```
-Agri-Soil-AI/
-├── backend/          # FastAPI server
-│   ├── app/          # Application code
-│   │   ├── api/      # API routes
-│   │   ├── models/   # Database models
-│   │   ├── schemas/  # Pydantic schemas
-│   │   └── services/ # Business logic
-│   └── data/         # Datasets
-├── frontend/         # React application
-│   └── src/
-│       ├── components/
-│       ├── pages/
-│       └── services/
-└── ml_model/         # ML training scripts & models
-```
+> Use test credentials for third-party services. Never commit real API keys or secrets to GitHub.
 
-## 📝 API Endpoints
+## 🚀 How It Works
 
-- `POST /api/v1/auth/login` - User authentication
-- `POST /api/v1/auth/register` - User registration
-- `POST /api/v1/prediction/analyze` - Soil analysis
-- `GET /api/v1/products` - List products
-- `POST /api/v1/orders` - Create order
+1. User enters soil and environmental parameters.
+2. FastAPI sends the data to the ML service.
+3. Soil type is predicted using the Soil Random Forest model.
+4. Crop suitability is calculated using the Crop Random Forest model.
+5. Agricultural rules validate the ML recommendations.
+6. The best valid crop is selected.
+7. Related seeds and fertilizers are displayed.
+8. Users can add products to the cart and complete a test payment.
 
-## 📄 License
+## 📊 Database
 
-MIT License
+The application uses **SQLite** with SQLAlchemy.
+
+Main entities:
+
+- Users
+- Products
+- Orders
+- Order Items
+- Delivery Staff
+
+## ⚠️ Current Limitations
+
+- Datasets are synthetic/generated for the project.
+- Crop model accuracy is **81.66%**, not 97.6%.
+- Razorpay is configured for test payments.
+- Product matching currently uses keyword-based matching.
+- Production deployment would require stronger secret management and scalability improvements.
+
+## 🎯 What I Learned
+
+- Building ML prediction pipelines
+- Feature engineering and model evaluation
+- Combining ML with rule-based decision systems
+- Developing REST APIs with FastAPI
+- JWT authentication and role-based access
+- Database design with SQLAlchemy
+- React frontend development
+- Payment verification workflows
+- E-commerce and delivery management logic
+
+## 👨‍💻 Author
+
+**Tigin Tom**  
+MCA Graduate | Python | Backend Development | AI/ML
+
+- GitHub: https://github.com/Tigin-T-om
+- LinkedIn: https://www.linkedin.com/in/tigintom/

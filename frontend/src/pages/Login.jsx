@@ -60,7 +60,7 @@ const Login = () => {
           </div>
 
           <div className="auth-features">
-            {['95%+ Accurate Predictions', 'Kerala Soil Types', 'Smart Recommendations'].map((item, i) => (
+            {['AI-Powered Predictions', 'Kerala Soil Types', 'Smart Recommendations'].map((item, i) => (
               <div key={i} className="auth-feature-item">
                 <div className="auth-feature-icon">
                   <svg className="auth-check-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">

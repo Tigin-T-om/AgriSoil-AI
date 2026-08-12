@@ -29,7 +29,11 @@ class Order(Base):
     total_amount = Column(Float, nullable=False)
     status = Column(SQLEnum(OrderStatus), default=OrderStatus.PENDING)
     shipping_address = Column(String, nullable=False)
+    city = Column(String, nullable=True)
     district = Column(String, nullable=True, index=True)  # Customer's district for delivery assignment
+    state = Column(String, nullable=True, default="Kerala")
+    pincode = Column(String, nullable=True)
+    landmark = Column(String, nullable=True)
     phone_number = Column(String, nullable=True)
     notes = Column(String, nullable=True)
     

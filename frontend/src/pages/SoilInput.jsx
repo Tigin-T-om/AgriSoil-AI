@@ -16,6 +16,7 @@ const SoilInput = () => {
     temperature: '',
     humidity: '',
     rainfall: '',
+    drainage: 'Good',
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -28,13 +29,13 @@ const SoilInput = () => {
   const navigate = useNavigate();
 
   const inputFields = [
-    { name: 'nitrogen', label: 'Nitrogen (N)', range: '0-300 ppm', placeholder: '50 (Mango optimal)', icon: '🧪', min: 0, max: 300 },
-    { name: 'phosphorus', label: 'Phosphorus (P)', range: '5-300 ppm', placeholder: '25 (Low-Moderate)', icon: '⚗️', min: 5, max: 300 },
-    { name: 'potassium', label: 'Potassium (K)', range: '5-400 ppm', placeholder: '50 (Moderate)', icon: '🔬', min: 5, max: 400 },
-    { name: 'ph', label: 'pH Level', range: '3.5-10.0', placeholder: '6.5 (Optimal)', icon: '📊', min: 3.5, max: 10 },
-    { name: 'temperature', label: 'Temperature', range: '8-55°C', placeholder: '30 (Tropical)', icon: '🌡️', min: 8, max: 55 },
-    { name: 'humidity', label: 'Humidity', range: '14-100%', placeholder: '65 (Moderate)', icon: '💧', min: 14, max: 100 },
-    { name: 'rainfall', label: 'Rainfall', range: '20-2000 mm', placeholder: '150 (Optimal)', icon: '🌧️', min: 20, max: 2000 },
+    { name: 'nitrogen', label: 'Nitrogen (N)', range: '0-1000 ppm', placeholder: '60 (Mango optimal)', icon: '🧪', min: 0, max: 1000 },
+    { name: 'phosphorus', label: 'Phosphorus (P)', range: '0-300 ppm', placeholder: '35 (Mango optimal)', icon: '⚗️', min: 0, max: 300 },
+    { name: 'potassium', label: 'Potassium (K)', range: '0-650 ppm', placeholder: '60 (Mango optimal)', icon: '🔬', min: 0, max: 650 },
+    { name: 'ph', label: 'pH Level', range: '3.0-9.5', placeholder: '6.5 (Mango optimal)', icon: '📊', min: 3.0, max: 9.5 },
+    { name: 'temperature', label: 'Temperature', range: '18-40°C', placeholder: '30 (Mango optimal)', icon: '🌡️', min: 18, max: 40 },
+    { name: 'humidity', label: 'Humidity', range: '30-100%', placeholder: '60 (Mango optimal)', icon: '💧', min: 30, max: 100 },
+    { name: 'rainfall', label: 'Rainfall (Annual)', range: '1000-6000 mm', placeholder: '1700 (Mango optimal)', icon: '🌧️', min: 1000, max: 6000 },
   ];
 
   const handleChange = (e) => {
@@ -95,11 +96,6 @@ const SoilInput = () => {
       const cropNames = [];
       if (analysisResult.crop_recommendation?.recommended_crop) {
         cropNames.push(analysisResult.crop_recommendation.recommended_crop);
-      }
-      if (analysisResult.crop_recommendation?.alternatives) {
-        analysisResult.crop_recommendation.alternatives.forEach((alt) => {
-          if (alt.crop && !cropNames.includes(alt.crop)) cropNames.push(alt.crop);
-        });
       }
       if (cropNames.length > 0) {
         const products = await productService.searchByMultipleCrops(cropNames, 12);
@@ -185,7 +181,7 @@ const SoilInput = () => {
 
               <div className="soil-form-grid">
                 {inputFields.map((field) => (
-                  <div key={field.name} className={field.name === 'rainfall' ? 'soil-form-field-full' : 'soil-form-field'}>
+                  <div key={field.name} className="soil-form-field">
                     <label className="soil-label">
                       <span className="soil-label-icon">{field.icon}</span>
                       <span>{field.label}</span>
@@ -203,6 +199,26 @@ const SoilInput = () => {
                     {errors[field.name] && <p className="soil-field-error">{errors[field.name]}</p>}
                   </div>
                 ))}
+
+                {/* Drainage Field */}
+                <div className="soil-form-field">
+                  <label className="soil-label">
+                    <span className="soil-label-icon">🌊</span>
+                    <span>Drainage level</span>
+                    <span className="soil-label-range"></span>
+                  </label>
+                  <select
+                    name="drainage"
+                    value={formData.drainage}
+                    onChange={handleChange}
+                    className="soil-input"
+                  >
+                    <option value="Good">Good (Well drained)</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="Poor">Poor (Waterlogged)</option>
+                    <option value="Excellent">Excellent</option>
+                  </select>
+                </div>
               </div>
 
               <button type="submit" disabled={loading} className="soil-submit-btn">
@@ -326,6 +342,24 @@ const SoilInput = () => {
                     <div key={soil} className="soil-prob-card">
                       <div className="soil-prob-value">{prob.toFixed(0)}%</div>
                       <div className="soil-prob-name">{soil}</div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            {/* Crop Probabilities */}
+            <div className="soil-detail-card">
+              <h3 className="soil-detail-title">
+                <span>🌾</span> Crop Probabilities
+              </h3>
+              <div className="soil-prob-grid">
+                {Object.entries(analysis.crop_recommendation?.all_probabilities || {})
+                  .sort((a, b) => b[1] - a[1])
+                  .slice(0, 6)
+                  .map(([crop, prob]) => (
+                    <div key={crop} className="soil-prob-card">
+                      <div className="soil-prob-value">{prob.toFixed(0)}%</div>
+                      <div className="soil-prob-name">{crop}</div>
                     </div>
                   ))}
               </div>

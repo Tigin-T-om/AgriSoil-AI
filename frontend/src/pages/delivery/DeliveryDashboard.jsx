@@ -287,19 +287,34 @@ const DeliveryDashboard = () => {
                                                     <div className="dd-info-block">
                                                         <div className="dd-info-label">📍 Shipping Address</div>
                                                         <div className="dd-info-value">{order.shipping_address}</div>
+                                                        {order.landmark && (
+                                                            <div className="dd-info-value" style={{ color: '#94a3b8', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                                                                🏠 Near: {order.landmark}
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                    {order.district && (
-                                                        <div className="dd-info-block">
-                                                            <div className="dd-info-label">🏘️ District</div>
-                                                            <div className="dd-info-value">{order.district}</div>
+                                                    <div className="dd-info-block">
+                                                        <div className="dd-info-label">🗺️ Location</div>
+                                                        <div className="dd-info-value">
+                                                            {[order.city, order.district, order.state].filter(Boolean).join(', ') || 'Not specified'}
                                                         </div>
-                                                    )}
-                                                    {order.phone_number && (
-                                                        <div className="dd-info-block">
-                                                            <div className="dd-info-label">📞 Contact</div>
-                                                            <div className="dd-info-value">{order.phone_number}</div>
+                                                        {order.pincode && (
+                                                            <div className="dd-info-value" style={{ color: '#4ade80', fontSize: '0.8rem', marginTop: '0.15rem' }}>
+                                                                📮 PIN: {order.pincode}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="dd-info-block">
+                                                        <div className="dd-info-label">👤 Customer</div>
+                                                        <div className="dd-info-value">
+                                                            {order.user?.full_name || order.user?.username || 'Customer'}
                                                         </div>
-                                                    )}
+                                                        {order.phone_number && (
+                                                            <div className="dd-info-value" style={{ color: '#60a5fa', fontSize: '0.85rem', marginTop: '0.15rem' }}>
+                                                                📞 {order.phone_number}
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                     <div className="dd-info-block">
                                                         <div className="dd-info-label">💰 Total</div>
                                                         <div className="dd-info-value dd-info-price">₹{order.total_amount?.toFixed(2)}</div>

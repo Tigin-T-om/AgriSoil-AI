@@ -213,21 +213,23 @@ class MLService:
         df['ph_stress'] = abs(df['ph'] - 6.5) / 6.5
         df['env_stress_index'] = (df['temp_stress'] + df['humidity_stress'] + df['ph_stress']) / 3
         
-        # Rainfall category
-        rainfall_bins = [0, 50, 100, 150, 200, 300, 3000]
+        # Rainfall category (annual mm/year scale for Kerala)
+        rainfall_bins = [0, 600, 1200, 1800, 2400, 3600, 10000]
         df['rainfall_category'] = pd.cut(
             df['rainfall'],
             bins=rainfall_bins,
-            labels=[0, 1, 2, 3, 4, 5]
-        ).astype(int)
+            labels=[0, 1, 2, 3, 4, 5],
+            include_lowest=True
+        ).fillna(5).astype(int)
         
         # pH category
         ph_bins = [0, 5.5, 6.5, 7.5, 14]
         df['ph_category'] = pd.cut(
             df['ph'],
             bins=ph_bins,
-            labels=[0, 1, 2, 3]
-        ).astype(int)
+            labels=[0, 1, 2, 3],
+            include_lowest=True
+        ).fillna(0).astype(int)
         
         return df
     
@@ -277,40 +279,44 @@ class MLService:
         # Fertility index
         df['fertility_index'] = (df['N'] * 0.4 + df['P'] * 0.3 + df['K'] * 0.3) / 100
         
-        # pH category (important for Kerala soils)
+        # pH category (important for Kerala soils — extended to cover ultra-acid)
         ph_bins = [0, 5.0, 5.5, 6.5, 7.0, 7.5, 14]
         df['ph_category'] = pd.cut(
             df['ph'],
             bins=ph_bins,
-            labels=[0, 1, 2, 3, 4, 5]
-        ).astype(int)
+            labels=[0, 1, 2, 3, 4, 5],
+            include_lowest=True
+        ).fillna(0).astype(int)
         
         # Acidity score
         df['acidity_score'] = (7.0 - df['ph']) / 7.0
         
-        # Humidity category
-        humidity_bins = [0, 60, 70, 80, 90, 100]
+        # Humidity category (extended lower bound for Kerala dry afternoon values)
+        humidity_bins = [0, 60, 70, 80, 90, 101]
         df['humidity_category'] = pd.cut(
             df['humidity'],
             bins=humidity_bins,
-            labels=[0, 1, 2, 3, 4]
-        ).astype(int)
+            labels=[0, 1, 2, 3, 4],
+            include_lowest=True
+        ).fillna(0).astype(int)
         
-        # Rainfall category
-        rainfall_bins = [0, 100, 150, 200, 250, 500]
+        # Rainfall category (annual mm/year scale for Kerala soil classification)
+        rainfall_bins = [0, 1000, 1800, 2400, 3600, 10000]
         df['rainfall_category'] = pd.cut(
             df['rainfall'],
             bins=rainfall_bins,
-            labels=[0, 1, 2, 3, 4]
-        ).astype(int)
+            labels=[0, 1, 2, 3, 4],
+            include_lowest=True
+        ).fillna(4).astype(int)
         
-        # Temperature category
-        temp_bins = [0, 20, 25, 30, 35, 50]
+        # Temperature category (extended for full Kerala range)
+        temp_bins = [0, 20, 25, 30, 35, 60]
         df['temp_category'] = pd.cut(
             df['temperature'],
             bins=temp_bins,
-            labels=[0, 1, 2, 3, 4]
-        ).astype(int)
+            labels=[0, 1, 2, 3, 4],
+            include_lowest=True
+        ).fillna(0).astype(int)
         
         # NEW: Additional discriminative features (v2 model)
         df['N_K_product'] = df['N'] * df['K'] / 1000
@@ -435,11 +441,15 @@ class MLService:
             top_pred_idx = top_indices[0]
             prediction = classes[top_pred_idx]
             confidence = float(probabilities[top_pred_idx]) * 100
-        
+            
+            # All probabilities
+            all_probs = {str(classes[i]): float(probabilities[i]) * 100 for i in range(len(classes))}
+            
         return {
             "recommended_crop": prediction,
             "confidence": round(confidence, 2),
-            "alternatives": alternatives
+            "alternatives": alternatives,
+            "all_probabilities": all_probs if 'all_probs' in locals() else {}
         }
     
     @classmethod
@@ -557,7 +567,8 @@ class MLService:
                 temperature=data.temperature,
                 humidity=data.humidity,
                 ph=data.ph,
-                rainfall=data.rainfall
+                rainfall=data.rainfall,
+                drainage=data.drainage
             )
             
             # Check if this crop has critical failures (soil type mismatch)
@@ -595,6 +606,7 @@ class MLService:
                 humidity=data.humidity,
                 ph=data.ph,
                 rainfall=data.rainfall,
+                drainage=data.drainage,
                 top_n=5
             )
             
@@ -613,7 +625,8 @@ class MLService:
                     temperature=data.temperature,
                     humidity=data.humidity,
                     ph=data.ph,
-                    rainfall=data.rainfall
+                    rainfall=data.rainfall,
+                    drainage=data.drainage
                 )
             else:
                 # Absolute fallback - use ML recommendation with warnings
@@ -628,7 +641,8 @@ class MLService:
                     temperature=data.temperature,
                     humidity=data.humidity,
                     ph=data.ph,
-                    rainfall=data.rainfall
+                    rainfall=data.rainfall,
+                    drainage=data.drainage
                 )
         
         # Step 4: Get rule-based crop suggestions for alternatives display
@@ -641,6 +655,7 @@ class MLService:
             humidity=data.humidity,
             ph=data.ph,
             rainfall=data.rainfall,
+            drainage=data.drainage,
             top_n=5
         )
         
@@ -717,7 +732,8 @@ class MLService:
                 "recommended_crop": final_recommended_crop,
                 "ml_confidence": final_crop_confidence,
                 "alternatives": filtered_alternatives,
-                "original_ml_prediction": ml_recommended_crop if ml_recommended_crop.lower() != final_recommended_crop.lower() else None
+                "original_ml_prediction": ml_recommended_crop if ml_recommended_crop.lower() != final_recommended_crop.lower() else None,
+                "all_probabilities": crop_result.get("all_probabilities", {}) if crop_result else {}
             },
             "rule_validation": {
                 "has_rules": final_rule_validation.get("has_rules", False),

@@ -225,7 +225,7 @@ const AuthPage = () => {
                         </p>
                     </div>
                     <div className="auth-features">
-                        {['95%+ Accurate Predictions', 'Kerala Soil Types', 'Smart Recommendations'].map((item, i) => (
+                        {['AI-Powered Predictions', 'Kerala Soil Types', 'Smart Recommendations'].map((item, i) => (
                             <div key={i} className="auth-feature-item">
                                 <div className="auth-feature-icon">
                                     <svg className="auth-check-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -244,7 +244,7 @@ const AuthPage = () => {
                     <div className="auth-info-cards">
                         {[
                             { icon: '🔬', title: 'AI Soil Analysis', desc: '11 Kerala soil types' },
-                            { icon: '🌾', title: 'Crop Recommendations', desc: '23 crops with 95% accuracy' },
+                            { icon: '🌾', title: 'Crop Recommendations', desc: '23 crops supported' },
                             { icon: '🛒', title: 'Product Integration', desc: 'Shop based on your soil' },
                         ].map((item, i) => (
                             <div key={i} className="auth-info-card">
@@ -365,7 +365,7 @@ const AuthPage = () => {
                                 <div className="auth-checkbox-group">
                                     <input type="checkbox" required className="auth-checkbox" />
                                     <span className="auth-checkbox-text">
-                                        I agree to the <a href="#" className="form-link">Terms of Service</a> and <a href="#" className="form-link">Privacy Policy</a>
+                                        I agree to the <Link to="/terms" className="form-link">Terms of Service</Link> and <Link to="/privacy" className="form-link">Privacy Policy</Link>
                                     </span>
                                 </div>
                                 <button type="submit" disabled={regLoading} className="auth-submit-btn">

@@ -26,7 +26,7 @@ CROP_CONDITIONS = {
         "temperature": (22, 32),  # Warm tropical
         "humidity": (75, 95),     # High humidity (flooded)
         "ph": (5.5, 6.8),         # Slightly acidic
-        "rainfall": (150, 300),   # High rainfall
+        "rainfall": (1800, 3600),  # Annual: High rainfall (Kerala paddy)
         "samples": 600
     },
     "wheat": {
@@ -36,7 +36,7 @@ CROP_CONDITIONS = {
         "temperature": (12, 25),  # Cool to moderate
         "humidity": (50, 75),
         "ph": (6.0, 7.5),
-        "rainfall": (50, 120),    # Moderate rainfall
+        "rainfall": (600, 1440),   # Annual: Moderate rainfall
         "samples": 550
     },
     "maize": {
@@ -46,7 +46,7 @@ CROP_CONDITIONS = {
         "temperature": (18, 32),
         "humidity": (55, 80),
         "ph": (5.8, 7.2),
-        "rainfall": (60, 120),
+        "rainfall": (720, 1440),   # Annual
         "samples": 550
     },
     
@@ -60,7 +60,7 @@ CROP_CONDITIONS = {
         "temperature": (15, 28),
         "humidity": (40, 65),
         "ph": (6.0, 7.8),
-        "rainfall": (40, 90),
+        "rainfall": (480, 1080),   # Annual
         "samples": 450
     },
     "lentil": {
@@ -70,7 +70,7 @@ CROP_CONDITIONS = {
         "temperature": (12, 25),
         "humidity": (35, 65),
         "ph": (6.0, 7.5),
-        "rainfall": (30, 80),
+        "rainfall": (360, 960),    # Annual
         "samples": 400
     },
     "kidneybeans": {
@@ -80,7 +80,7 @@ CROP_CONDITIONS = {
         "temperature": (15, 27),
         "humidity": (55, 75),
         "ph": (6.0, 7.2),
-        "rainfall": (70, 130),
+        "rainfall": (840, 1560),   # Annual
         "samples": 400
     },
     "pigeonpeas": {
@@ -90,7 +90,7 @@ CROP_CONDITIONS = {
         "temperature": (20, 35),
         "humidity": (45, 75),
         "ph": (5.5, 7.5),
-        "rainfall": (60, 130),
+        "rainfall": (720, 1560),   # Annual
         "samples": 400
     },
     "mothbeans": {
@@ -100,7 +100,7 @@ CROP_CONDITIONS = {
         "temperature": (25, 38),  # Hot climate
         "humidity": (30, 55),     # Dry conditions
         "ph": (6.0, 8.0),
-        "rainfall": (25, 60),     # Low rainfall
+        "rainfall": (300, 720),    # Annual: Low rainfall
         "samples": 350
     },
     "mungbean": {
@@ -110,7 +110,7 @@ CROP_CONDITIONS = {
         "temperature": (22, 35),
         "humidity": (55, 78),
         "ph": (6.0, 7.5),
-        "rainfall": (55, 95),
+        "rainfall": (660, 1140),   # Annual
         "samples": 400
     },
     "blackgram": {
@@ -120,7 +120,7 @@ CROP_CONDITIONS = {
         "temperature": (25, 35),
         "humidity": (60, 82),
         "ph": (6.0, 7.5),
-        "rainfall": (65, 110),
+        "rainfall": (780, 1320),   # Annual
         "samples": 400
     },
     
@@ -134,7 +134,7 @@ CROP_CONDITIONS = {
         "temperature": (22, 38),
         "humidity": (45, 70),
         "ph": (6.0, 7.8),
-        "rainfall": (60, 130),
+        "rainfall": (720, 1560),   # Annual
         "samples": 500
     },
     "jute": {
@@ -144,7 +144,7 @@ CROP_CONDITIONS = {
         "temperature": (26, 38),  # Very warm
         "humidity": (75, 92),     # HIGH humidity
         "ph": (5.8, 7.2),
-        "rainfall": (170, 280),   # HIGH rainfall (flooding)
+        "rainfall": (2040, 3360),  # Annual: HIGH rainfall
         "samples": 500
     },
     
@@ -158,7 +158,7 @@ CROP_CONDITIONS = {
         "temperature": (24, 38),  # Hot tropical
         "humidity": (45, 75),
         "ph": (5.8, 7.2),
-        "rainfall": (80, 200),
+        "rainfall": (960, 2400),   # Annual: Kerala mango belt
         "samples": 600
     },
     "banana": {
@@ -168,7 +168,7 @@ CROP_CONDITIONS = {
         "temperature": (24, 34),
         "humidity": (70, 92),
         "ph": (5.8, 7.2),
-        "rainfall": (120, 220),
+        "rainfall": (1440, 2640),  # Annual
         "samples": 550
     },
     "papaya": {
@@ -178,7 +178,7 @@ CROP_CONDITIONS = {
         "temperature": (22, 35),
         "humidity": (65, 85),
         "ph": (6.0, 7.2),
-        "rainfall": (110, 210),
+        "rainfall": (1320, 2520),  # Annual
         "samples": 500
     },
     "apple": {
@@ -188,7 +188,7 @@ CROP_CONDITIONS = {
         "temperature": (10, 24),  # Cool climate
         "humidity": (55, 78),
         "ph": (5.8, 7.0),
-        "rainfall": (100, 180),
+        "rainfall": (1200, 2160),  # Annual
         "samples": 450
     },
     "grapes": {
@@ -198,7 +198,7 @@ CROP_CONDITIONS = {
         "temperature": (18, 38),
         "humidity": (45, 70),     # Dry preferred
         "ph": (6.0, 7.5),
-        "rainfall": (50, 110),    # Low-moderate
+        "rainfall": (600, 1320),   # Annual: Low-moderate
         "samples": 500
     },
     "orange": {
@@ -208,7 +208,7 @@ CROP_CONDITIONS = {
         "temperature": (18, 32),
         "humidity": (55, 78),
         "ph": (5.5, 7.2),
-        "rainfall": (100, 190),
+        "rainfall": (1200, 2280),  # Annual
         "samples": 500
     },
     "pomegranate": {
@@ -218,7 +218,7 @@ CROP_CONDITIONS = {
         "temperature": (20, 38),
         "humidity": (40, 68),     # Semi-arid
         "ph": (6.0, 7.8),
-        "rainfall": (55, 130),
+        "rainfall": (660, 1560),   # Annual
         "samples": 450
     },
     "watermelon": {
@@ -228,7 +228,7 @@ CROP_CONDITIONS = {
         "temperature": (22, 35),
         "humidity": (55, 78),
         "ph": (6.0, 7.2),
-        "rainfall": (40, 80),     # Low but consistent
+        "rainfall": (480, 960),    # Annual: Low but consistent
         "samples": 400
     },
     "muskmelon": {
@@ -238,7 +238,7 @@ CROP_CONDITIONS = {
         "temperature": (22, 35),
         "humidity": (50, 72),
         "ph": (6.0, 7.0),
-        "rainfall": (35, 70),
+        "rainfall": (420, 840),    # Annual
         "samples": 400
     },
     
@@ -252,7 +252,7 @@ CROP_CONDITIONS = {
         "temperature": (16, 28),  # Moderate
         "humidity": (65, 88),
         "ph": (5.0, 6.2),         # Acidic preferred
-        "rainfall": (150, 280),
+        "rainfall": (1800, 3360),  # Annual: Kerala coffee belt
         "samples": 500
     },
     "coconut": {
@@ -262,7 +262,7 @@ CROP_CONDITIONS = {
         "temperature": (24, 35),
         "humidity": (75, 95),
         "ph": (5.5, 7.2),
-        "rainfall": (150, 280),
+        "rainfall": (1800, 3360),  # Annual: Kerala coconut belt
         "samples": 500
     },
 }

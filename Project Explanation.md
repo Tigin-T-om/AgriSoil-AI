@@ -1,559 +1,531 @@
-# 🌱 AgriSoil AI (AgroNova) — Complete Project Explanation
+# 🌱 AgriSoil AI — Complete Project Documentation
 
-> **An AI-powered agricultural intelligence platform that combines machine learning with domain-specific rules to deliver accurate soil analysis, smart crop recommendations, and an integrated e-commerce marketplace for seeds and agricultural products — specifically tailored for Kerala, India.**
+> **An AI-powered agricultural intelligence platform that combines machine learning with domain-specific rules to deliver accurate soil analysis, smart crop recommendations, and an integrated e-commerce marketplace with Razorpay payments, delivery staff management, drainage-aware predictions, and structured address-based order fulfillment — specifically tailored for Kerala, India.**
 
 ---
 
 ## 📋 Table of Contents
 
-1. [Project Overview](#1-project-overview)
-2. [Problem Statement & Goal](#2-problem-statement--goal)
-3. [Target Users](#3-target-users)
-4. [System Architecture](#4-system-architecture)
-5. [Technology Stack](#5-technology-stack)
-6. [Features & Functionalities](#6-features--functionalities)
-7. [Machine Learning System](#7-machine-learning-system)
-8. [Datasets](#8-datasets)
-9. [Algorithms & Models](#9-algorithms--models)
-10. [Rule Engine (Domain Knowledge)](#10-rule-engine-domain-knowledge)
-11. [Hybrid Intelligence System](#11-hybrid-intelligence-system)
-12. [Authentication & Security](#12-authentication--security)
-13. [Database Design](#13-database-design)
-14. [API Endpoints](#14-api-endpoints)
-15. [Frontend Pages & Components](#15-frontend-pages--components)
-16. [Project Structure](#16-project-structure)
-17. [How It All Works Together](#17-how-it-all-works-together)
+1. [Project Purpose & Vision](#1-project-purpose--vision)
+2. [Market Importance & Real-World Impact](#2-market-importance--real-world-impact)
+3. [Problem Statement & Goal](#3-problem-statement--goal)
+4. [Target Users & Role-Based Access](#4-target-users--role-based-access)
+5. [System Architecture](#5-system-architecture)
+6. [Technology Stack](#6-technology-stack)
+7. [Features & Functionalities](#7-features--functionalities)
+8. [Machine Learning System](#8-machine-learning-system)
+9. [Datasets](#9-datasets)
+10. [Algorithms & Models](#10-algorithms--models)
+11. [Rule Engine (Domain Knowledge)](#11-rule-engine-domain-knowledge)
+12. [Hybrid Intelligence System](#12-hybrid-intelligence-system)
+13. [Authentication & Security](#13-authentication--security)
+14. [Database Design](#14-database-design)
+15. [API Endpoints](#15-api-endpoints)
+16. [Frontend Pages & Components](#16-frontend-pages--components)
+17. [Project Structure](#17-project-structure)
+18. [How It All Works Together](#18-how-it-all-works-together)
+19. [Version History](#19-version-history)
 
 ---
 
-## 1. Project Overview
+## 1. Project Purpose & Vision
 
-**AgriSoil AI** (branded as **AgroNova** on the frontend) is a full-stack web application that helps farmers and agricultural stakeholders make data-driven decisions about soil management and crop selection. It is specifically designed for the agricultural landscape of **Kerala, India**, recognizing 11 distinct soil types including 8 Kerala-specific varieties.
+### Why We Built This Project
 
-The platform brings together three core capabilities:
+**AgriSoil AI** was created to solve a critical gap in India's agricultural sector — bringing the power of **Artificial Intelligence** directly to farmers who traditionally rely on intuition, outdated advice, or expensive lab tests to make crop and soil decisions.
 
-| Capability | Description |
-|-----------|-------------|
-| 🔬 **AI Soil Analysis** | Classifies soil type from NPK, pH, temperature, humidity, and rainfall data |
-| 🌾 **Smart Crop Recommendations** | Recommends the best crop for given soil and environmental conditions |
-| 🛒 **Integrated E-commerce** | Marketplace for seeds and products linked to soil analysis results |
+The project serves as a **proof of concept** and **working prototype** demonstrating how AI can be practically applied to agriculture, specifically targeting **Kerala, India** — a state with unique agro-climatic diversity including 8+ distinct soil types, tropical monsoon patterns, and 23+ viable crop varieties.
 
-What makes this project unique is its **Hybrid Intelligence System** — it doesn't rely solely on ML predictions. Instead, it validates every ML prediction against a comprehensive **Rule Engine** containing agricultural domain knowledge for 22+ crops, ensuring recommendations are scientifically sound.
+### Core Vision
+
+> *Democratize access to intelligent agricultural analysis by giving every farmer — regardless of education or economic background — the same quality of soil and crop guidance that was previously only available through expensive consultants and laboratory testing.*
+
+### What Makes This Project Unique
+
+| Aspect | Traditional Approach | AgriSoil AI Approach |
+|--------|---------------------|---------------------|
+| **Soil Analysis** | Send samples to a lab (₹500-2000, 7-14 days) | Instant AI classification from 7 parameters (free) |
+| **Crop Selection** | Ask local elders or agricultural officers | ML model trained on 10,000+ scientifically generated samples |
+| **Validation** | Trust a single source blindly | **Hybrid system** — ML predictions validated by agricultural rules |
+| **Product Purchase** | Visit multiple seed shops | Integrated marketplace linked to recommendations |
+| **Drainage Awareness** | Manual observation | AI-powered drainage/waterlogging risk assessment |
+| **End-to-End Flow** | Visit 3-4 different places | Single platform: Analyze → Recommend → Purchase → Deliver |
 
 ---
 
-## 2. Problem Statement & Goal
+## 2. Market Importance & Real-World Impact
+
+### 2.1 India's Agricultural Context (2026)
+
+| Statistic | Value |
+|-----------|-------|
+| **Agriculture's GDP Contribution** | ~17% of India's GDP |
+| **Farming Population** | ~58% of India's population depends on agriculture |
+| **Small/Marginal Farmers** | 86% of all farmers have < 2 hectares |
+| **Annual Crop Loss due to wrong selection** | Estimated ₹50,000+ crore |
+| **Soil Testing Penetration** | Only ~30% of farmers have had their soil tested |
+
+### 2.2 Why AI in Agriculture Matters Now
+
+1. **Digital India Growth**: Internet penetration in rural India has crossed 50%, making web-based tools accessible to farmers for the first time.
+2. **Climate Uncertainty**: Changing monsoon patterns require data-driven decision making over traditional knowledge.
+3. **Food Security**: India needs to feed 1.4 billion people; optimized crop selection directly impacts food production.
+4. **Government Push**: Programs like e-NAM, AgriStack, and Digital Agriculture Mission actively promote tech adoption.
+5. **Kerala's Unique Challenge**: With 8+ distinct soil types in a small geographic area, one-size-fits-all advice fails — localized AI is critical.
+
+### 2.3 Competitive Advantage
+
+| Feature | Other AgriTech Apps | AgriSoil AI |
+|---------|-------------------|-------------|
+| Soil Type Detection | ❌ Require lab results | ✅ AI from 7 parameters |
+| Drainage/Waterlogging Risk | ❌ Not considered | ✅ Built-in drainage validation |
+| Crop Probability Distribution | ❌ Single recommendation | ✅ Shows top 6 crops with % |
+| Rule Validation | ❌ Pure ML (may give wrong crops) | ✅ Hybrid ML + Domain Rules |
+| Kerala-Specific Soil Types | ❌ Generic soil classes | ✅ 8 Kerala-specific types |
+| Integrated Marketplace | ❌ Separate apps | ✅ Buy seeds directly from results |
+| Delivery Management | ❌ Basic shipping | ✅ District-based staff auto-assign |
+
+### 2.4 Real-World Impact
+
+- **Reduces crop failure risk** by validating ML predictions against scientific rules
+- **Saves farmers ₹500-2000** per soil test by providing instant AI analysis
+- **Improves yield potential** by matching crops accurately to soil conditions
+- **Supports local commerce** through the integrated marketplace
+- **Creates employment** through the delivery staff management system
+
+---
+
+## 3. Problem Statement & Goal
 
 ### The Problem
 
 Farmers in Kerala face several challenges:
 
-- **Diverse Soil Types**: Kerala has 8+ distinct soil types (Laterite, Riverine Alluvial, Forest Loam, etc.), each requiring different treatment and crop selection strategies.
-- **Lack of Access to Soil Testing**: Professional soil analysis is expensive and not easily accessible to small-scale farmers.
-- **Incorrect Crop Selection**: Choosing the wrong crop for a soil type leads to poor yields, wasted resources, and financial loss.
-- **No Unified Platform**: Farmers must visit multiple places — soil testing labs, agricultural advisors, seed shops — to make informed decisions.
+- **Diverse Soil Types**: Kerala has 8+ distinct soil types (Laterite, Riverine Alluvial, Forest Loam, etc.), each requiring different crop strategies.
+- **Lack of Soil Testing Access**: Professional soil analysis is expensive (₹500-2000) and takes 7-14 days.
+- **Incorrect Crop Selection**: Choosing the wrong crop leads to poor yields, wasted resources, and financial loss.
+- **Waterlogging Risk**: Kerala's high rainfall (2000-3000mm annually) makes drainage assessment critical for crops like Banana and Mango that are waterlogging-sensitive.
+- **No Unified Platform**: Farmers must visit labs, advisors, and seed shops separately.
 
 ### The Goal
 
 Build an **all-in-one AI-powered platform** that:
 
-1. **Accepts 7 soil/environmental parameters** (Nitrogen, Phosphorus, Potassium, pH, Temperature, Humidity, Rainfall)
-2. **Classifies the soil type** using a trained ML model
-3. **Recommends the best crop** using another ML model, validated by agricultural rules
-4. **Provides a confidence score** and quality rating for each recommendation
-5. **Suggests related products** (seeds, fertilizers) that the farmer can purchase directly
-6. **Manages the entire workflow**: from analysis → recommendation → purchase → order tracking
+1. **Accepts 8 soil/environmental parameters** (N, P, K, pH, Temperature, Humidity, Rainfall, Drainage)
+2. **Classifies the soil type** using a trained ML model (11 types, 97.6% accuracy)
+3. **Recommends the best crop** validated by agricultural rules for 23 crops
+4. **Provides probability distributions** for both soil types and crop matches
+5. **Assesses drainage/waterlogging risk** for sensitive crops
+6. **Suggests related products** that the farmer can purchase directly
+7. **Manages the entire workflow**: analysis → recommendation → purchase → delivery
 
 ---
 
-## 3. Target Users
+## 4. Target Users & Role-Based Access
 
-### 3.1 Farmers (Primary Users)
+### 4.1 Farmers (Primary Users)
 
-| Feature Access | Description |
-|---------------|-------------|
-| Soil Analysis | Input soil parameters and get AI-powered soil type classification |
-| Crop Recommendations | Receive crop suggestions validated by both ML and agricultural rules |
+| Feature | Description |
+|---------|-------------|
+| Soil Analysis | Input 8 parameters including drainage; get AI-powered classification |
+| Crop Recommendations | Receive validated recommendations with probability distributions |
+| Crop Probabilities | View top 6 crop matches with percentage confidence |
+| Soil Probabilities | View top 6 soil type matches with percentage confidence |
 | Product Shop | Browse and purchase seeds/products recommended for their soil |
-| Cart & Orders | Place orders and track delivery status |
-| Account Management | Register, login (email/password or Google OAuth), manage profile |
+| Cart & Orders | Place orders with structured addresses and Razorpay payments |
+| Account | Register, login (email/password or Google OAuth), manage profile |
 
-### 3.2 Admin Users
+### 4.2 Admin Users
 
-| Feature Access | Description |
-|---------------|-------------|
-| Admin Dashboard | Overview of system statistics (users, products, orders, revenue) |
-| User Management | View, activate/deactivate, and manage all registered users |
-| Product Management | CRUD operations for products (add, edit, delete seeds and crops) |
-| Order Management | View all orders, update order statuses (pending → confirmed → shipped → delivered) |
+| Feature | Description |
+|---------|-------------|
+| Dashboard | Overview with Recharts analytics — revenue, order distribution, top products |
+| User Management | View, activate/deactivate, manage registered users |
+| Product Management | Full CRUD for products (seeds, crops, fertilizers) |
+| Order Management | View orders with full addresses, update statuses, assign delivery staff |
+| Delivery Staff | Manage staff, toggle availability, monitor workload, auto-assign by district |
 
-### 3.3 Role-Based Access
+### 4.3 Delivery Staff
+
+| Feature | Description |
+|---------|-------------|
+| Delivery Login | Separate JWT-based authentication at `/delivery/login` |
+| Dashboard | View assigned orders with full customer details |
+| Status Updates | Mark orders as Shipped → Delivered |
+| Profile | Update service district, phone number, availability status |
+
+### 4.4 Role-Based Routes
 
 | Route | Access Level |
 |-------|-------------|
-| `/` (Home) | Public — anyone |
-| `/shop` | Public — anyone |
-| `/login`, `/register` | Public — unauthenticated users |
-| `/soil-analysis` | Protected — authenticated users only |
-| `/cart`, `/my-orders` | Protected — authenticated users only |
-| `/admin/*` | Admin only — users with `is_admin = True` |
+| `/` (Home) | Public |
+| `/shop`, `/product/:id` | Public |
+| `/soil-analysis` | Public (no login required) |
+| `/terms`, `/privacy` | Public |
+| `/login`, `/register` | Public (unauthenticated users) |
+| `/cart`, `/my-orders` | Protected (authenticated users) |
+| `/admin/*` | Admin only (`is_admin = True`) |
+| `/delivery/*` | Delivery staff only (separate JWT) |
 
 ---
 
-## 4. System Architecture
+## 5. System Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    FRONTEND (React + Vite)                    │
-│                                                               │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────────┐ │
-│  │  Home    │  │  Auth    │  │  Soil    │  │  Shop/Cart   │ │
-│  │  Page    │  │  Page    │  │  Analysis│  │  /Orders     │ │
-│  └──────────┘  └──────────┘  └──────────┘  └──────────────┘ │
-│  ┌──────────────────────────────────────────────────────────┐ │
-│  │              Admin Panel (Dashboard, Users,              │ │
-│  │              Products, Orders)                            │ │
-│  └──────────────────────────────────────────────────────────┘ │
-│                          │ Axios API calls                    │
-└──────────────────────────┼────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────┐
+│                    FRONTEND (React 19 + Vite 7)                │
+│                                                                │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────────┐  │
+│  │  Home    │  │  Auth    │  │  Soil    │  │  Shop/Cart   │  │
+│  │  Page    │  │  Page    │  │  Analysis│  │  /Orders     │  │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────────┘  │
+│  ┌────────────────┐  ┌───────────────┐  ┌─────────────────┐  │
+│  │  Admin Panel   │  │ Delivery Panel│  │ Legal Pages     │  │
+│  │  (5 pages)     │  │ (Login+Dash)  │  │ (Terms/Privacy) │  │
+│  └────────────────┘  └───────────────┘  └─────────────────┘  │
+│                          │ Axios API calls                     │
+└──────────────────────────┼─────────────────────────────────────┘
                            │
                            ▼
-┌─────────────────────────────────────────────────────────────┐
-│                  BACKEND (FastAPI + Python)                   │
-│                                                               │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────────┐ │
-│  │  Auth    │  │  Product │  │  Order   │  │  Prediction  │ │
-│  │  API     │  │  API     │  │  API     │  │  API         │ │
-│  └──────────┘  └──────────┘  └──────────┘  └──────────────┘ │
-│                          │                                    │
-│         ┌────────────────┼────────────────┐                  │
-│         ▼                ▼                ▼                  │
-│  ┌──────────┐  ┌──────────────────┐  ┌───────────────┐     │
-│  │ SQLite   │  │  ML Service      │  │ Rule Engine   │     │
-│  │ Database │  │  (scikit-learn)  │  │ (22 crops)    │     │
-│  └──────────┘  └──────────────────┘  └───────────────┘     │
-│                    │            │                             │
-│         ┌──────────┴──────────┐                              │
-│         ▼                     ▼                              │
-│  ┌─────────────┐  ┌──────────────────┐                      │
-│  │ Crop Model  │  │ Soil Model       │                      │
-│  │ (RandomForest│  │ (RandomForest   │                      │
-│  │  + Features) │  │  + Features)    │                      │
-│  └─────────────┘  └──────────────────┘                      │
-└─────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────┐
+│                  BACKEND (FastAPI + Python 3.12)                │
+│                                                                │
+│  ┌────────┐ ┌────────┐ ┌────────┐ ┌──────────┐ ┌─────────┐  │
+│  │ Auth   │ │Product │ │ Order  │ │Prediction│ │Delivery │  │
+│  │ API    │ │ API    │ │ API    │ │ API      │ │Staff API│  │
+│  └────────┘ └────────┘ └────────┘ └──────────┘ └─────────┘  │
+│  ┌─────────────┐                                              │
+│  │ Payment API │ (Razorpay Integration)                       │
+│  └─────────────┘                                              │
+│                          │                                     │
+│         ┌────────────────┼────────────────┐                   │
+│         ▼                ▼                ▼                   │
+│  ┌──────────┐  ┌──────────────────┐  ┌───────────────┐      │
+│  │ SQLite   │  │  ML Service      │  │ Rule Engine   │      │
+│  │ Database │  │  (scikit-learn)  │  │ (23 crops +   │      │
+│  └──────────┘  └──────────────────┘  │  drainage)    │      │
+│                    │            │     └───────────────┘      │
+│         ┌──────────┴──────────┐                               │
+│         ▼                     ▼                               │
+│  ┌─────────────┐  ┌──────────────────┐                       │
+│  │ Crop Model  │  │ Soil Model       │                       │
+│  │ (97.6% acc) │  │ (11 types)       │                       │
+│  │ 18 features │  │ 22 features      │                       │
+│  └─────────────┘  └──────────────────┘                       │
+└───────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 5. Technology Stack
+## 6. Technology Stack
 
-### 5.1 Frontend
+### 6.1 Frontend
 
 | Technology | Version | Purpose |
 |-----------|---------|---------|
-| **React** | 19.2.0 | UI library for building interactive components |
-| **React Router DOM** | 6.22.0 | Client-side routing and navigation |
-| **Vite** | 7.2.4 | Build tool and development server (fast HMR) |
+| **React** | 19.2.0 | UI library for interactive components |
+| **React Router DOM** | 6.22.0 | Client-side routing (20+ routes) |
+| **Vite** | 7.2.4 | Build tool with fast HMR |
 | **Axios** | 1.6.5 | HTTP client for API communication |
-| **@react-oauth/google** | 0.13.4 | Google OAuth 2.0 authentication integration |
-| **Vanilla CSS** | — | Custom styling with animations, glassmorphism, dark mode |
-| **ESLint** | 9.39.1 | Code linting and quality assurance |
+| **Recharts** | 2.x | Admin dashboard analytics charts |
+| **@react-oauth/google** | 0.13.4 | Google OAuth 2.0 integration |
+| **Vanilla CSS** | — | Custom dark theme with animations and glassmorphism |
 
-### 5.2 Backend
+### 6.2 Backend
 
 | Technology | Version | Purpose |
 |-----------|---------|---------|
 | **Python** | 3.12 | Primary backend language |
-| **FastAPI** | 0.104.1 | Modern, high-performance web framework with automatic API docs |
-| **Uvicorn** | 0.24.0 | ASGI server for running FastAPI with hot-reload |
-| **SQLAlchemy** | 2.0.23 | ORM (Object-Relational Mapping) for database operations |
-| **Pydantic** | 2.5.0 | Data validation and serialization (request/response schemas) |
-| **Pydantic-Settings** | 2.1.0 | Environment-based configuration management |
-| **python-jose** | 3.3.0 | JWT (JSON Web Token) creation and verification |
-| **passlib + bcrypt** | 1.7.4 / 3.2.2 | Secure password hashing |
-| **email-validator** | 2.1.0 | Email format validation |
+| **FastAPI** | 0.104.1 | High-performance web framework with auto API docs |
+| **Uvicorn** | 0.24.0 | ASGI server with hot-reload |
+| **SQLAlchemy** | 2.0.23 | ORM for database operations |
+| **Pydantic** | 2.5.0 | Data validation and serialization |
+| **python-jose** | 3.3.0 | JWT creation and verification |
+| **passlib + bcrypt** | 1.7.4 | Secure password hashing |
+| **razorpay** | — | Payment gateway SDK |
 
-### 5.3 Machine Learning
-
-| Technology | Purpose |
-|-----------|---------|
-| **scikit-learn** | ML model training, evaluation, and inference |
-| **NumPy** | Numerical computations and array operations |
-| **Pandas** | Data manipulation, feature engineering, dataset handling |
-| **joblib** | Model serialization (save/load trained models) |
-
-### 5.4 Database
+### 6.3 Machine Learning
 
 | Technology | Purpose |
 |-----------|---------|
-| **SQLite** | Lightweight relational database (file: `agrisoil.db`) |
+| **scikit-learn** | Model training, evaluation, inference |
+| **NumPy** | Numerical computations |
+| **Pandas** | Data manipulation and feature engineering |
+| **joblib** | Model serialization (save/load) |
 
-### 5.5 Authentication
+### 6.4 Database & Auth
 
 | Technology | Purpose |
 |-----------|---------|
-| **JWT (JSON Web Tokens)** | Stateless authentication with token-based sessions |
-| **bcrypt** | Secure one-way password hashing |
-| **Google OAuth 2.0** | Social login via Google accounts |
+| **SQLite** | Lightweight relational database (`agrisoil.db`) |
+| **JWT** | Stateless authentication (users + delivery staff) |
+| **bcrypt** | One-way password hashing |
+| **Google OAuth 2.0** | Social login |
+| **Razorpay + HMAC SHA256** | Payment processing and verification |
 
 ---
 
-## 6. Features & Functionalities
+## 7. Features & Functionalities
 
-### 6.1 🔬 AI Soil Analysis (Core Feature)
+### 7.1 🔬 AI Soil Analysis (Core Feature)
 
-**Page**: `/soil-analysis`
+**Page**: `/soil-analysis` — **No login required**
 
-The crown jewel of the application. Users input 7 parameters:
+Users input 8 parameters:
 
-| Parameter | Unit | Valid Range | Example |
-|----------|------|-------------|---------|
-| Nitrogen (N) | ppm | 0–300 | 50 |
-| Phosphorus (P) | ppm | 5–300 | 25 |
-| Potassium (K) | ppm | 5–400 | 50 |
-| pH Level | — | 3.5–10.0 | 6.5 |
-| Temperature | °C | 8–55 | 30 |
-| Humidity | % | 14–100 | 65 |
-| Rainfall | mm | 20–2000 | 150 |
+| Parameter | Unit | Range | Example |
+|----------|------|-------|---------|
+| Nitrogen (N) | ppm | 0–1000 | 60 |
+| Phosphorus (P) | ppm | 0–300 | 35 |
+| Potassium (K) | ppm | 0–650 | 60 |
+| pH Level | — | 3.0–9.5 | 6.5 |
+| Temperature | °C | 18–40 | 30 |
+| Humidity | % | 30–100 | 60 |
+| Rainfall (Annual) | mm | 1000–6000 | 1700 |
+| **Drainage** | — | Poor/Moderate/Good/Excellent | Good |
 
 **What happens on submission:**
 
-1. Data is sent to the **Hybrid Analysis** endpoint (`/api/v1/model/hybrid-analyze`)
-2. **Soil Classification Model** predicts the soil type (e.g., "Laterite", "Red Loam")
-3. **Crop Recommendation Model** predicts the best crop (e.g., "Mango", "Rice")
-4. **Rule Engine** validates the ML predictions against agricultural rules
-5. If the ML-recommended crop fails validation (e.g., wrong soil type), the system **automatically selects the next best alternative** that passes rules
-6. A **combined score** (60% ML + 40% Rules) is calculated
-7. **Recommendation quality** is rated: Excellent / Good / Moderate / Fair / Poor
-8. **Warnings** and **suggestions** are generated for suboptimal conditions
-9. **Related products** (seeds/fertilizers) matching the recommended crop are fetched from the shop
+1. Data sent to **Hybrid Analysis** endpoint
+2. **Soil Classification Model** predicts soil type with probability distribution
+3. **Crop Recommendation Model** predicts best crop with all crop probabilities
+4. **Rule Engine** validates ML predictions against agricultural rules (including drainage)
+5. If ML crop fails validation, system **auto-selects the next best alternative**
+6. **Combined score** calculated (60% ML + 40% Rules)
+7. **Quality rating**: Excellent / Good / Moderate / Fair / Poor
+8. **Drainage warnings** generated for waterlogging-sensitive crops
+9. **Related products** fetched from the marketplace (only for the recommended crop)
 
-### 6.2 🛒 E-commerce Shop
+**Results Display:**
+- Overall score with quality badge
+- Detected soil type with confidence percentage
+- Recommended crop with match percentage
+- Validation scores breakdown (ML, Rule, Final)
+- **Insights & Suggestions** with actionable advice
+- **Soil Type Probabilities** — top 6 with percentage bars
+- **Crop Probabilities** — top 6 with percentage bars
+- **Recommended Products** linked to the predicted crop
 
-**Page**: `/shop`
+### 7.2 🛒 E-commerce Shop
 
-- Browse agricultural products (seeds, crops, fertilizers)
-- Filter by category
-- Search functionality
-- Product cards with images, prices, and stock availability
-- "Add to Cart" button (requires authentication)
-- After soil analysis, shows **related products** matching the recommended crop
+**Page**: `/shop` and `/product/:id`
 
-### 6.3 🛍️ Cart & Checkout
+- Browse products (seeds, crops, fertilizers, tools)
+- Filter by category, search by name
+- Product detail page with full descriptions
+- "Add to Cart" (requires login)
+- Products linked to soil analysis recommendations
+
+### 7.3 🛍️ Cart & Checkout (Razorpay)
 
 **Page**: `/cart`
 
-- View cart items with quantities
-- Adjust quantities (increase/decrease)
-- Remove items
-- Calculate total amount
-- Checkout with shipping address and phone number
-- Place order
+- Cart management (add/remove, adjust quantities)
+- Real-time stock validation
+- **Structured Address Form**: House/Flat, Landmark, City, District (Kerala dropdown), State, Pincode, Phone, Notes
+- **Razorpay Payment Flow**: Create order → Checkout popup → Verify signature → Confirm order
+- Free shipping above ₹500
 
-### 6.4 📦 Order Tracking
+### 7.4 📦 Order Tracking
 
 **Page**: `/my-orders`
 
-- View all past orders with status
-- Order status flow: `Pending → Confirmed → Processing → Shipped → Delivered`
-- View order items and total amount
-- Cancellation option for pending orders
+- Order history with status tracking
+- Status flow: `Pending → Confirmed → Processing → Shipped → Delivered`
+- Cancellation for pending orders
 
-### 6.5 🔐 Authentication
+### 7.5 🔐 Authentication
 
-**Page**: `/login` and `/register` (unified `AuthPage`)
+**Page**: `/login` and `/register` (unified `AuthPage` with sliding panel)
 
-- **Email/Password Registration**: Full name, email, username, phone, password
-- **Email/Password Login**: Email + password
-- **Google OAuth Login**: One-click Google sign-in (auto-creates account if first time)
-- Animated dual-panel UI with sliding transitions between Sign In and Sign Up
-- JWT-based session management
+- Email/Password registration and login
+- Google OAuth one-click sign-in
+- JWT-based sessions (30-minute expiry)
+- Terms of Service and Privacy Policy agreement on registration
 
-### 6.6 👑 Admin Panel
+### 7.6 👑 Admin Panel
 
-**Pages**: `/admin/dashboard`, `/admin/users`, `/admin/products`, `/admin/orders`
+**Pages**: `/admin/dashboard`, `/admin/users`, `/admin/products`, `/admin/orders`, `/admin/delivery`
 
 | Panel | Features |
 |-------|----------|
-| **Dashboard** | Stats overview — total users, products, orders, revenue |
-| **Users** | View all users, toggle active/inactive status, admin role management |
-| **Products** | CRUD — create, read, update, delete products with images and pricing |
-| **Orders** | View all orders, update status (pending → confirmed → shipped → delivered → cancelled) |
+| Dashboard | Recharts analytics — revenue chart, order status pie, top products bar |
+| Users | View all, toggle active/inactive, admin role management |
+| Products | Full CRUD with images and pricing |
+| Orders | Full address details, status updates, delivery staff assign/auto-assign/unassign |
+| Delivery Staff | View all staff, monitor workload, toggle availability |
 
-### 6.7 🏠 Landing Page (Home)
+### 7.7 🚚 Delivery Staff Panel
+
+**Pages**: `/delivery/login`, `/delivery/dashboard`
+
+- Separate JWT authentication
+- Profile card with order statistics
+- Full customer details per order (name, phone, address, landmark, city, district, pincode)
+- Status updates: Shipped → Delivered
+- Profile editing (district, phone, availability)
+
+### 7.8 🏠 Landing Page
 
 **Page**: `/`
 
-- Hero section with animated gradient background
-- Feature highlights (AI Analysis, Smart Recommendations, Hybrid Intelligence, Marketplace)
-- Kerala soil types showcase (6 soil types with color visualization)
-- Statistics: 95%+ accuracy, 11 soil types, 23 crops, 10K+ predictions
-- Call-to-action buttons linking to soil analysis and shop
+- Side-by-side hero layout: text content (left) + farmer sunset image (right)
+- "Powered by AI • Hybrid Intelligence" badge
+- Feature highlights (4 feature cards)
+- Kerala soil types showcase (6 types with color swatches)
+- Statistics: AI Powered, 11 Soil Types, 23 Crops, 10K+ Predictions
+- CTA buttons linking to soil analysis and shop
+
+### 7.9 📄 Legal Pages
+
+**Pages**: `/terms` and `/privacy`
+
+- **Terms of Service**: 9 sections covering acceptance, service description, user accounts, AI disclaimer, marketplace, IP, liability, modifications, contact
+- **Privacy Policy**: 10 sections covering data collection, usage, storage, soil data handling, cookies, third-party services, user rights, retention, changes, contact
+- All links throughout the app (footer, registration) properly navigate to these pages
 
 ---
 
-## 7. Machine Learning System
+## 8. Machine Learning System
 
-The ML system consists of **two trained models** that work in tandem:
-
-### 7.1 Crop Recommendation Model
+### 8.1 Crop Recommendation Model
 
 | Property | Details |
 |----------|---------|
-| **Purpose** | Predict the best crop for given soil and environmental conditions |
-| **Algorithm** | RandomForest Classifier (with optional GradientBoosting fallback) |
-| **Input Features** | 7 base + 11 engineered = **18 total features** |
-| **Output** | Crop name (22 possible crops) + confidence scores for all classes |
-| **Target Accuracy** | >85% |
+| **Algorithm** | RandomForest Classifier |
+| **Input Features** | 7 base + 11 engineered = **18 total** |
+| **Output** | Crop name (23 crops) + probability distribution |
+| **Accuracy** | **97.6%** |
 | **Model File** | `backend/app/ml_models/crop_recommendation_model.joblib` |
-| **Training Script** | `backend/train_enhanced_model.py` |
 
-**Engineered Features for Crop Model:**
-- Nutrient ratios: `N_P_ratio`, `N_K_ratio`, `P_K_ratio`
-- `total_nutrients` (N + P + K)
-- `nutrient_balance` (how balanced NPK are)
-- Environmental stress indices: `temp_stress`, `humidity_stress`, `ph_stress`, `env_stress_index`
-- Categorical: `rainfall_category` (6 bins), `ph_category` (4 bins)
-
-### 7.2 Soil Classification Model
+### 8.2 Soil Classification Model
 
 | Property | Details |
 |----------|---------|
-| **Purpose** | Classify soil type from NPK, pH, temperature, humidity, and rainfall |
-| **Algorithm** | RandomForest Classifier (500 estimators, balanced class weights) |
-| **Input Features** | 7 base + 15 engineered = **22 total features** |
-| **Output** | Soil type (11 types) + probability distribution across all types |
-| **Target** | >70% prediction confidence |
+| **Algorithm** | RandomForest Classifier (500 estimators, balanced weights) |
+| **Input Features** | 7 base + 15 engineered = **22 total** |
+| **Output** | Soil type (11 types) + probability distribution |
 | **Model File** | `backend/app/ml_models/soil_classification_model.joblib` |
-| **Training Script** | `backend/train_improved_soil_model.py` |
 
-**Engineered Features for Soil Model (additional to crop model features):**
-- `fertility_index` (weighted NPK score)
-- `acidity_score` (derived from pH distance from neutral 7.0)
-- Categorical: `humidity_category`, `rainfall_category`, `temp_category`
-- Interaction features: `N_K_product`, `ph_humidity_ratio`, `rainfall_temp_ratio`
+### 8.3 Engineered Features
+
+| Feature | Formula | Agricultural Meaning |
+|---------|---------|---------------------|
+| `N_P_ratio` | N / (P + 1) | Nitrogen-Phosphorus balance |
+| `N_K_ratio` | N / (K + 1) | Nitrogen-Potassium balance |
+| `P_K_ratio` | P / (K + 1) | Phosphorus-Potassium balance |
+| `total_nutrients` | N + P + K | Overall soil fertility |
+| `nutrient_balance` | 1 - deviation | NPK distribution evenness |
+| `fertility_index` | 0.4N + 0.3P + 0.3K | Weighted fertility score |
+| `temp_stress` | \|temp - 25\| / 25 | Temperature deviation |
+| `humidity_stress` | \|humidity - 70\| / 70 | Humidity deviation |
+| `ph_stress` | \|pH - 6.5\| / 6.5 | pH deviation |
+| `env_stress_index` | Avg of stress indices | Overall environmental stress |
+| `rainfall_category` | Binned rainfall | Rainfall intensity level |
+| `ph_category` | Binned pH | Acidity level |
 
 ---
 
-## 8. Datasets
+## 9. Datasets
 
-### 8.1 Unified Agricultural Dataset (Crop Recommendation)
-
-| Property | Details |
-|----------|---------|
-| **File** | `ml_model/datasets/combined/unified_agricultural_dataset.csv` |
-| **Size** | ~10,500+ samples |
-| **Crops** | 22 crops |
-| **Features** | N, P, K, temperature, humidity, ph, rainfall, crop |
-| **Generated by** | `backend/generate_dataset.py` |
-
-**Crop Categories:**
+### 9.1 Crop Dataset (~10,500+ samples, 23 crops)
 
 | Category | Crops |
 |----------|-------|
-| **Cereals & Grains** | Rice (600 samples), Wheat (550), Maize (550) |
-| **Pulses & Legumes** | Chickpea (450), Lentil (400), Kidneybeans (400), Pigeonpeas (400), Mothbeans (350), Mungbean (400), Blackgram (400) |
-| **Fiber Crops** | Cotton (500), Jute (500) |
-| **Fruits** | Mango (600), Banana (550), Papaya (500), Apple (450), Grapes (500), Orange (500), Pomegranate (450), Watermelon (400), Muskmelon (400) |
-| **Plantation Crops** | Coffee (500), Coconut (500) |
+| Cereals & Grains | Rice, Wheat, Maize |
+| Pulses & Legumes | Chickpea, Lentil, Kidneybeans, Pigeonpeas, Mothbeans, Mungbean, Blackgram |
+| Fiber Crops | Cotton, Jute |
+| Fruits | Mango, Banana, Papaya, Apple, Grapes, Orange, Pomegranate, Watermelon, Muskmelon |
+| Plantation | Coffee, Coconut |
 
-**Generation Method**: Each crop has scientifically accurate ranges for all 7 parameters based on agricultural research. Samples are generated using **Gaussian distribution** centered at the midpoint of each range, with natural variation (±10–15% outside range bounds). This ensures the ML model learns correct crop-condition relationships.
+### 9.2 Soil Dataset (~10,500+ samples, 11 types)
 
-### 8.2 Synthetic Soil Classification Dataset (Soil Classification)
-
-| Property | Details |
-|----------|---------|
-| **File** | `ml_model/datasets/soil_classification/synthetic_soil_dataset.csv` |
-| **Size** | ~10,500+ samples |
-| **Soil Types** | 11 types (8 Kerala-specific + 3 generic) |
-| **Features** | N, P, K, temperature, humidity, ph, rainfall, soil_type |
-| **Generated by** | `backend/generate_soil_dataset.py` |
-| **Data Source** | Kerala Agricultural University (KAU), Indian Council of Agricultural Research (ICAR), Soil Survey Organizations |
-
-**Kerala Soil Types (8 types):**
-
-| Soil Type | Samples | Key Characteristics | Where Found |
-|-----------|---------|-------------------|-------------|
-| **Laterite** | 2,000 | Acidic (pH 4.5–6.0), iron-rich, low P | Kannur, Kasaragod, Wayanad — 65% of Kerala |
-| **Red Loam** | 1,500 | Slightly acidic (pH 5.5–6.8), fertile | Thrissur, Palakkad, Ernakulam |
-| **Coastal Alluvial** | 1,200 | Alkaline (pH 7.0–8.5), salt influence | Alappuzha, Kollam coast |
-| **Riverine Alluvial** | 1,300 | Near neutral (pH 6.2–7.5), high NPK, most fertile | Along Bharathapuzha, Periyar, Pamba rivers |
-| **Brown Hydromorphic** | 1,100 | Very acidic (pH 4.0–5.5), waterlogged, high humidity | Kuttanad, Kole lands |
-| **Forest Loam** | 1,000 | Slightly acidic (pH 5.0–6.5), very high N, cool temperatures | Wayanad, Idukki (Western Ghats) |
-| **Black Cotton** | 700 | Alkaline (pH 7.0–8.5), high water retention, low humidity | Parts of Palakkad |
-| **Peaty/Marshy** | 700 | Very acidic (pH 3.5–5.0), very high N, saturated | Kuttanad (below sea level) |
-
-**Generic Soil Types (3 types):**
+**Kerala-Specific (8 types):**
 
 | Soil Type | Samples | Key Characteristics |
 |-----------|---------|-------------------|
-| **Loamy** | 400 | Balanced, neutral pH, good drainage |
-| **Sandy** | 400 | Low nutrients, well-drained, low humidity |
-| **Clayey** | 400 | High K, poor drainage, higher pH |
+| Laterite | 2,000 | Acidic, iron-rich (65% of Kerala) |
+| Red Loam | 1,500 | Slightly acidic, fertile |
+| Coastal Alluvial | 1,200 | Alkaline, salt influence |
+| Riverine Alluvial | 1,300 | Near neutral, highest NPK |
+| Brown Hydromorphic | 1,100 | Very acidic, waterlogged |
+| Forest Loam | 1,000 | Acidic, high organic matter |
+| Black Cotton | 700 | Alkaline, high water retention |
+| Peaty/Marshy | 700 | Very acidic, saturated |
 
-**Generation Method**: Same Gaussian distribution approach as the crop dataset. Each soil type has scientifically derived parameter ranges based on research data from KAU and ICAR. The Laterite type gets the most samples (2,000) because it covers 65% of Kerala's land area.
+**Generic (3 types):** Loamy (400), Sandy (400), Clayey (400)
 
 ---
 
-## 9. Algorithms & Models
+## 10. Algorithms & Models
 
-### 9.1 Random Forest Classifier
-
-**Used for**: Both Crop Recommendation and Soil Classification
+### 10.1 Random Forest Classifier
 
 **Why Random Forest?**
-- **Ensemble Method**: Combines predictions from hundreds of decision trees, reducing overfitting
-- **Handles Non-Linear Relationships**: Soil-crop relationships are inherently non-linear
-- **Feature Importance**: Provides built-in feature importance scores, useful for understanding which parameters matter most
-- **Probability Outputs**: Gives confidence scores (probabilities) for each class, essential for the hybrid system
-- **Robust to Outliers**: Agricultural data naturally has outliers; RF handles them well
+- Ensemble of hundreds of decision trees → reduces overfitting
+- Handles non-linear soil-crop relationships
+- Provides probability outputs for confidence scoring
+- Built-in feature importance
+- Robust to outliers in agricultural data
 
-**Crop Model Configuration:**
-```python
-RandomForestClassifier(
-    n_estimators=200-300,      # Number of trees (tuned via GridSearchCV)
-    max_depth=20-30,           # tree depth (tuned)
-    min_samples_split=2-5,     # tuned
-    min_samples_leaf=1-2,      # tuned
-    random_state=42,
-    n_jobs=-1                  # parallel processing
-)
-```
+### 10.2 Supporting Techniques
 
-**Soil Model Configuration:**
-```python
-RandomForestClassifier(
-    n_estimators=500,           # More trees for higher confidence
-    max_depth=25,
-    min_samples_split=3,
-    min_samples_leaf=1,
-    class_weight='balanced',   # Handle class imbalance
-    max_features='sqrt',
-    random_state=42,
-    n_jobs=-1
-)
-```
-
-### 9.2 Gradient Boosting Classifier (Fallback)
-
-**Used for**: Crop Recommendation (only if Random Forest accuracy < 90%)
-
-```python
-GradientBoostingClassifier(
-    n_estimators=200,
-    max_depth=10,
-    learning_rate=0.1,
-    random_state=42
-)
-```
-
-### 9.3 Standard Scaler
-
-**Used for**: Feature normalization before model prediction
-
-Normalizes all features to have zero mean and unit variance, preventing features with larger scales (e.g., rainfall: 20–2000) from dominating features with smaller scales (e.g., pH: 3.5–10.0).
-
-### 9.4 GridSearchCV (Hyperparameter Tuning)
-
-**Used for**: Finding optimal Random Forest parameters
-
-Performs **5-fold cross-validation** over a grid of hyperparameter combinations to find the best configuration. The grid explores:
-- `n_estimators`: [200, 300]
-- `max_depth`: [20, 30, None]
-- `min_samples_split`: [2, 5]
-- `min_samples_leaf`: [1, 2]
-
-### 9.5 Cross-Validation (k=5)
-
-**Used for**: Robust accuracy estimation
-
-5-fold cross-validation splits training data into 5 parts, trains on 4 and tests on 1, rotating 5 times. This gives a more reliable accuracy estimate than a single train-test split.
-
-### 9.6 Feature Engineering
-
-**Purpose**: Transform raw 7 features into 18–22 enriched features
-
-This is one of the most critical aspects of the ML pipeline. Domain knowledge is encoded into the features:
-
-| Engineered Feature | Formula | Agricultural Meaning |
-|-------------------|---------|---------------------|
-| `N_P_ratio` | N / (P + 1) | Nitrogen-to-Phosphorus balance |
-| `N_K_ratio` | N / (K + 1) | Nitrogen-to-Potassium balance |
-| `P_K_ratio` | P / (K + 1) | Phosphorus-to-Potassium balance |
-| `total_nutrients` | N + P + K | Overall soil fertility |
-| `nutrient_balance` | 1 - deviation from equal NPK | How evenly distributed NPK are |
-| `fertility_index` | 0.4N + 0.3P + 0.3K | Weighted fertility score |
-| `temp_stress` | |temp - 25| / 25 | Distance from optimal temperature |
-| `humidity_stress` | |humidity - 70| / 70 | Distance from optimal humidity |
-| `ph_stress` | |pH - 6.5| / 6.5 | Distance from optimal pH |
-| `env_stress_index` | Avg(temp, humidity, pH stress) | Overall environmental stress |
-| `acidity_score` | (7.0 - pH) / 7.0 | Soil acidity indicator |
-| `rainfall_category` | Binned rainfall | Rainfall intensity level |
-| `ph_category` | Binned pH | Soil acidity level |
-| `N_K_product` | N × K / 1000 | Interaction between N and K |
-| `ph_humidity_ratio` | pH / (humidity/100 + 0.1) | pH adjusted for humidity |
-
-### 9.7 Data Augmentation (SMOTE-like)
-
-**Used for**: Balancing underrepresented soil types in the soil dataset
-
-For soil types with fewer than 1,500 samples, the system generates additional synthetic samples by:
-1. Resampling existing samples with replacement
-2. Adding small Gaussian noise (5% of standard deviation)
-3. Clipping values to valid ranges
+| Technique | Purpose |
+|-----------|---------|
+| StandardScaler | Feature normalization (prevent scale dominance) |
+| GridSearchCV | Hyperparameter tuning (5-fold cross-validation) |
+| SMOTE-like Augmentation | Balance underrepresented soil types |
+| Feature Engineering | Transform 7 raw features → 18-22 enriched features |
 
 ---
 
-## 10. Rule Engine (Domain Knowledge)
+## 11. Rule Engine (Domain Knowledge)
 
 **File**: `backend/app/services/rule_engine.py`
 
-The Rule Engine is a comprehensive knowledge base containing **agricultural rules for 22 crops**. Each crop has a `CropRule` dataclass with scientifically validated parameters:
+Contains **agricultural rules for 23 crops** with scientifically validated parameters.
 
-### 10.1 Rule Parameters per Crop
+### 11.1 Rule Parameters per Crop
 
-| Parameter | Description | Example (Rice) |
-|----------|-------------|----------------|
-| `ph_min / ph_max` | Acceptable pH range | 5.0 – 8.0 |
-| `ph_optimal_min / ph_optimal_max` | Optimal pH range | 5.5 – 6.5 |
-| `preferred_soils` | Best soil types | Clayey, Loamy, Riverine Alluvial, Coastal Alluvial |
-| `acceptable_soils` | Acceptable alternatives | Silty, Black Cotton |
-| `min_rainfall / max_rainfall` | Acceptable rainfall (mm) | 150 – 300 |
-| `optimal_rainfall_min / max` | Optimal rainfall | 180 – 250 |
-| `min_temperature / max_temperature` | Acceptable temp (°C) | 20 – 40 |
-| `optimal_temp_min / max` | Optimal temp | 22 – 32 |
-| `nitrogen_need` | N requirement level | HIGH |
-| `phosphorus_need` | P requirement level | MODERATE |
-| `potassium_need` | K requirement level | MODERATE |
-| `min_humidity / max_humidity` | Acceptable humidity (%) | 70 – 100 |
+| Parameter | Description |
+|----------|-------------|
+| pH range (acceptable + optimal) | Soil acidity tolerance |
+| Preferred & acceptable soils | Soil type compatibility |
+| Rainfall range (acceptable + optimal) | Water requirements (annual mm) |
+| Temperature range (acceptable + optimal) | Thermal tolerance |
+| NPK requirements | Nutrient level needs (High/Moderate/Low) |
+| Humidity range | Moisture requirements |
+| **Drainage need** | Required drainage level (Poor/Moderate/Good/Excellent) |
+| **Waterlogging sensitivity** | Whether crop is sensitive to waterlogging |
 
-### 10.2 Validation Functions
+### 11.2 Validation Functions (7 total)
 
-The `RuleValidator` class provides 6 validation functions:
+| Function | Scoring |
+|----------|---------|
+| `validate_ph()` | 1.0 (optimal) / 0.7 (acceptable) / 0.0 (fail) |
+| `validate_soil_type()` | 1.0 (preferred) / 0.7 (acceptable) / 0.0 (fail) |
+| `validate_rainfall()` | 1.0 / 0.7 / 0.3 |
+| `validate_temperature()` | 1.0 / 0.7 / 0.2 |
+| `validate_humidity()` | 1.0 / 0.8 / 0.4 |
+| `validate_nutrients()` | 1.0 / 0.6 |
+| **`validate_drainage()`** | 1.0 (suitable) / 0.5 (suboptimal) / 0.0 (critical fail) |
 
-| Function | What it Validates | Scoring |
-|----------|------------------|---------|
-| `validate_ph()` | pH against crop's acceptable and optimal ranges | 1.0 (optimal), 0.7 (acceptable), 0.0 (fail) |
-| `validate_soil_type()` | Soil type against preferred and acceptable lists | 1.0 (preferred), 0.7 (acceptable), 0.0 (fail) |
-| `validate_rainfall()` | Rainfall against crop's water needs | 1.0 / 0.7 / 0.3 |
-| `validate_temperature()` | Temperature against crop's thermal tolerance | 1.0 / 0.7 / 0.2 |
-| `validate_humidity()` | Humidity against crop's moisture needs | 1.0 / 0.8 / 0.4 |
-| `validate_nutrients()` | NPK levels against crop's nutrient requirements | 1.0 / 0.6 |
+### 11.3 Drainage-Aware Crops
 
-### 10.3 Crops with Rules (22 total)
-
-Rice, Wheat, Maize, Cotton, Jute, Coffee, Banana, Mango, Apple, Grapes, Orange, Papaya, Coconut, Chickpea, Lentil, Pigeonpeas, Mothbeans, Mungbean, Blackgram, Kidneybeans, Pomegranate, Watermelon, Muskmelon
+| Crop | Drainage Behavior |
+|------|------------------|
+| **Rice** | Prefers **Poor** drainage (waterlogged/flooded conditions) |
+| **Banana** | **Waterlogging sensitive** — Poor drainage triggers critical warning |
+| **Mango** | **Waterlogging sensitive** — Needs well-drained soil |
 
 ---
 
-## 11. Hybrid Intelligence System
+## 12. Hybrid Intelligence System
 
-This is the **most important concept** in the project. Instead of blindly trusting ML predictions, the system uses a multi-step process:
-
-### 11.1 The Hybrid Analysis Pipeline
+### 12.1 Pipeline
 
 ```
-User Input (7 parameters)
+User Input (8 parameters including drainage)
         │
         ▼
 ┌─── Step 1: ML Soil Classification ───┐
@@ -563,386 +535,245 @@ User Input (7 parameters)
         ▼
 ┌─── Step 2: ML Crop Recommendation ───┐
 │   Random Forest → "Rice" (85%)        │
-│   Alternatives: "Jute" (8%), ...      │
+│   + All crop probabilities             │
 └───────────────────────────────────────┘
         │
         ▼
-┌─── Step 3: Rule Validation ──────────┐
-│   Check "Rice" against rules:         │
-│   ✅ pH: 5.5 is in range (5.0-8.0)   │
-│   ❌ Soil: Laterite not in preferred  │
-│      soils for Rice                    │
-│   → FAILS SOIL CHECK                  │
+┌─── Step 3: Rule Validation (7 checks)─┐
+│   pH ✅, Soil ❌, Rainfall ✅,         │
+│   Temp ✅, Humidity ✅, Nutrients ✅,  │
+│   Drainage ✅                          │
+│   → FAILS SOIL CHECK → try next       │
 └───────────────────────────────────────┘
         │
         ▼
-┌─── Step 4: Rule-Filtered Selection ──┐
-│   "Rice" failed → try "Jute"          │
-│   ✅ Jute passes rules for Laterite   │
-│   → SELECT "Jute" as recommendation   │
+┌─── Step 4: Auto-Select Best Crop ────┐
+│   Try alternatives by ML confidence   │
+│   → Find crop passing ALL rules       │
 └───────────────────────────────────────┘
         │
         ▼
-┌─── Step 5: Score Calculation ────────┐
-│   Final Score = 60% × ML confidence   │
-│              + 40% × Rule score       │
-│              - 5% × each warning      │
-└───────────────────────────────────────┘
-        │
-        ▼
-┌─── Step 6: Quality Rating ───────────┐
-│   Score ≥ 80 → "Excellent"            │
-│   Score ≥ 70 → "Good"                 │
-│   Score ≥ 50 → "Moderate"             │
-│   Score ≥ 30 → "Fair"                 │
-│   Score < 30 → "Poor"                 │
+┌─── Step 5: Score & Quality Rating ───┐
+│   Final = 60% ML + 40% Rules - 5%/warn│
+│   ≥80 Excellent, ≥70 Good, ≥50 Moderate│
 └───────────────────────────────────────┘
 ```
 
-### 11.2 Why Hybrid?
+### 12.2 Why Hybrid?
 
 | Approach | Strength | Weakness |
 |----------|----------|----------|
-| **ML Only** | Learns complex patterns from data | May predict crops unsuitable for the soil type |
-| **Rules Only** | Guaranteed agricultural correctness | Limited to pre-defined rules, can't discover new patterns |
-| **Hybrid (This Project)** | Best of both — ML discovers patterns, Rules validate correctness | More complex implementation |
-
-### 11.3 Fallback Strategy
-
-If no ML-predicted crop passes rule validation:
-1. **Try**: Each ML alternative (sorted by confidence) → validate against rules
-2. **Fallback**: If all ML crops fail → use `RuleValidator.get_suitable_crops()` to find the best rule-based crop for the conditions
-3. **Last Resort**: If no rules match → use the original ML prediction with warnings
+| ML Only | Learns complex patterns | May predict unsuitable crops |
+| Rules Only | Guaranteed correctness | Can't discover new patterns |
+| **Hybrid** | Best of both | More complex (worth it) |
 
 ---
 
-## 12. Authentication & Security
+## 13. Authentication & Security
 
-### 12.1 Email/Password Authentication
-- Passwords hashed with **bcrypt** (72-byte limit enforced)
-- JWT tokens with **HS256** algorithm
-- Token expiry: **30 minutes**
-- Tokens stored in `localStorage` on the frontend
-
-### 12.2 Google OAuth 2.0
-- Frontend: `@react-oauth/google` provides the Google login button
-- Backend: Verifies Google ID token via `https://oauth2.googleapis.com/tokeninfo`
-- Validates `aud` (audience) matches the app's Google Client ID
-- Auto-creates a new user account if the Google email doesn't exist
-- Generates a random password for Google-created accounts (they'll always use Google to sign in)
-
-### 12.3 Route Protection
-- **ProtectedRoute**: Redirects to `/login` if not authenticated
-- **AdminRoute**: Redirects to `/` if not an admin user
-- Backend: `get_current_active_user` dependency verifies JWT on protected endpoints
+| Feature | Implementation |
+|---------|---------------|
+| Password Hashing | bcrypt (72-byte limit) |
+| JWT Tokens | HS256, 30-minute expiry |
+| Google OAuth | ID token verification via Google API |
+| Route Protection | ProtectedRoute, AdminRoute, DeliveryRoute components |
+| Payment Security | Razorpay HMAC SHA256 signature verification |
 
 ---
 
-## 13. Database Design
+## 14. Database Design
 
 **Database**: SQLite (`agrisoil.db`)
 
-### 13.1 Users Table
+### Tables
 
-| Column | Type | Description |
-|--------|------|-------------|
-| id | Integer (PK) | Auto-increment primary key |
-| email | String (Unique) | User's email address |
-| username | String (Unique) | Display name |
-| full_name | String (Nullable) | Full name |
-| phone_number | String (Nullable) | Phone number |
-| hashed_password | String | bcrypt-hashed password |
-| is_active | Boolean | Account active status |
-| is_admin | Boolean | Admin role flag |
-| created_at | DateTime | Account creation timestamp |
-| updated_at | DateTime | Last update timestamp |
-
-### 13.2 Products Table
-
-| Column | Type | Description |
-|--------|------|-------------|
-| id | Integer (PK) | Auto-increment primary key |
-| name | String | Product name |
-| description | Text | Product description |
-| category | String | Category (seeds, crops, etc.) |
-| price | Float | Price in ₹ |
-| stock_quantity | Integer | Available stock |
-| image_url | String (Nullable) | Product image URL |
-| is_available | Boolean | Availability toggle |
-| created_at | DateTime | Creation timestamp |
-| updated_at | DateTime | Last update timestamp |
-
-### 13.3 Orders Table
-
-| Column | Type | Description |
-|--------|------|-------------|
-| id | Integer (PK) | Auto-increment primary key |
-| user_id | Integer (FK → users.id) | Ordering user |
-| total_amount | Float | Order total in ₹ |
-| status | Enum | pending/confirmed/processing/shipped/delivered/cancelled |
-| shipping_address | String | Delivery address |
-| phone_number | String (Nullable) | Contact phone |
-| notes | String (Nullable) | Order notes |
-| created_at | DateTime | Order creation timestamp |
-| updated_at | DateTime | Last update timestamp |
-
-### 13.4 Order Items Table
-
-| Column | Type | Description |
-|--------|------|-------------|
-| id | Integer (PK) | Auto-increment primary key |
-| order_id | Integer (FK → orders.id) | Parent order |
-| product_id | Integer (FK → products.id) | Ordered product |
-| quantity | Integer | Number of units |
-| price | Float | Price at time of purchase |
-| created_at | DateTime | Item creation timestamp |
+| Table | Key Columns |
+|-------|-------------|
+| **Users** | id, email, username, full_name, phone, hashed_password, is_admin, is_active |
+| **Products** | id, name, description, category, price, stock_quantity, image_url, is_available |
+| **Orders** | id, user_id, total_amount, status, shipping_address, city, district, state, pincode, landmark, phone_number, notes, delivery_staff_id, payment_status, razorpay_order_id/payment_id/signature |
+| **Order Items** | id, order_id, product_id, quantity, price |
+| **Delivery Staff** | id, username, email, full_name, hashed_password, phone, district, is_available, is_active |
 
 ---
 
-## 14. API Endpoints
+## 15. API Endpoints
 
-### 14.1 Authentication (`/api/v1/auth`)
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/register` | Register new user |
-| POST | `/login` | Login with email/password |
-| POST | `/google` | Login/register with Google OAuth |
-| GET | `/me` | Get current user info (JWT required) |
-
-### 14.2 ML/Prediction (`/api/v1/model`)
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/predict` | Crop recommendation (ML only) |
-| POST | `/classify-soil` | Soil classification (ML only) |
-| POST | `/analyze` | Combined soil + crop analysis (ML only) |
-| POST | `/hybrid-analyze` | **Main endpoint** — Hybrid ML + Rules analysis |
-| GET | `/model-status` | Check if models are loaded |
-
-### 14.3 Products (`/api/v1/products`)
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/` | List all products (with pagination) |
-| POST | `/` | Create product (admin only) |
-| PUT | `/{id}` | Update product (admin only) |
-| DELETE | `/{id}` | Delete product (admin only) |
-| GET | `/search/by-crop/{crop_name}` | Find products matching a crop |
-| POST | `/search/by-crops` | Find products matching multiple crops |
-
-### 14.4 Orders (`/api/v1/orders`)
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/` | Get my orders (authenticated user) |
-| POST | `/` | Place a new order |
-| GET | `/all` | Get all orders (admin only) |
-| PATCH | `/{id}/status` | Update order status (admin only) |
-
-### 14.5 Users (`/api/v1/users`)
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/` | List all users (admin only) |
-| PATCH | `/{id}/toggle-active` | Activate/deactivate user (admin only) |
+| Group | Endpoints | Auth |
+|-------|-----------|------|
+| **Auth** (`/api/v1/auth`) | register, login, google, me | Public / JWT |
+| **ML** (`/api/v1/model`) | predict, classify-soil, analyze, **hybrid-analyze**, model-status | Public |
+| **Products** (`/api/v1/products`) | CRUD, search/by-crop, search/by-crops | Public / Admin |
+| **Orders** (`/api/v1/orders`) | create, list (my/all), update status | JWT / Admin |
+| **Payment** (`/api/v1/payment`) | create-order, verify-payment | JWT |
+| **Users** (`/api/v1/users`) | list, toggle-active | Admin |
+| **Delivery** (`/api/v1/delivery`) | login, me, my-orders, status update, list, create, assign/auto-assign/unassign | Delivery JWT / Admin |
 
 ---
 
-## 15. Frontend Pages & Components
+## 16. Frontend Pages & Components
 
-### 15.1 Pages
+### 16.1 Pages (22 total)
 
-| Page | File | Description |
-|------|------|-------------|
-| Home | `Home.jsx` | Landing page with hero, features, soil types showcase |
-| Auth | `AuthPage.jsx` | Unified login/register with sliding panel animation |
-| Soil Analysis | `SoilInput.jsx` | 7-parameter input form + analysis results display |
-| Shop | `Shop.jsx` | Product listing with categories and search |
-| Cart | `Cart.jsx` | Shopping cart with checkout functionality |
-| My Orders | `MyOrders.jsx` | Order history and status tracking |
-| Admin Dashboard | `admin/Dashboard.jsx` | Admin overview with stats |
-| Admin Users | `admin/Users.jsx` | User management panel |
-| Admin Products | `admin/Products.jsx` | Product CRUD panel |
-| Admin Orders | `admin/Orders.jsx` | Order management panel |
+| Page | File | Access |
+|------|------|--------|
+| Home | `Home.jsx` | Public |
+| Auth (Login/Register) | `AuthPage.jsx` | Public |
+| Standalone Login | `Login.jsx` | Public |
+| Standalone Register | `Register.jsx` | Public |
+| Forgot Password | `ForgotPassword.jsx` | Public |
+| Twitter Callback | `TwitterCallback.jsx` | Public |
+| **Terms of Service** | `TermsOfService.jsx` | Public |
+| **Privacy Policy** | `PrivacyPolicy.jsx` | Public |
+| Soil Analysis | `SoilInput.jsx` | Public |
+| Shop | `Shop.jsx` | Public |
+| Product Detail | `ProductDetail.jsx` | Public |
+| Cart | `Cart.jsx` | Protected |
+| My Orders | `MyOrders.jsx` | Protected |
+| Admin Dashboard | `admin/Dashboard.jsx` | Admin |
+| Admin Users | `admin/Users.jsx` | Admin |
+| Admin Products | `admin/Products.jsx` | Admin |
+| Admin Orders | `admin/Orders.jsx` | Admin |
+| Admin Delivery | `admin/DeliveryManage.jsx` | Admin |
+| Delivery Login | `delivery/DeliveryLogin.jsx` | Public |
+| Delivery Dashboard | `delivery/DeliveryDashboard.jsx` | Delivery Staff |
 
-### 15.2 Components
+### 16.2 Components
 
-| Component | File | Description |
-|-----------|------|-------------|
-| Navbar | `Navbar.jsx` | Navigation bar with authentication-aware links, frosted glass effect |
-| ProtectedRoute | `ProtectedRoute.jsx` | Redirects unauthenticated users to login |
-| AdminRoute | `AdminRoute.jsx` | Restricts access to admin users only |
+| Component | Purpose |
+|-----------|---------|
+| Navbar | Auth-aware navigation with frosted glass effect |
+| ProtectedRoute | Redirect unauthenticated users |
+| AdminRoute | Restrict to admin users |
+| DeliveryRoute | Restrict to delivery staff |
 
-### 15.3 Services (API Layer)
+### 16.3 Services (7 API modules)
 
-| Service | File | Description |
-|---------|------|-------------|
-| authService | `authService.js` | Register, login, Google login, get current user |
-| mlService | `mlService.js` | Predict crop, classify soil, analyze, hybrid analyze, model status |
-| productService | `productService.js` | CRUD products, search by crop |
-| orderService | `orderService.js` | Create order, get orders, update status |
-| userService | `userService.js` | Admin user management |
-
-### 15.4 Context
-
-| Context | File | Description |
-|---------|------|-------------|
-| AuthContext | `AuthContext.jsx` | Global auth state (user, login, logout, googleLogin, register) |
+authService, mlService, productService, orderService, paymentService, userService, deliveryService
 
 ---
 
-## 16. Project Structure
+## 17. Project Structure
 
 ```
 AgriSoil AI/
 ├── backend/                          # Python FastAPI Backend
 │   ├── app/
-│   │   ├── api/v1/                   # API route handlers
-│   │   │   ├── auth.py               # Authentication endpoints
-│   │   │   ├── prediction.py         # ML prediction endpoints
-│   │   │   ├── products.py           # Product CRUD endpoints
-│   │   │   ├── orders.py             # Order management endpoints
-│   │   │   └── users.py              # User management endpoints
-│   │   ├── core/
-│   │   │   ├── config.py             # App settings (JWT, DB, Google OAuth)
-│   │   │   ├── database.py           # SQLAlchemy engine and session
-│   │   │   └── security.py           # Password hashing and JWT utilities
-│   │   ├── dependencies/
-│   │   │   └── auth.py               # JWT verification dependency
-│   │   ├── models/                   # SQLAlchemy ORM models
-│   │   │   ├── user.py
-│   │   │   ├── product.py
-│   │   │   └── order.py
-│   │   ├── schemas/                  # Pydantic validation schemas
-│   │   │   ├── user.py
-│   │   │   ├── product.py
-│   │   │   ├── order.py
-│   │   │   └── prediction.py
-│   │   ├── services/                 # Business logic
-│   │   │   ├── auth.py               # Auth service (login, register)
-│   │   │   ├── ml_service.py         # ML model loading and prediction
-│   │   │   └── rule_engine.py        # Agricultural rule validation
-│   │   ├── ml_models/                # Trained model files (.joblib)
-│   │   │   ├── crop_recommendation_model.joblib
-│   │   │   ├── soil_classification_model.joblib
-│   │   │   └── soil_model_metadata.json
-│   │   └── main.py                   # FastAPI app entry point
+│   │   ├── api/v1/                   # API route handlers (7 files)
+│   │   ├── core/                     # Config, database, security
+│   │   ├── dependencies/             # JWT verification
+│   │   ├── models/                   # SQLAlchemy ORM models (4 files)
+│   │   ├── schemas/                  # Pydantic schemas (5 files)
+│   │   ├── services/                 # Business logic (8 files)
+│   │   │   ├── ml_service.py         # ML model loading, prediction, hybrid analysis
+│   │   │   ├── rule_engine.py        # 23-crop rules + drainage validation
+│   │   │   ├── payment.py            # Razorpay integration
+│   │   │   └── ...
+│   │   ├── ml_models/                # Trained .joblib model files
+│   │   └── main.py                   # FastAPI entry point
 │   ├── generate_dataset.py           # Crop dataset generator
 │   ├── generate_soil_dataset.py      # Soil dataset generator
 │   ├── train_enhanced_model.py       # Crop model training
 │   ├── train_improved_soil_model.py  # Soil model training
-│   ├── create_admin.py               # Admin user creation script
-│   ├── requirements.txt              # Python dependencies
-│   └── agrisoil.db                   # SQLite database file
+│   └── requirements.txt
 │
 ├── frontend/                         # React + Vite Frontend
 │   ├── src/
-│   │   ├── pages/                    # Page components
-│   │   │   ├── Home.jsx / Home.css
-│   │   │   ├── AuthPage.jsx / Auth.css
-│   │   │   ├── SoilInput.jsx / SoilInput.css
-│   │   │   ├── Shop.jsx / Shop.css
-│   │   │   ├── Cart.jsx / Cart.css
-│   │   │   ├── MyOrders.jsx / MyOrders.css
-│   │   │   └── admin/                # Admin pages
-│   │   │       ├── Dashboard.jsx
-│   │   │       ├── Products.jsx
-│   │   │       ├── Orders.jsx
-│   │   │       └── Users.jsx
-│   │   ├── components/               # Reusable components
-│   │   │   ├── Navbar.jsx / Navbar.css
-│   │   │   ├── ProtectedRoute.jsx
-│   │   │   └── AdminRoute.jsx
-│   │   ├── services/                 # API service modules
-│   │   │   ├── authService.js
-│   │   │   ├── mlService.js
-│   │   │   ├── productService.js
-│   │   │   ├── orderService.js
-│   │   │   └── userService.js
-│   │   ├── context/AuthContext.jsx    # Auth state management
-│   │   ├── config/api.js             # Axios instance configuration
-│   │   ├── utils/validation.js       # Input validation utilities
-│   │   ├── App.jsx                   # Root component with routing
-│   │   └── main.jsx                  # Entry point (Google OAuth wrapper)
+│   │   ├── pages/                    # 22 page components
+│   │   │   ├── Home.jsx              # Hero + features + soil types
+│   │   │   ├── AuthPage.jsx          # Unified login/register
+│   │   │   ├── SoilInput.jsx         # 8-param form + drainage + probabilities
+│   │   │   ├── TermsOfService.jsx    # Legal - Terms
+│   │   │   ├── PrivacyPolicy.jsx     # Legal - Privacy  
+│   │   │   ├── Shop.jsx / Cart.jsx / MyOrders.jsx
+│   │   │   ├── admin/                # 5 admin pages
+│   │   │   └── delivery/             # 2 delivery staff pages
+│   │   ├── components/               # Navbar, ProtectedRoute, AdminRoute, DeliveryRoute
+│   │   ├── services/                 # 7 API service modules
+│   │   ├── context/AuthContext.jsx   # Global auth state
+│   │   └── App.jsx                   # Root routing (20+ routes)
 │   └── package.json
 │
-├── ml_model/                         # ML training artifacts
-│   ├── datasets/
-│   │   ├── combined/                 # Crop recommendation dataset
-│   │   │   └── unified_agricultural_dataset.csv
-│   │   └── soil_classification/      # Soil classification dataset
-│   │       └── synthetic_soil_dataset.csv
-│   ├── models/                       # Alternative model storage
-│   └── train_soil_model.py           # Basic soil model training
+├── ml_model/                         # ML training datasets
+│   └── datasets/                     # CSV files (crop + soil)
 │
-└── docs/                             # Documentation
+└── Project Explanation.md            # This file
 ```
 
 ---
 
-## 17. How It All Works Together
-
-### End-to-End User Flow
+## 18. How It All Works Together
 
 ```
 1. LANDING
-   User visits AgroNova → sees hero section, features, soil types
-   → clicks "Start Soil Analysis"
+   User visits AgriSoil AI → sees hero with farmer image,
+   features, soil types → clicks "Start Soil Analysis"
 
-2. AUTHENTICATION
-   Redirected to /login (protected route)
-   → Signs in with email/password OR Google OAuth
-   → JWT stored in localStorage
-   → Redirected back to /soil-analysis
+2. SOIL ANALYSIS (No Login Required)
+   Enters 8 parameters (N, P, K, pH, temp, humidity, rainfall, drainage)
+   → Frontend validates ranges → POST to /api/v1/model/hybrid-analyze
 
-3. SOIL ANALYSIS
-   User enters 7 parameters (N, P, K, pH, temp, humidity, rainfall)
-   → Frontend validates ranges
-   → Sends POST to /api/v1/model/hybrid-analyze
+3. BACKEND PROCESSING
+   a) ML Soil Classification → "Red Loam" (85%)
+   b) ML Crop Recommendation → "Coffee" (65%) + all probabilities
+   c) Rule Validation (7 checks including drainage):
+      - pH ✅, Soil ✅, Rainfall ✅, Temp ✅, Humidity ✅, Nutrients ✅, Drainage ✅
+   d) Score = 60% × ML + 40% × Rules = 99.4% → "Excellent"
 
-4. BACKEND PROCESSING
-   a) ML Soil Classification → "Laterite" (92% confidence)
-   b) ML Crop Recommendation → "Coconut" (78% confidence)
-   c) Rule Validation → Check "Coconut" for Laterite soil
-      - pH: ✅ 5.2 in range (5.0-8.0)
-      - Soil: ✅ Laterite is preferred for Coconut
-      - All checks: ✅ PASSED
-   d) Score = 60% × 78 + 40% × 95 = 84.8 → "Excellent"
+4. RESULTS DISPLAYED
+   - Soil type probabilities (top 6)
+   - Crop probabilities (top 6)  
+   - Recommended crop with quality badge
+   - Insights, suggestions, drainage warnings
+   - Related products for the recommended crop ONLY
 
-5. RESULTS DISPLAYED
-   User sees:
-   - Soil type: Laterite (92% confidence)
-   - Recommended crop: Coconut (Excellent quality)
-   - Warnings: None
-   - Suggestions: Minor improvements
-   - Alternative crops: Coffee, Mango, Banana
-   - Related products: Coconut seedlings, fertilizers
+5. SHOPPING (Login Required)
+   "Add to Cart" → redirected to login if not authenticated
+   → Sign in (email/password OR Google) → JWT stored
+   → Add to cart → Navigate to /cart
 
-6. SHOPPING
-   User clicks "View Products" → sees coconut seeds in shop
-   → Adds to cart → Proceeds to checkout
-   → Enters shipping address → Places order
+6. CHECKOUT (Razorpay)
+   Address form: House, Landmark, City, District, State, Pincode, Phone
+   → Razorpay popup → Payment verified → Order confirmed, stock deducted
 
 7. ORDER TRACKING
-   User visits /my-orders → sees order status: "Pending"
-   Admin updates status: Pending → Confirmed → Shipped → Delivered
+   /my-orders → status: Confirmed → Processing → Shipped → Delivered
 
 8. ADMIN OPERATIONS
-   Admin logs in → Dashboard shows stats
-   → Manages products (add new seeds)
-   → Updates order statuses
-   → Manages user accounts
+   Dashboard analytics → Manage products → View orders with addresses
+   → Assign delivery staff (manual or auto by district)
+
+9. DELIVERY STAFF
+   /delivery/login → View assigned orders with full customer details
+   → Mark as Shipped → Delivered → Update profile
 ```
+
+---
+
+## 19. Version History
+
+| Version | Date | Key Changes |
+|---------|------|-------------|
+| **v1.0** | Jan 2026 | Initial release: Basic ML models, shop, cart |
+| **v1.1** | Jan 2026 | SQLite integration, admin panel |
+| **v1.2** | Feb 2026 | Google OAuth, Twitter OAuth, Razorpay payments |
+| **v1.3** | Feb 2026 | Delivery staff system, district-based auto-assign |
+| **v1.4** | Feb 2026 | Structured address forms, admin analytics (Recharts) |
+| **v1.5** | Feb 2026 | Product detail page, order management improvements |
+| **v2.0** | Mar 2026 | **Major ML overhaul**: 97.6% accuracy crop model, annual rainfall scale fix, hybrid analysis improvements |
+| **v2.1** | Mar 2026 | **Drainage/waterlogging** parameter added to analysis, rule engine, and UI |
+| **v2.2** | Mar 2026 | **Crop probabilities** display, product recommendations fix (recommended crop only) |
+| **v2.3** | Mar 2026 | **UI redesign**: Hero section with farmer image, unified backgrounds, navbar cleanup |
+| **v2.4** | Mar 2026 | **Legal pages**: Terms of Service, Privacy Policy with proper routing across all pages |
 
 ---
 
 ## Summary
 
-**AgriSoil AI** is a comprehensive agricultural intelligence platform that bridges the gap between modern AI technology and traditional farming wisdom. By combining **machine learning models** trained on 10,000+ scientifically generated samples with a **rule engine** encoding agricultural knowledge for 22 crops and 11 soil types, it delivers recommendations that are both **data-driven** and **agriculturally sound** — specifically tailored for Kerala's unique agricultural landscape.
+**AgriSoil AI** is a comprehensive agricultural intelligence platform that bridges the gap between modern AI technology and traditional farming wisdom. By combining **machine learning models** (97.6% accuracy) trained on 10,000+ scientifically generated samples with a **rule engine** encoding agricultural knowledge for 23 crops and 11 soil types — including **drainage/waterlogging risk assessment** — it delivers recommendations that are both **data-driven** and **agriculturally sound**, specifically tailored for Kerala's unique landscape.
 
-The **hybrid approach** (60% ML + 40% Rules) with automatic fallback ensures that farmers always receive actionable, validated crop recommendations, along with the ability to purchase the right seeds and products directly through the integrated e-commerce platform.
+The **hybrid approach** (60% ML + 40% Rules) with automatic fallback ensures farmers always receive actionable, validated crop recommendations with full **probability distributions** for both soil types and crops. The platform goes beyond analysis — users can purchase recommended products through the integrated **e-commerce marketplace with Razorpay payments**, while district-based **delivery staff management** ensures orders reach farmers efficiently. With **three distinct roles** (Customer, Admin, Delivery Staff), each with dedicated dashboards, proper **Terms of Service and Privacy Policy** pages, and a premium dark-themed UI — AgriSoil AI provides a complete end-to-end agricultural commerce solution ready for real-world deployment.
 
 ---
 
-*© 2026 AgroNova AI. Built with ❤️ for farmers.*
+*© 2026 AgriSoil AI. Built with ❤️ for farmers.*

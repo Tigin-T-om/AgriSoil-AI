@@ -19,6 +19,8 @@ import MyOrders from './pages/MyOrders';
 import ProductDetail from './pages/ProductDetail';
 import DeliveryLogin from './pages/delivery/DeliveryLogin';
 import DeliveryDashboard from './pages/delivery/DeliveryDashboard';
+import TermsOfService from './pages/TermsOfService';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import './App.css';
 
 function App() {
@@ -31,6 +33,10 @@ function App() {
           <Route path="/register" element={<AuthPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/auth/callback/twitter" element={<TwitterCallback />} />
+
+          {/* Legal Pages */}
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
 
           {/* Shop/Products - both paths work */}
           <Route path="/shop" element={<Shop />} />
@@ -65,23 +71,9 @@ function App() {
             }
           />
 
-          {/* Soil Analysis - both paths work */}
-          <Route
-            path="/soil-analysis"
-            element={
-              <ProtectedRoute>
-                <SoilInput />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/soil-input"
-            element={
-              <ProtectedRoute>
-                <SoilInput />
-              </ProtectedRoute>
-            }
-          />
+          {/* Soil Analysis - accessible without login */}
+          <Route path="/soil-analysis" element={<SoilInput />} />
+          <Route path="/soil-input" element={<SoilInput />} />
 
           {/* Admin Routes */}
           <Route

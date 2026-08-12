@@ -15,7 +15,7 @@
 .dm-create-title {
     font-size: 1rem;
     font-weight: 700;
-    color: #f1f5f9;
+    color: var(--dark-50);
     margin: 0 0 1rem;
 }
 
@@ -45,7 +45,7 @@
     display: block;
     font-size: 0.7rem;
     font-weight: 600;
-    color: #94a3b8;
+    color: var(--dark-300);
     text-transform: uppercase;
     letter-spacing: 0.04em;
     margin-bottom: 0.3rem;
@@ -158,7 +158,7 @@
 
 .dm-workload-label {
     font-size: 0.65rem;
-    color: #64748b;
+    color: var(--dark-400);
     text-transform: uppercase;
 }
 

@@ -60,19 +60,21 @@ def create_enhanced_features(df):
     df['ph_stress'] = abs(df['ph'] - 6.5) / 6.5
     df['env_stress_index'] = (df['temp_stress'] + df['humidity_stress'] + df['ph_stress']) / 3
     
-    # Rainfall category
+    # Rainfall category (annual mm/year scale)
     df['rainfall_category'] = pd.cut(
         df['rainfall'],
-        bins=[0, 50, 100, 150, 200, 300, 3000],
-        labels=[0, 1, 2, 3, 4, 5]
-    ).astype(int)
+        bins=[0, 600, 1200, 1800, 2400, 3600, 10000],
+        labels=[0, 1, 2, 3, 4, 5],
+        include_lowest=True
+    ).fillna(5).astype(int)
     
     # pH category
     df['ph_category'] = pd.cut(
         df['ph'],
         bins=[0, 5.5, 6.5, 7.5, 14],
-        labels=[0, 1, 2, 3]
-    ).astype(int)
+        labels=[0, 1, 2, 3],
+        include_lowest=True
+    ).fillna(0).astype(int)
     
     return df
 
@@ -340,11 +342,11 @@ def quick_test():
     features = model_package['features']
     base_features = model_package['base_features']
     
-    # Test samples
+    # Test samples (annual rainfall scale)
     test_samples = [
-        {'N': 80, 'P': 50, 'K': 60, 'temperature': 25, 'humidity': 75, 'ph': 6.5, 'rainfall': 200},
-        {'N': 100, 'P': 40, 'K': 50, 'temperature': 28, 'humidity': 85, 'ph': 6.0, 'rainfall': 220},
-        {'N': 40, 'P': 30, 'K': 30, 'temperature': 22, 'humidity': 60, 'ph': 7.0, 'rainfall': 100},
+        {'N': 60, 'P': 35, 'K': 60, 'temperature': 30, 'humidity': 60, 'ph': 6.5, 'rainfall': 1700},
+        {'N': 100, 'P': 40, 'K': 50, 'temperature': 28, 'humidity': 85, 'ph': 6.0, 'rainfall': 2640},
+        {'N': 40, 'P': 30, 'K': 30, 'temperature': 22, 'humidity': 60, 'ph': 7.0, 'rainfall': 1200},
     ]
     
     for i, sample in enumerate(test_samples, 1):

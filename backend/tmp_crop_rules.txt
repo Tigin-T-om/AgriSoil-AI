@@ -1,0 +1,45 @@
+Coffee:
+  N: Moderate, P: Moderate, K: High
+  pH: 5.0 - 6.0
+  Temp: 18°C - 25°C
+  Humidity: 60% - 90%
+  Rainfall: 2160 - 3000 mm/year
+  Drainage: Good
+  Soils: ['Loamy', 'Forest Loam', 'Red Loam', 'Laterite']
+------------------------------
+Rice:
+  N: High, P: Moderate, K: Moderate
+  pH: 5.5 - 6.5
+  Temp: 22°C - 32°C
+  Humidity: 70% - 100%
+  Rainfall: 2160 - 3000 mm/year
+  Drainage: Good
+  Soils: ['Clayey', 'Loamy', 'Riverine Alluvial', 'Coastal Alluvial']
+------------------------------
+Coconut:
+  N: Moderate, P: Low, K: High
+  pH: 5.5 - 7.0
+  Temp: 25°C - 32°C
+  Humidity: 70% - 95%
+  Rainfall: 2160 - 3000 mm/year
+  Drainage: Good
+  Soils: ['Sandy', 'Loamy', 'Coastal Alluvial', 'Laterite', 'Red Loam']
+------------------------------
+Banana:
+  N: High, P: Moderate, K: High
+  pH: 6.0 - 7.0
+  Temp: 25°C - 32°C
+  Humidity: 70% - 90%
+  Rainfall: 1800 - 2400 mm/year
+  Drainage: Good
+  Soils: ['Loamy', 'Riverine Alluvial', 'Coastal Alluvial']
+------------------------------
+Mango:
+  N: Moderate, P: Low, K: Moderate
+  pH: 6.0 - 7.0
+  Temp: 24°C - 35°C
+  Humidity: 40% - 80%
+  Rainfall: 1200 - 2400 mm/year
+  Drainage: Good
+  Soils: ['Loamy', 'Sandy', 'Red Loam', 'Laterite']
+------------------------------

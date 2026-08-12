@@ -12,6 +12,8 @@ Features:
 - Suggestion generation for improvements
 
 Part of the Agri-Soil AI Hybrid ML + Rule-Based System
+
+NOTE: All rainfall values are in ANNUAL mm/year (Kerala-specific)
 """
 
 from typing import Dict, List, Any, Optional, Tuple
@@ -44,10 +46,10 @@ class CropRule:
     ph_optimal_max: float
     preferred_soils: List[str]
     acceptable_soils: List[str]
-    min_rainfall: float
-    max_rainfall: float
-    optimal_rainfall_min: float
-    optimal_rainfall_max: float
+    min_rainfall: float         # Annual mm/year
+    max_rainfall: float         # Annual mm/year
+    optimal_rainfall_min: float # Annual mm/year
+    optimal_rainfall_max: float # Annual mm/year
     min_temperature: float
     max_temperature: float
     optimal_temp_min: float
@@ -58,12 +60,15 @@ class CropRule:
     min_humidity: float
     max_humidity: float
     description: str
+    drainage_need: DrainageType = DrainageType.GOOD
+    waterlogging_sensitive: bool = False
 
 
 # ============================================================================
-# CROP RULES DATABASE
+# CROP RULES DATABASE (All rainfall values in ANNUAL mm/year)
 # ============================================================================
 # Comprehensive rules for each crop based on agricultural research
+# Rainfall converted to annual scale for Kerala compatibility
 
 CROP_RULES: Dict[str, CropRule] = {
     "rice": CropRule(
@@ -71,7 +76,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.0, ph_max=8.0, ph_optimal_min=5.5, ph_optimal_max=6.5,
         preferred_soils=["Clayey", "Loamy", "Riverine Alluvial", "Coastal Alluvial"],
         acceptable_soils=["Silty", "Black Cotton"],
-        min_rainfall=150, max_rainfall=300, optimal_rainfall_min=180, optimal_rainfall_max=250,
+        min_rainfall=1800, max_rainfall=3600, optimal_rainfall_min=2160, optimal_rainfall_max=3000,
         min_temperature=20, max_temperature=40, optimal_temp_min=22, optimal_temp_max=32,
         nitrogen_need=NutrientLevel.HIGH,
         phosphorus_need=NutrientLevel.MODERATE,
@@ -84,7 +89,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.5, ph_max=8.0, ph_optimal_min=6.0, ph_optimal_max=7.0,
         preferred_soils=["Loamy", "Clayey"],
         acceptable_soils=["Silty"],
-        min_rainfall=50, max_rainfall=150, optimal_rainfall_min=75, optimal_rainfall_max=100,
+        min_rainfall=600, max_rainfall=1800, optimal_rainfall_min=900, optimal_rainfall_max=1200,
         min_temperature=10, max_temperature=30, optimal_temp_min=12, optimal_temp_max=25,
         nitrogen_need=NutrientLevel.HIGH,
         phosphorus_need=NutrientLevel.MODERATE,
@@ -97,7 +102,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.5, ph_max=8.0, ph_optimal_min=5.8, ph_optimal_max=7.0,
         preferred_soils=["Loamy", "Sandy"],
         acceptable_soils=["Clayey", "Silty"],
-        min_rainfall=60, max_rainfall=120, optimal_rainfall_min=80, optimal_rainfall_max=110,
+        min_rainfall=720, max_rainfall=1440, optimal_rainfall_min=960, optimal_rainfall_max=1320,
         min_temperature=18, max_temperature=35, optimal_temp_min=21, optimal_temp_max=30,
         nitrogen_need=NutrientLevel.HIGH,
         phosphorus_need=NutrientLevel.MODERATE,
@@ -110,7 +115,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.5, ph_max=8.5, ph_optimal_min=6.0, ph_optimal_max=7.5,
         preferred_soils=["Clayey", "Loamy"],
         acceptable_soils=["Silty"],
-        min_rainfall=50, max_rainfall=150, optimal_rainfall_min=80, optimal_rainfall_max=120,
+        min_rainfall=600, max_rainfall=1800, optimal_rainfall_min=960, optimal_rainfall_max=1440,
         min_temperature=20, max_temperature=40, optimal_temp_min=25, optimal_temp_max=35,
         nitrogen_need=NutrientLevel.HIGH,
         phosphorus_need=NutrientLevel.MODERATE,
@@ -123,7 +128,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.0, ph_max=8.0, ph_optimal_min=6.0, ph_optimal_max=7.0,
         preferred_soils=["Loamy", "Clayey"],
         acceptable_soils=["Silty"],
-        min_rainfall=150, max_rainfall=250, optimal_rainfall_min=170, optimal_rainfall_max=230,
+        min_rainfall=1800, max_rainfall=3000, optimal_rainfall_min=2040, optimal_rainfall_max=2760,
         min_temperature=25, max_temperature=38, optimal_temp_min=27, optimal_temp_max=35,
         nitrogen_need=NutrientLevel.HIGH,
         phosphorus_need=NutrientLevel.MODERATE,
@@ -136,7 +141,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=4.5, ph_max=6.5, ph_optimal_min=5.0, ph_optimal_max=6.0,
         preferred_soils=["Loamy", "Forest Loam", "Red Loam", "Laterite"],
         acceptable_soils=["Clayey", "Silty", "Brown Hydromorphic"],
-        min_rainfall=150, max_rainfall=300, optimal_rainfall_min=180, optimal_rainfall_max=250,
+        min_rainfall=1800, max_rainfall=3600, optimal_rainfall_min=2160, optimal_rainfall_max=3000,
         min_temperature=15, max_temperature=30, optimal_temp_min=18, optimal_temp_max=25,
         nitrogen_need=NutrientLevel.MODERATE,
         phosphorus_need=NutrientLevel.MODERATE,
@@ -149,7 +154,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.5, ph_max=7.5, ph_optimal_min=6.0, ph_optimal_max=7.0,
         preferred_soils=["Loamy", "Riverine Alluvial", "Coastal Alluvial"],
         acceptable_soils=["Clayey", "Silty", "Red Loam", "Laterite"],
-        min_rainfall=100, max_rainfall=250, optimal_rainfall_min=150, optimal_rainfall_max=200,
+        min_rainfall=1200, max_rainfall=3000, optimal_rainfall_min=1800, optimal_rainfall_max=2400,
         min_temperature=20, max_temperature=35, optimal_temp_min=25, optimal_temp_max=32,
         nitrogen_need=NutrientLevel.HIGH,
         phosphorus_need=NutrientLevel.MODERATE,
@@ -162,7 +167,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.5, ph_max=7.5, ph_optimal_min=6.0, ph_optimal_max=7.0,
         preferred_soils=["Loamy", "Sandy", "Red Loam", "Laterite"],
         acceptable_soils=["Clayey", "Forest Loam", "Brown Hydromorphic"],
-        min_rainfall=75, max_rainfall=250, optimal_rainfall_min=100, optimal_rainfall_max=200,
+        min_rainfall=900, max_rainfall=3000, optimal_rainfall_min=1200, optimal_rainfall_max=2400,
         min_temperature=21, max_temperature=45, optimal_temp_min=24, optimal_temp_max=35,
         nitrogen_need=NutrientLevel.MODERATE,
         phosphorus_need=NutrientLevel.LOW,
@@ -175,7 +180,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.5, ph_max=7.0, ph_optimal_min=6.0, ph_optimal_max=6.8,
         preferred_soils=["Loamy"],
         acceptable_soils=["Sandy", "Silty"],
-        min_rainfall=100, max_rainfall=200, optimal_rainfall_min=125, optimal_rainfall_max=175,
+        min_rainfall=1200, max_rainfall=2400, optimal_rainfall_min=1500, optimal_rainfall_max=2100,
         min_temperature=8, max_temperature=28, optimal_temp_min=10, optimal_temp_max=22,
         nitrogen_need=NutrientLevel.MODERATE,
         phosphorus_need=NutrientLevel.LOW,
@@ -188,7 +193,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.5, ph_max=8.0, ph_optimal_min=6.0, ph_optimal_max=7.0,
         preferred_soils=["Loamy", "Sandy"],
         acceptable_soils=["Clayey"],
-        min_rainfall=50, max_rainfall=150, optimal_rainfall_min=75, optimal_rainfall_max=100,
+        min_rainfall=600, max_rainfall=1800, optimal_rainfall_min=900, optimal_rainfall_max=1200,
         min_temperature=15, max_temperature=40, optimal_temp_min=20, optimal_temp_max=35,
         nitrogen_need=NutrientLevel.MODERATE,
         phosphorus_need=NutrientLevel.LOW,
@@ -201,7 +206,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.0, ph_max=8.0, ph_optimal_min=5.5, ph_optimal_max=7.0,
         preferred_soils=["Loamy", "Sandy"],
         acceptable_soils=["Clayey"],
-        min_rainfall=100, max_rainfall=200, optimal_rainfall_min=120, optimal_rainfall_max=180,
+        min_rainfall=1200, max_rainfall=2400, optimal_rainfall_min=1440, optimal_rainfall_max=2160,
         min_temperature=13, max_temperature=38, optimal_temp_min=20, optimal_temp_max=30,
         nitrogen_need=NutrientLevel.MODERATE,
         phosphorus_need=NutrientLevel.MODERATE,
@@ -214,7 +219,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.5, ph_max=7.5, ph_optimal_min=6.0, ph_optimal_max=7.0,
         preferred_soils=["Loamy", "Sandy"],
         acceptable_soils=["Silty"],
-        min_rainfall=100, max_rainfall=250, optimal_rainfall_min=150, optimal_rainfall_max=200,
+        min_rainfall=1200, max_rainfall=3000, optimal_rainfall_min=1800, optimal_rainfall_max=2400,
         min_temperature=20, max_temperature=38, optimal_temp_min=25, optimal_temp_max=32,
         nitrogen_need=NutrientLevel.HIGH,
         phosphorus_need=NutrientLevel.MODERATE,
@@ -227,7 +232,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.0, ph_max=8.0, ph_optimal_min=5.5, ph_optimal_max=7.0,
         preferred_soils=["Sandy", "Loamy", "Coastal Alluvial", "Laterite", "Red Loam"],
         acceptable_soils=["Clayey", "Riverine Alluvial"],
-        min_rainfall=150, max_rainfall=300, optimal_rainfall_min=180, optimal_rainfall_max=250,
+        min_rainfall=1800, max_rainfall=3600, optimal_rainfall_min=2160, optimal_rainfall_max=3000,
         min_temperature=20, max_temperature=35, optimal_temp_min=25, optimal_temp_max=32,
         nitrogen_need=NutrientLevel.MODERATE,
         phosphorus_need=NutrientLevel.LOW,
@@ -240,7 +245,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.5, ph_max=8.5, ph_optimal_min=6.0, ph_optimal_max=7.5,
         preferred_soils=["Loamy", "Clayey"],
         acceptable_soils=["Sandy", "Silty"],
-        min_rainfall=40, max_rainfall=100, optimal_rainfall_min=60, optimal_rainfall_max=80,
+        min_rainfall=480, max_rainfall=1200, optimal_rainfall_min=720, optimal_rainfall_max=960,
         min_temperature=10, max_temperature=30, optimal_temp_min=15, optimal_temp_max=25,
         nitrogen_need=NutrientLevel.LOW,  # Legume - fixes nitrogen
         phosphorus_need=NutrientLevel.MODERATE,
@@ -253,7 +258,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.5, ph_max=8.0, ph_optimal_min=6.0, ph_optimal_max=7.0,
         preferred_soils=["Loamy", "Sandy"],
         acceptable_soils=["Clayey", "Silty"],
-        min_rainfall=25, max_rainfall=100, optimal_rainfall_min=40, optimal_rainfall_max=75,
+        min_rainfall=300, max_rainfall=1200, optimal_rainfall_min=480, optimal_rainfall_max=900,
         min_temperature=10, max_temperature=30, optimal_temp_min=15, optimal_temp_max=25,
         nitrogen_need=NutrientLevel.LOW,  # Legume
         phosphorus_need=NutrientLevel.MODERATE,
@@ -266,7 +271,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.0, ph_max=8.0, ph_optimal_min=5.5, ph_optimal_max=7.0,
         preferred_soils=["Loamy", "Sandy"],
         acceptable_soils=["Clayey"],
-        min_rainfall=60, max_rainfall=150, optimal_rainfall_min=80, optimal_rainfall_max=120,
+        min_rainfall=720, max_rainfall=1800, optimal_rainfall_min=960, optimal_rainfall_max=1440,
         min_temperature=18, max_temperature=35, optimal_temp_min=22, optimal_temp_max=30,
         nitrogen_need=NutrientLevel.LOW,  # Legume
         phosphorus_need=NutrientLevel.MODERATE,
@@ -279,7 +284,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.0, ph_max=8.5, ph_optimal_min=6.0, ph_optimal_max=7.5,
         preferred_soils=["Sandy", "Loamy"],
         acceptable_soils=["Clayey"],
-        min_rainfall=25, max_rainfall=75, optimal_rainfall_min=35, optimal_rainfall_max=60,
+        min_rainfall=300, max_rainfall=900, optimal_rainfall_min=420, optimal_rainfall_max=720,
         min_temperature=24, max_temperature=40, optimal_temp_min=28, optimal_temp_max=35,
         nitrogen_need=NutrientLevel.LOW,
         phosphorus_need=NutrientLevel.LOW,
@@ -292,7 +297,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.5, ph_max=8.0, ph_optimal_min=6.0, ph_optimal_max=7.0,
         preferred_soils=["Loamy", "Sandy"],
         acceptable_soils=["Clayey"],
-        min_rainfall=50, max_rainfall=100, optimal_rainfall_min=60, optimal_rainfall_max=85,
+        min_rainfall=600, max_rainfall=1200, optimal_rainfall_min=720, optimal_rainfall_max=1020,
         min_temperature=20, max_temperature=38, optimal_temp_min=25, optimal_temp_max=32,
         nitrogen_need=NutrientLevel.LOW,
         phosphorus_need=NutrientLevel.MODERATE,
@@ -305,7 +310,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.5, ph_max=8.0, ph_optimal_min=6.0, ph_optimal_max=7.0,
         preferred_soils=["Loamy", "Clayey"],
         acceptable_soils=["Sandy", "Silty"],
-        min_rainfall=60, max_rainfall=120, optimal_rainfall_min=75, optimal_rainfall_max=100,
+        min_rainfall=720, max_rainfall=1440, optimal_rainfall_min=900, optimal_rainfall_max=1200,
         min_temperature=25, max_temperature=38, optimal_temp_min=27, optimal_temp_max=33,
         nitrogen_need=NutrientLevel.LOW,
         phosphorus_need=NutrientLevel.MODERATE,
@@ -318,7 +323,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.5, ph_max=7.5, ph_optimal_min=6.0, ph_optimal_max=7.0,
         preferred_soils=["Loamy"],
         acceptable_soils=["Clayey", "Sandy"],
-        min_rainfall=60, max_rainfall=150, optimal_rainfall_min=80, optimal_rainfall_max=120,
+        min_rainfall=720, max_rainfall=1800, optimal_rainfall_min=960, optimal_rainfall_max=1440,
         min_temperature=15, max_temperature=30, optimal_temp_min=18, optimal_temp_max=25,
         nitrogen_need=NutrientLevel.LOW,
         phosphorus_need=NutrientLevel.HIGH,
@@ -331,7 +336,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.5, ph_max=8.0, ph_optimal_min=6.0, ph_optimal_max=7.5,
         preferred_soils=["Loamy", "Sandy"],
         acceptable_soils=["Clayey"],
-        min_rainfall=50, max_rainfall=150, optimal_rainfall_min=75, optimal_rainfall_max=120,
+        min_rainfall=600, max_rainfall=1800, optimal_rainfall_min=900, optimal_rainfall_max=1440,
         min_temperature=18, max_temperature=40, optimal_temp_min=22, optimal_temp_max=35,
         nitrogen_need=NutrientLevel.MODERATE,
         phosphorus_need=NutrientLevel.LOW,
@@ -344,7 +349,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.5, ph_max=7.5, ph_optimal_min=6.0, ph_optimal_max=7.0,
         preferred_soils=["Sandy", "Loamy"],
         acceptable_soils=["Silty"],
-        min_rainfall=40, max_rainfall=80, optimal_rainfall_min=50, optimal_rainfall_max=70,
+        min_rainfall=480, max_rainfall=960, optimal_rainfall_min=600, optimal_rainfall_max=840,
         min_temperature=22, max_temperature=38, optimal_temp_min=25, optimal_temp_max=32,
         nitrogen_need=NutrientLevel.MODERATE,
         phosphorus_need=NutrientLevel.MODERATE,
@@ -357,7 +362,7 @@ CROP_RULES: Dict[str, CropRule] = {
         ph_min=5.5, ph_max=7.5, ph_optimal_min=6.0, ph_optimal_max=6.8,
         preferred_soils=["Sandy", "Loamy"],
         acceptable_soils=["Silty"],
-        min_rainfall=35, max_rainfall=75, optimal_rainfall_min=45, optimal_rainfall_max=65,
+        min_rainfall=420, max_rainfall=900, optimal_rainfall_min=540, optimal_rainfall_max=780,
         min_temperature=20, max_temperature=38, optimal_temp_min=24, optimal_temp_max=32,
         nitrogen_need=NutrientLevel.MODERATE,
         phosphorus_need=NutrientLevel.MODERATE,
@@ -436,19 +441,19 @@ class RuleValidator:
     @staticmethod
     def validate_rainfall(rainfall: float, rule: CropRule) -> Tuple[bool, bool, str]:
         """
-        Validate rainfall against crop rules.
+        Validate rainfall (annual mm/year) against crop rules.
         
         Returns:
             Tuple of (is_acceptable, is_optimal, message)
         """
         if rule.optimal_rainfall_min <= rainfall <= rule.optimal_rainfall_max:
-            return True, True, f"Rainfall {rainfall}mm is optimal"
+            return True, True, f"Rainfall {rainfall}mm/yr is optimal"
         elif rule.min_rainfall <= rainfall <= rule.max_rainfall:
-            return True, False, f"Rainfall {rainfall}mm is acceptable (optimal: {rule.optimal_rainfall_min}-{rule.optimal_rainfall_max}mm)"
+            return True, False, f"Rainfall {rainfall}mm/yr is acceptable (optimal: {rule.optimal_rainfall_min}-{rule.optimal_rainfall_max}mm/yr)"
         elif rainfall < rule.min_rainfall:
-            return False, False, f"Rainfall {rainfall}mm is too low (minimum: {rule.min_rainfall}mm)"
+            return False, False, f"Rainfall {rainfall}mm/yr is too low (minimum: {rule.min_rainfall}mm/yr)"
         else:
-            return False, False, f"Rainfall {rainfall}mm is too high (maximum: {rule.max_rainfall}mm)"
+            return False, False, f"Rainfall {rainfall}mm/yr is too high (maximum: {rule.max_rainfall}mm/yr)"
     
     @staticmethod
     def validate_temperature(temperature: float, rule: CropRule) -> Tuple[bool, bool, str]:
@@ -540,7 +545,8 @@ class RuleValidator:
         temperature: float,
         humidity: float,
         ph: float,
-        rainfall: float
+        rainfall: float,
+        drainage: str = "Good"
     ) -> Dict[str, Any]:
         """
         Full validation of crop suitability based on all parameters.
@@ -663,6 +669,34 @@ class RuleValidator:
                 if "⚠️" in msg:
                     warnings.append(msg.replace("⚠️ ", ""))
         
+        # 7. Validate Drainage
+        drainage_passed = True
+        if drainage:
+            input_dl = drainage.lower()
+            if rule.waterlogging_sensitive and input_dl == "poor":
+                drainage_passed = False
+                warnings.append("⚠️ CRITICAL: Crop is highly sensitive to waterlogging, but drainage is poor.")
+                validations["drainage"] = {
+                    "passed": False, "optimal": False, "message": "Poor drainage is unsuitable for this crop."
+                }
+                score_components.append(0.0)
+            elif rule.drainage_need == DrainageType.POOR and input_dl != "poor":
+                warnings.append("This crop prefers poor drainage/waterlogging.")
+                validations["drainage"] = {
+                    "passed": True, "optimal": False, "message": "Optimal drainage not met (requires waterlogging)."
+                }
+                score_components.append(0.5)
+            else:
+                validations["drainage"] = {
+                    "passed": True, "optimal": True, "message": f"Drainage condition ({drainage}) is suitable."
+                }
+                score_components.append(1.0)
+        else:
+            validations["drainage"] = {
+                "passed": True, "optimal": True, "message": "Drainage assumed suitable."
+            }
+            score_components.append(1.0)
+            
         # Calculate overall validation score (0-100)
         validation_score = (sum(score_components) / len(score_components)) * 100 if score_components else 0
         
@@ -688,6 +722,7 @@ class RuleValidator:
         humidity: float,
         ph: float,
         rainfall: float,
+        drainage: str = "Good",
         top_n: int = 5
     ) -> List[Dict[str, Any]]:
         """
@@ -709,7 +744,8 @@ class RuleValidator:
                 temperature=temperature,
                 humidity=humidity,
                 ph=ph,
-                rainfall=rainfall
+                rainfall=rainfall,
+                drainage=drainage
             )
             
             if validation["validation_score"] is not None:
@@ -731,4 +767,3 @@ class RuleValidator:
         results.sort(key=lambda x: x["validation_score"], reverse=True)
         
         return results[:top_n]
-

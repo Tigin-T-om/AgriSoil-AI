@@ -118,7 +118,7 @@
 }
 
 .delivery-login-subtitle {
-    color: #94a3b8;
+    color: var(--dark-300);
     font-size: 0.875rem;
     margin: 0;
 }
@@ -168,7 +168,7 @@
 }
 
 .delivery-form-label {
-    color: #cbd5e1;
+    color: var(--dark-200);
     font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -267,7 +267,7 @@
 }
 
 .delivery-back-link {
-    color: #64748b;
+    color: var(--dark-400);
     font-size: 0.85rem;
     text-decoration: none;
     transition: color 0.2s ease;

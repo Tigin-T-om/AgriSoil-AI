@@ -305,13 +305,35 @@ const AdminOrders = () => {
                                                                     <div className="admin-detail-section">
                                                                         <div className="admin-detail-label">📍 Shipping Address</div>
                                                                         <div className="admin-detail-value">{order.shipping_address || 'Not provided'}</div>
-                                                                        {order.district && (
-                                                                            <div className="admin-detail-value" style={{ marginTop: '0.25rem', color: '#f97316' }}>
-                                                                                🏘️ District: {order.district}
+                                                                        {order.landmark && (
+                                                                            <div className="admin-detail-value" style={{ marginTop: '0.25rem', color: '#94a3b8', fontSize: '0.8rem' }}>
+                                                                                🏠 Landmark: {order.landmark}
                                                                             </div>
                                                                         )}
+                                                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.5rem' }}>
+                                                                            {order.city && (
+                                                                                <span style={{ color: '#60a5fa', fontSize: '0.8rem', background: 'rgba(96,165,250,0.1)', padding: '0.15rem 0.5rem', borderRadius: '0.4rem' }}>
+                                                                                    🏙️ {order.city}
+                                                                                </span>
+                                                                            )}
+                                                                            {order.district && (
+                                                                                <span style={{ color: '#f97316', fontSize: '0.8rem', background: 'rgba(249,115,22,0.1)', padding: '0.15rem 0.5rem', borderRadius: '0.4rem' }}>
+                                                                                    🏘️ {order.district}
+                                                                                </span>
+                                                                            )}
+                                                                            {order.state && (
+                                                                                <span style={{ color: '#a78bfa', fontSize: '0.8rem', background: 'rgba(167,139,250,0.1)', padding: '0.15rem 0.5rem', borderRadius: '0.4rem' }}>
+                                                                                    📌 {order.state}
+                                                                                </span>
+                                                                            )}
+                                                                            {order.pincode && (
+                                                                                <span style={{ color: '#4ade80', fontSize: '0.8rem', background: 'rgba(74,222,128,0.1)', padding: '0.15rem 0.5rem', borderRadius: '0.4rem' }}>
+                                                                                    📮 {order.pincode}
+                                                                                </span>
+                                                                            )}
+                                                                        </div>
                                                                         {order.phone_number && (
-                                                                            <div className="admin-detail-value" style={{ marginTop: '0.25rem', color: '#64748b' }}>
+                                                                            <div className="admin-detail-value" style={{ marginTop: '0.4rem', color: '#64748b' }}>
                                                                                 📞 {order.phone_number}
                                                                             </div>
                                                                         )}

@@ -38,7 +38,7 @@ KERALA_SOIL_TYPES = {
         "temperature": (24, 34),  # Tropical warm
         "humidity": (70, 92),     # High humidity
         "ph": (4.5, 6.0),         # ACIDIC (key characteristic)
-        "rainfall": (200, 350),   # High rainfall regions
+        "rainfall": (2400, 4200),  # Annual: High rainfall regions
         "samples": 2000,          # Most common soil
         "color": "Red to reddish-brown",
         "description": "Iron-rich acidic soil common in Kerala midlands"
@@ -55,7 +55,7 @@ KERALA_SOIL_TYPES = {
         "temperature": (24, 35),
         "humidity": (65, 88),
         "ph": (5.5, 6.8),         # Slightly acidic to neutral
-        "rainfall": (150, 280),
+        "rainfall": (1800, 3360),  # Annual
         "samples": 1500,
         "color": "Reddish",
         "description": "Fertile loamy soil suitable for diverse crops"
@@ -72,7 +72,7 @@ KERALA_SOIL_TYPES = {
         "temperature": (26, 36),  # Warm coastal
         "humidity": (75, 95),     # Very high (sea influence)
         "ph": (7.0, 8.5),         # ALKALINE (salt influence)
-        "rainfall": (120, 220),
+        "rainfall": (1440, 2640),  # Annual
         "samples": 1200,
         "color": "Grey to yellowish",
         "description": "Sandy alluvial soil with salt influence near coasts"
@@ -89,7 +89,7 @@ KERALA_SOIL_TYPES = {
         "temperature": (24, 33),
         "humidity": (70, 90),
         "ph": (6.2, 7.5),         # Near neutral (most fertile)
-        "rainfall": (180, 300),
+        "rainfall": (2160, 3600),  # Annual
         "samples": 1300,
         "color": "Dark brown to grey",
         "description": "Highly fertile river deposited soil"
@@ -106,7 +106,7 @@ KERALA_SOIL_TYPES = {
         "temperature": (25, 34),
         "humidity": (80, 98),     # VERY HIGH (waterlogged)
         "ph": (4.0, 5.5),         # ACIDIC (waterlogging)
-        "rainfall": (200, 320),   # High rainfall
+        "rainfall": (2400, 3840),  # Annual: High rainfall
         "samples": 1100,
         "color": "Brown to dark brown",
         "description": "Waterlogged paddy soil with high organic content"
@@ -123,7 +123,7 @@ KERALA_SOIL_TYPES = {
         "temperature": (15, 26),  # COOLER (high altitude)
         "humidity": (75, 95),
         "ph": (5.0, 6.5),         # Slightly acidic
-        "rainfall": (250, 400),   # VERY HIGH rainfall
+        "rainfall": (3000, 4800),  # Annual: VERY HIGH rainfall
         "samples": 1000,
         "color": "Dark brown to black",
         "description": "Organic-rich forest soil from Western Ghats"
@@ -140,7 +140,7 @@ KERALA_SOIL_TYPES = {
         "temperature": (26, 38),  # Hot regions
         "humidity": (50, 75),     # Lower humidity
         "ph": (7.0, 8.5),         # ALKALINE
-        "rainfall": (80, 150),    # Lower rainfall
+        "rainfall": (960, 1800),   # Annual: Lower rainfall
         "samples": 700,           # Less common in Kerala
         "color": "Black to dark grey",
         "description": "Clayey black soil with high water retention"
@@ -157,7 +157,7 @@ KERALA_SOIL_TYPES = {
         "temperature": (26, 34),
         "humidity": (85, 99),     # SATURATED
         "ph": (3.5, 5.0),         # VERY ACIDIC (key feature)
-        "rainfall": (200, 300),
+        "rainfall": (2400, 3600),  # Annual
         "samples": 700,
         "color": "Black, mucky",
         "description": "Highly acidic organic soil from marsh areas"
@@ -173,7 +173,7 @@ ADDITIONAL_SOIL_TYPES = {
         "temperature": (22, 32),
         "humidity": (60, 80),
         "ph": (6.0, 7.2),
-        "rainfall": (100, 200),
+        "rainfall": (1200, 2400),  # Annual
         "samples": 400,
         "color": "Brown",
         "description": "Balanced fertile soil with good drainage"
@@ -185,7 +185,7 @@ ADDITIONAL_SOIL_TYPES = {
         "temperature": (25, 38),
         "humidity": (40, 70),
         "ph": (6.0, 7.5),
-        "rainfall": (50, 150),
+        "rainfall": (600, 1800),   # Annual
         "samples": 400,
         "color": "Light brown to tan",
         "description": "Well-drained sandy soil with low fertility"
@@ -197,7 +197,7 @@ ADDITIONAL_SOIL_TYPES = {
         "temperature": (22, 34),
         "humidity": (65, 90),
         "ph": (6.5, 8.0),
-        "rainfall": (100, 250),
+        "rainfall": (1200, 3000),  # Annual
         "samples": 400,
         "color": "Grey to dark",
         "description": "Heavy clay soil with poor drainage"

@@ -4,7 +4,7 @@
 
 .pd-page {
     min-height: 100vh;
-    background: #020617;
+    background: var(--dark-950);
 }
 
 .pd-container {
@@ -38,12 +38,12 @@
 }
 
 .pd-breadcrumb-cat {
-    color: #64748b;
+    color: var(--dark-400);
     text-transform: capitalize;
 }
 
 .pd-breadcrumb-current {
-    color: #94a3b8;
+    color: var(--dark-300);
 }
 
 /* Layout */
@@ -64,7 +64,7 @@
     position: relative;
     border-radius: 1.25rem;
     overflow: hidden;
-    background: rgba(30, 41, 59, 0.5);
+    background: var(--dark-800);
     border: 1px solid rgba(255, 255, 255, 0.06);
     aspect-ratio: 1;
 }
@@ -147,7 +147,7 @@
 .pd-name {
     font-size: 2rem;
     font-weight: 700;
-    color: white;
+    color: var(--dark-50);
     line-height: 1.2;
     letter-spacing: -0.02em;
 }
@@ -192,14 +192,14 @@
 .pd-section-title {
     font-size: 0.75rem;
     font-weight: 600;
-    color: #64748b;
+    color: var(--dark-400);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-bottom: 0.75rem;
 }
 
 .pd-description {
-    color: #cbd5e1;
+    color: var(--dark-200);
     font-size: 0.95rem;
     line-height: 1.7;
     white-space: pre-line;
@@ -224,7 +224,7 @@
 
 .pd-detail-label {
     font-size: 0.7rem;
-    color: #64748b;
+    color: var(--dark-400);
     text-transform: uppercase;
     letter-spacing: 0.04em;
     font-weight: 600;
@@ -248,10 +248,10 @@
 .pd-quantity {
     display: flex;
     align-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--dark-700);
     border-radius: 0.75rem;
     overflow: hidden;
-    background: rgba(30, 41, 59, 0.5);
+    background: var(--dark-800);
 }
 
 .pd-qty-btn {
@@ -259,7 +259,7 @@
     height: 2.5rem;
     background: none;
     border: none;
-    color: #94a3b8;
+    color: var(--dark-300);
     font-size: 1.1rem;
     cursor: pointer;
     display: flex;
@@ -269,14 +269,14 @@
 }
 
 .pd-qty-btn:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
+    background: var(--dark-800);
+    color: var(--dark-50);
 }
 
 .pd-qty-value {
     width: 2.5rem;
     text-align: center;
-    color: white;
+    color: var(--dark-50);
     font-weight: 600;
     font-size: 0.95rem;
 }
@@ -287,7 +287,7 @@
     border-radius: 0.75rem;
     border: none;
     background: linear-gradient(135deg, #22c55e, #16a34a);
-    color: white;
+    color: var(--dark-50);
     font-weight: 600;
     font-size: 0.95rem;
     cursor: pointer;
@@ -329,14 +329,14 @@
 }
 
 .pd-not-found h2 {
-    color: white;
+    color: var(--dark-50);
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
 }
 
 .pd-not-found p {
-    color: #94a3b8;
+    color: var(--dark-300);
     margin-bottom: 2rem;
 }
 
@@ -365,7 +365,7 @@
 
 .pd-skeleton-image {
     aspect-ratio: 1;
-    background: rgba(30, 41, 59, 0.5);
+    background: var(--dark-800);
     border-radius: 1.25rem;
     animation: pdPulse 2s ease-in-out infinite;
 }
@@ -379,7 +379,7 @@
 
 .pd-skeleton-line {
     height: 1.5rem;
-    background: #1e293b;
+    background: var(--dark-800);
     border-radius: 0.5rem;
     animation: pdPulse 2s ease-in-out infinite;
 }

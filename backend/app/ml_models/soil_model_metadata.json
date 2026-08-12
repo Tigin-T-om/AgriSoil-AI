@@ -1,8 +1,7 @@
 {
   "model_type": "RandomForest (High-Confidence v2)",
-  "accuracy": 0.9794117647058823,
-  "cv_accuracy": 0.9711764705882352,
-  "mean_confidence": 0.9343187969290734,
+  "accuracy": 0.9758823529411764,
+  "mean_confidence": 0.9341733965582081,
   "n_features": 21,
   "base_features": [
     "N",
@@ -51,18 +50,5 @@
     "Sandy"
   ],
   "training_samples": 13600,
-  "test_samples": 3400,
-  "n_estimators": 500,
-  "feature_importance": {
-    "ph_humidity_ratio": 0.08860671803975093,
-    "rainfall_temp_ratio": 0.07984085676098412,
-    "fertility_index": 0.07603508172728762,
-    "total_nutrients": 0.07579351312398634,
-    "acidity_score": 0.0707974542472022,
-    "ph": 0.07036802756208352,
-    "P": 0.0591322636615106,
-    "rainfall": 0.0571738294425649,
-    "N": 0.05037150417807612,
-    "N_K_ratio": 0.04979373642446276
-  }
+  "test_samples": 3400
 }

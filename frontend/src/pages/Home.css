@@ -4,7 +4,7 @@
 
 .home-page {
     min-height: 100vh;
-    background: #020617;
+    background: var(--dark-950);
 }
 
 /* Hero Section */
@@ -66,10 +66,58 @@
     }
 }
 
-.hero-inner {
-    max-width: 56rem;
-    margin: 0 auto;
-    text-align: center;
+.hero-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    align-items: center;
+    max-width: 100%;
+}
+
+@media (min-width: 1024px) {
+    .hero-layout {
+        flex-direction: row;
+        text-align: left;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.hero-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.hero-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.hero-image-wrapper {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4);
+    border: 2px solid var(--dark-700);
+}
+
+.hero-image-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.hero-image-wrapper:hover img {
+    transform: scale(1.05);
 }
 
 /* Badge */
@@ -125,7 +173,7 @@
 .hero-title {
     font-size: 2.5rem;
     font-weight: 700;
-    color: white;
+    color: var(--dark-50);
     margin-bottom: 1.5rem;
     line-height: 1.1;
 }
@@ -153,11 +201,10 @@
 /* Subtitle */
 .hero-subtitle {
     font-size: 1.125rem;
-    color: #cbd5e1;
+    color: var(--dark-200);
+    margin-bottom: 2.5rem;
     margin-bottom: 2.5rem;
     max-width: 42rem;
-    margin-left: auto;
-    margin-right: auto;
     line-height: 1.75;
 }
 
@@ -171,8 +218,8 @@
 .hero-buttons {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
+    justify-content: flex-start;
     gap: 1rem;
 }
 
@@ -223,8 +270,8 @@
     width: 100%;
     padding: 1rem 2rem;
     border-radius: 1rem;
-    background: #1e293b;
-    border: 1px solid #334155;
+    background: var(--dark-800);
+    border: 1px solid var(--dark-700);
     color: white;
     font-weight: 600;
     font-size: 1.125rem;
@@ -241,7 +288,7 @@
 
 .hero-btn-secondary:hover {
     background: #334155;
-    border-color: #475569;
+    border-color: var(--dark-600);
 }
 
 /* Stats */
@@ -251,8 +298,7 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
     max-width: 48rem;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
 }
 
 @media (min-width: 768px) {
@@ -265,9 +311,10 @@
     text-align: center;
     padding: 1.5rem;
     border-radius: 1rem;
-    background: rgba(15, 23, 42, 0.5);
+    background: var(--dark-900);
     backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--dark-700);
+    box-shadow: var(--shadow-sm);
 }
 
 .hero-stat-value {
@@ -286,7 +333,7 @@
 }
 
 .hero-stat-label {
-    color: #94a3b8;
+    color: var(--dark-300);
     font-size: 0.875rem;
     margin-top: 0.25rem;
 }
@@ -317,7 +364,7 @@
 .section-title {
     font-size: 1.875rem;
     font-weight: 700;
-    color: white;
+    color: var(--dark-50);
     margin-bottom: 1rem;
 }
 
@@ -335,7 +382,7 @@
 }
 
 .section-subtitle {
-    color: #94a3b8;
+    color: var(--dark-300);
     font-size: 1.125rem;
     max-width: 42rem;
     margin: 0 auto;
@@ -363,9 +410,10 @@
 .feature-card {
     padding: 1.5rem;
     border-radius: 1rem;
-    background: rgba(15, 23, 42, 0.5);
+    background: var(--dark-900);
     backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--dark-700);
+    box-shadow: var(--shadow-sm);
     transition: all 0.5s ease;
 }
 
@@ -410,19 +458,18 @@
 .feature-title {
     font-size: 1.25rem;
     font-weight: 600;
-    color: white;
+    color: var(--dark-50);
     margin-bottom: 0.75rem;
 }
 
 .feature-desc {
-    color: #94a3b8;
+    color: var(--dark-300);
     line-height: 1.6;
 }
 
 /* Soil Types Section */
 .soil-section {
     padding: 5rem 0 8rem;
-    background: rgba(15, 23, 42, 0.5);
 }
 
 .soil-grid {
@@ -446,14 +493,15 @@
 .soil-card {
     padding: 1.25rem;
     border-radius: 1rem;
-    background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--dark-800);
+    border: 1px solid var(--dark-700);
+    box-shadow: var(--shadow-sm);
     text-align: center;
     transition: all 0.3s ease;
 }
 
 .soil-card:hover {
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: var(--dark-600);
 }
 
 .soil-color-box {
@@ -470,14 +518,14 @@
 }
 
 .soil-name {
-    color: white;
+    color: var(--dark-50);
     font-weight: 600;
     font-size: 0.875rem;
     margin-bottom: 0.25rem;
 }
 
 .soil-desc {
-    color: #94a3b8;
+    color: var(--dark-300);
     font-size: 0.75rem;
 }
 
@@ -491,7 +539,6 @@
 .cta-bg {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to right, rgba(22, 163, 74, 0.2), rgba(5, 150, 105, 0.2));
 }
 
 .cta-glow {
@@ -516,7 +563,7 @@
 .cta-title {
     font-size: 1.875rem;
     font-weight: 700;
-    color: white;
+    color: var(--dark-50);
     margin-bottom: 1.5rem;
 }
 
@@ -527,7 +574,7 @@
 }
 
 .cta-subtitle {
-    color: #cbd5e1;
+    color: var(--dark-200);
     font-size: 1.125rem;
     margin-bottom: 2.5rem;
 }
@@ -555,7 +602,7 @@
 /* Footer */
 .footer {
     padding: 3rem 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid var(--dark-700);
 }
 
 .footer-content {
@@ -591,11 +638,11 @@
 .footer-logo-text {
     font-size: 1.125rem;
     font-weight: 700;
-    color: white;
+    color: var(--dark-50);
 }
 
 .footer-copyright {
-    color: #94a3b8;
+    color: var(--dark-300);
     font-size: 0.875rem;
 }
 
@@ -606,11 +653,11 @@
 }
 
 .footer-link {
-    color: #94a3b8;
+    color: var(--dark-300);
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 .footer-link:hover {
-    color: white;
+    color: var(--dark-50);
 }

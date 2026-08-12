@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { userService } from '../../services/userService';
+import { useAuth } from '../../context/AuthContext';
 
 const AdminUsers = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { user: currentUser } = useAuth();
 
     useEffect(() => {
         fetchUsers();
@@ -137,22 +139,31 @@ const AdminUsers = () => {
                                             {user.is_active && (
                                                 <span className="admin-badge admin-badge-green">Active</span>
                                             )}
+                                            {currentUser && currentUser.id === user.id && (
+                                                <span className="admin-badge" style={{ background: 'rgba(251, 191, 36, 0.15)', color: '#fbbf24', border: '1px solid rgba(251, 191, 36, 0.3)' }}>You</span>
+                                            )}
                                         </div>
-                                        <div style={{ display: 'flex', gap: '0.35rem' }}>
-                                            <button
-                                                onClick={() => handleToggleAdmin(user.id)}
-                                                className={`admin-user-toggle-btn ${user.is_admin ? 'admin-user-toggle-remove' : 'admin-user-toggle-make'}`}
-                                            >
-                                                {user.is_admin ? 'Remove Admin' : 'Make Admin'}
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(user.id)}
-                                                className="admin-btn-icon admin-btn-icon-delete"
-                                                title="Delete user"
-                                            >
-                                                🗑️
-                                            </button>
-                                        </div>
+                                        {currentUser && currentUser.id === user.id ? (
+                                            <div style={{ fontSize: '0.75rem', color: 'var(--dark-400)', fontStyle: 'italic' }}>
+                                                Protected
+                                            </div>
+                                        ) : (
+                                            <div style={{ display: 'flex', gap: '0.35rem' }}>
+                                                <button
+                                                    onClick={() => handleToggleAdmin(user.id)}
+                                                    className={`admin-user-toggle-btn ${user.is_admin ? 'admin-user-toggle-remove' : 'admin-user-toggle-make'}`}
+                                                >
+                                                    {user.is_admin ? 'Remove Admin' : 'Make Admin'}
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(user.id)}
+                                                    className="admin-btn-icon admin-btn-icon-delete"
+                                                    title="Delete user"
+                                                >
+                                                    🗑️
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))}

@@ -169,9 +169,9 @@ const Register = () => {
               />
               <span className="auth-checkbox-text">
                 I agree to the{' '}
-                <a href="#" className="form-link">Terms of Service</a>
+                <Link to="/terms" className="form-link">Terms of Service</Link>
                 {' '}and{' '}
-                <a href="#" className="form-link">Privacy Policy</a>
+                <Link to="/privacy" className="form-link">Privacy Policy</Link>
               </span>
             </div>
 
@@ -217,7 +217,7 @@ const Register = () => {
           <div className="auth-info-cards">
             {[
               { icon: '🔬', title: 'AI Soil Analysis', desc: '11 Kerala soil types' },
-              { icon: '🌾', title: 'Crop Recommendations', desc: '23 crops with 95% accuracy' },
+              { icon: '🌾', title: 'Crop Recommendations', desc: '23 crops supported' },
               { icon: '🛒', title: 'Product Integration', desc: 'Shop based on your soil' },
             ].map((item, i) => (
               <div key={i} className="auth-info-card">

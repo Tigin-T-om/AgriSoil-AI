@@ -41,9 +41,7 @@ const Navbar = () => {
                     <div className="navbar-inner">
                         {/* Logo */}
                         <Link to="/" className="navbar-logo">
-                            <div className="navbar-logo-icon">
-                                <span>🌱</span>
-                            </div>
+
                             <div className="navbar-logo-text">
                                 <span className="navbar-logo-name">Agri-Soil AI</span>
                                 <span className="navbar-logo-tagline">AI-Powered Agriculture</span>

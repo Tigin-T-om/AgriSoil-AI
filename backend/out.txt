@@ -1,0 +1,5 @@
+Coffee -> Soil: Red Loam, Crop: coffee (Conf: 99.4%)
+Rice -> Soil: Riverine Alluvial, Crop: rice (Conf: 85.4%)
+Coconut -> Soil: Red Loam, Crop: coconut (Conf: 90.6%)
+Banana -> Soil: Riverine Alluvial, Crop: banana (Conf: 70.0%)
+Mango -> Soil: Loamy, Crop: mango (Conf: 98.0%)

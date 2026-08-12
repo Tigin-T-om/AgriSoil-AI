@@ -113,7 +113,7 @@
 
 .admin-topbar-link:hover {
     color: #fff;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--dark-800);
 }
 
 .admin-topbar-link-site {
@@ -133,7 +133,7 @@
     gap: 0.625rem;
     padding: 0.3rem 0.75rem 0.3rem 0.3rem;
     border-radius: 0.625rem;
-    background: rgba(30, 41, 59, 0.5);
+    background: var(--dark-800);
     border: 1px solid var(--dark-700);
 }
 
@@ -276,7 +276,7 @@
 }
 
 .admin-sidebar-link:hover {
-    color: var(--dark-100);
+    color: var(--dark-50);
     background: rgba(255, 255, 255, 0.04);
 }
 
@@ -706,7 +706,7 @@
 }
 
 .admin-btn-ghost:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--dark-800);
     color: #fff;
     border-color: var(--dark-600);
 }
@@ -951,7 +951,7 @@
     align-items: center;
     justify-content: space-between;
     padding-top: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid var(--dark-700);
 }
 
 .admin-user-badges {
